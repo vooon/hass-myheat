@@ -42,7 +42,8 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return await self._show_auth_config_form(user_input)
 
         self._devices = await self._get_devices(
-            user_input[CONF_USERNAME], user_input[CONF_API_KEY]
+            username=user_input[CONF_USERNAME],
+            api_key=user_input[CONF_API_KEY],
         )
         if not self._devices:
             self._errors["base"] = "auth"
@@ -70,7 +71,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Show the configuration form to choose the device."""
         if not user_input:
             devices = [
-                f"{v[id]} - {v[name]} - {v[city]}"
+                f"{v['id']} - {v['name']} - {v['city']}"
                 for v in self._devices["data"]["devices"]
             ]
 
