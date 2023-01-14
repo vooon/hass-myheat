@@ -6,15 +6,26 @@ import socket
 import aiohttp
 import async_timeout
 
+from .const import VERSION
+
 TIMEOUT = 10
 
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
-HEADERS = {"Content-type": "application/json; charset=UTF-8"}
+HEADERS = {
+    "Content-Type": "application/json; charset=UTF-8",
+    "User-Agent": f"homeassistant-myheat/{VERSION}",
+}
+
+RPC_ENDPOINT = "https://my.myheat.net/api/request/"
 
 
 class MhApiClient:
+    """
+    API helper to manipulate with myheat.net cloud
+    """
+
     def __init__(
         self, username: str, password: str, session: aiohttp.ClientSession
     ) -> None:
@@ -23,34 +34,62 @@ class MhApiClient:
         self._passeword = password
         self._session = session
 
-    async def async_get_data(self) -> dict:
-        """Get data from the API."""
-        url = "https://jsonplaceholder.typicode.com/posts/1"
-        return await self.api_wrapper("get", url)
+    async def async_get_devices(self) -> dict:
+        """Get available devices"""
+        return await self.rpc("getDevices")
 
-    async def async_set_title(self, value: str) -> None:
-        """Get data from the API."""
-        url = "https://jsonplaceholder.typicode.com/posts/1"
-        await self.api_wrapper("patch", url, data={"title": value}, headers=HEADERS)
+    async def async_get_device_info(self, device_id: int) -> dict:
+        """Get device state and objects"""
+        return await self.rpc("getDeviceInfo", deviceId=device_id)
 
-    async def api_wrapper(
-        self, method: str, url: str, data: dict = {}, headers: dict = {}
-    ) -> dict:
+    async def async_set_env_goal(self, device_id: int, obj_id: int, goal: int) -> None:
+        """Set goal for environment"""
+        await self.rpc("setEnvGoal", deviceId=device_id, objId=obj_id)
+
+    async def async_set_env_curve(
+        self, device_id: int, obj_id: int, curve: int
+    ) -> None:
+        """Set goal curve for environment"""
+        await self.rpc("setEnvCurve", deviceId=device_id, objId=obj_id, curve=curve)
+
+    async def async_set_eng_goal(self, device_id: int, obj_id: int, goal: int) -> None:
+        """Set goal for engineering component"""
+        await self.rpc("setEngGoal", deviceId=device_id, objId=obj_id)
+
+    async def async_set_heating_mode(
+        self, device_id: int, mode_id: int = None, schedule_id: int = None
+    ) -> None:
+        """Set heating mode.
+
+        Should be only one ID set: Mode or Schedule
+        Value of 0 resets mode.
+        """
+
+        kvs = {}
+        if mode_id is not None:
+            kvs["modeId"] = mode_id
+        if schedule_id is not None:
+            kvs["scheduleId"] = schedule_id
+
+        await self.rpc("setHeatingMode", deviceId=device_id, **kvs)
+
+    async def async_set_security_mode(self, device_id: int, mode: bool) -> None:
+        """Set security alarm mode (on/off)"""
+        await self.rpc("setSecurityMode", deviceId=device_id, mode=mode and 1 or 0)
+
+    async def rpc(self, action: str, **kwargs: dict) -> dict:
         """Get information from the API."""
+
+        url = RPC_ENDPOINT
+
+        kwargs["action"] = action
+        kwargs["login"] = self._username
+        kwargs["key"] = self._passeword
+
         try:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
-                if method == "get":
-                    response = await self._session.get(url, headers=headers)
-                    return await response.json()
-
-                elif method == "put":
-                    await self._session.put(url, headers=headers, json=data)
-
-                elif method == "patch":
-                    await self._session.patch(url, headers=headers, json=data)
-
-                elif method == "post":
-                    await self._session.post(url, headers=headers, json=data)
+                response = await self._session.post(url, headers=HEADERS, json=kwargs)
+                return await response.json()
 
         except asyncio.TimeoutError as exception:
             _LOGGER.error(
@@ -58,7 +97,6 @@ class MhApiClient:
                 url,
                 exception,
             )
-
         except (KeyError, TypeError) as exception:
             _LOGGER.error(
                 "Error parsing information from %s - %s",
