@@ -45,7 +45,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     session = async_get_clientsession(hass)
     client = MhApiClient(
-        username=username, api_key=api_key, device_id=device_id, session=session
+        username=username,
+        api_key=api_key,
+        device_id=device_id,
+        session=session,
     )
 
     coordinator = MhDataUpdateCoordinator(hass, client=client)
