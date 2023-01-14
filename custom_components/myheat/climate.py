@@ -98,8 +98,9 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
-
-        _logger.info(f"set t: {kwargs}")
+        goal = kwargs.get("temperature", 0)
+        await self.coordinator.api.async_set_goal(obj_id=self.env["id"], goal=goal)
+        await self.coordinator.async_request_refresh()
 
     @callback
     def _handle_coordinator_update(self):
@@ -121,7 +122,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
     @property
     def device_info(self) -> dict:
         d = super().device_info
-        d["name"] += f" {self.env['name']}"
+        d["name"] += f" Env {self.env['name']}"
         return d
 
     def _env(self) -> dict:
