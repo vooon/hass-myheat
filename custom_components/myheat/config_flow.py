@@ -23,6 +23,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Initialize."""
         self._devices = {}
         self._errors = {}
+        self._auth = {}
 
     @property
     def data_schema(self):
@@ -47,7 +48,8 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self._errors["base"] = "auth"
             return await self._show_auth_config_form(user_input)
 
-        return await self.async_step_device(user_input)
+        self._auth = user_input
+        return await self.async_step_device()
 
     async def _show_auth_config_form(
         self, user_input
@@ -82,6 +84,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 ),
             )
 
+        user_input.update(self._auth)
         device_id = int(user_input[CONF_DEVICE_ID].strip().split(" ")[0])
         unique_id = f"myheat-{device_id}"
 
