@@ -2,30 +2,26 @@
   "config": {
     "step": {
       "user": {
-        "title": "MyHeat",
-        "description": "If you need help with the configuration have a look here: https://github.com/vooon/myheat",
+        "title": "MyHeat Account",
+        "description": "Please obtain API key from https://my.myheat.net on user preferences page",
         "data": {
           "username": "Username",
-          "password": "Password"
+          "api_key": "API Key"
+        }
+      },
+      "device": {
+        "title": "MyHeat Controller",
+        "description": "Please select the connected device",
+        "data": {
+          "name": "Name",
+          "device_id": "Device"
         }
       }
     },
     "error": {
-      "auth": "Username/Password is wrong."
+      "auth": "Username/Key is wrong."
     },
     "abort": {
-      "single_instance_allowed": "Only a single instance is allowed."
-    }
-  },
-  "options": {
-    "step": {
-      "user": {
-        "data": {
-          "binary_sensor": "Binary sensor enabled",
-          "sensor": "Sensor enabled",
-          "switch": "Switch enabled"
-        }
-      }
     }
   }
 }

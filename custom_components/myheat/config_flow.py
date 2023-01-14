@@ -8,7 +8,7 @@ from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
 from .api import MhApiClient
-from .const import CONF_API_KEY, CONF_NAME, CONF_USERNAME, DOMAIN, PLATFORMS
+from .const import CONF_API_KEY, CONF_DEVICE_ID, CONF_NAME, CONF_USERNAME, DOMAIN
 
 _logger = logging.getLogger(__name__)
 
