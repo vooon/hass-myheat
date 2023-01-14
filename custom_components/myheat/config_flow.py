@@ -87,7 +87,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         user_input.update(self._auth)
         device_id = int(user_input[CONF_DEVICE_ID].strip().split(" ")[0])
-        unique_id = f"myheat-{device_id}"
+        unique_id = f"myheat{device_id}"
 
         await self.async_set_unique_id(unique_id)
         self._abort_if_unique_id_configured()

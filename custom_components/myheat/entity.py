@@ -15,7 +15,7 @@ class MhEntity(CoordinatorEntity):
         return self.config_entry.entry_id
 
     @property
-    def device_info(self):
+    def device_info(self) -> dict:
         return {
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": NAME,

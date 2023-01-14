@@ -90,7 +90,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{self.config_entry.entry_id}env{self.env.get('id')}"
+        return f"{super().unique_id}env{self.env.get('id')}"
 
     # async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
     #     """Set new target hvac mode."""
@@ -118,10 +118,11 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
         self.async_write_ha_state()
 
-    # @property
-    # def device_class(self):
-    #     """Return de device class of the sensor."""
-    #     return "myheat__custom_device_class"
+    @property
+    def device_info(self) -> dict:
+        d = super().device_info
+        d["name"] += f" {self.env['name']}"
+        return d
 
     def _env(self) -> dict:
         if not self.coordinator.data.get("data", {}).get("dataActual", False):
