@@ -22,6 +22,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self):
         """Initialize."""
         self._devices = {}
+        self._errors = {}
 
     @property
     def data_schema(self):
