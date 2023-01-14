@@ -111,7 +111,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         self._attr_target_temperature = e.get("target")
 
         self._attr_hvac_action = (
-            HVACAction.HEATING
+            (HVACAction.HEATING if e.get("demand", False) else HVACAction.IDLE)
             if self._attr_target_temperature is not None
             else HVACMode.OFF
         )
