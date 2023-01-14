@@ -47,7 +47,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             self._errors["base"] = "auth"
             return await self._show_auth_config_form(user_input)
 
-        return await self._show_device_form()
+        return await self.async_step_device(user_input)
 
     async def _show_auth_config_form(
         self, user_input
@@ -64,7 +64,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def _show_device_form(self, user_input):
+    async def async_step_device(self, user_input=None):
         """Show the configuration form to choose the device."""
         if not user_input:
             devices = [
