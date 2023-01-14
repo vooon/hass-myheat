@@ -4,6 +4,7 @@ import asyncio
 import aiohttp
 from custom_components.myheat.api import (
     MhApiClient,
+    RPC_ENDPOINT,
 )
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -11,17 +12,37 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 async def test_api(hass, aioclient_mock, caplog):
     """Test API calls."""
 
-    # To test the api submodule, we first create an instance of our API client
-    api = MhApiClient("test", "test", async_get_clientsession(hass))
+    api = MhApiClient("test_user", "test_api_key", async_get_clientsession(hass))
 
-    # Use aioclient_mock which is provided by `pytest_homeassistant_custom_components`
-    # to mock responses to aiohttp requests. In this case we are telling the mock to
-    # return {"test": "test"} when a `GET` call is made to the specified URL. We then
-    # call `async_get_data` which will make that `GET` request.
-    aioclient_mock.get(
-        "https://jsonplaceholder.typicode.com/posts/1", json={"test": "test"}
+    # Use data from api pdf
+    GET_DEVIDES = {
+        "data": {
+            "devices": [
+                {
+                    "id": 12,
+                    "name": "У Моста",
+                    "city": "Новошешминск",
+                    "severity": 1,
+                    "severityDesc": "Система работает нормально.",
+                },
+                {
+                    "id": 10,
+                    "name": "Хорошее место",
+                    "city": "Новошешминск",
+                    "severity": 1,
+                    "severityDesc": "Система работает нормально.",
+                },
+            ]
+        },
+        "err": 0,
+        "refreshPage": False,
+    }
+
+    aioclient_mock.post(
+        RPC_ENDPOINT,
+        json=GET_DEVIDES,
     )
-    assert await api.async_get_data() == {"test": "test"}
+    assert await api.async_get_devices() == GET_DEVIDES
 
     # We do the same for `async_set_title`. Note the difference in the mock call
     # between the previous step and this one. We use `patch` here instead of `get`
