@@ -120,7 +120,7 @@ class MhApiClient:
             kwargs["deviceId"] = self._device_id
 
         try:
-            async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):
+            async with async_timeout.timeout(TIMEOUT):
                 response = await self._session.post(url, headers=HEADERS, json=kwargs)
                 return await response.json()
 
