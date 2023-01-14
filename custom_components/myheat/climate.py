@@ -99,7 +99,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
         goal = kwargs.get("temperature", 0)
-        await self.coordinator.api.async_set_goal(obj_id=self.env["id"], goal=goal)
+        await self.coordinator.api.async_set_env_goal(obj_id=self.env["id"], goal=goal)
         await self.coordinator.async_request_refresh()
 
     @callback
