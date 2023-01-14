@@ -5,16 +5,26 @@ on:
     branches:
       - main
       - master
+    paths:
+      - '.github/labels.yml'
+      - '.github/workflows/labels.yml'
 
 jobs:
   labeler:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3.3.0
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Run Labeler
-        uses: crazy-max/ghaction-github-labeler@v4.1.0
+        if: success()
+        uses: crazy-max/ghaction-github-labeler@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          yaml-file: .github/labels.yml
           skip-delete: true
+          dry-run: false
+          exclude: |
+            help*
+            *issue
