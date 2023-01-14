@@ -2,8 +2,9 @@
 Custom integration to integrate MyHeat with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/vooon/myheat
+https://github.com/vooon/hass-myheat
 """
+
 import asyncio
 import logging
 from datetime import timedelta

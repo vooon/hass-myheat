@@ -27,11 +27,11 @@ class MhApiClient:
     """
 
     def __init__(
-        self, username: str, password: str, session: aiohttp.ClientSession
+        self, username: str, api_key: str, session: aiohttp.ClientSession
     ) -> None:
         """Sample API Client."""
         self._username = username
-        self._passeword = password
+        self._api_key = api_key
         self._session = session
 
     async def async_get_devices(self) -> dict:
@@ -104,7 +104,7 @@ class MhApiClient:
 
         kwargs["action"] = action
         kwargs["login"] = self._username
-        kwargs["key"] = self._passeword
+        kwargs["key"] = self._api_key
 
         try:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):

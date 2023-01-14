@@ -1,4 +1,13 @@
 """Constants for MyHeat."""
+
+from homeassistant.const import (
+    CONF_API_KEY,
+    CONF_NAME,
+    CONF_USERNAME,
+    CONF_DEVICE_ID,
+    Platform,
+)
+
 # Base component constants
 NAME = "MyHeat"
 DOMAIN = "myheat"
@@ -18,13 +27,8 @@ BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
-PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
 
-
-# Configuration and options
-CONF_ENABLED = "enabled"
-CONF_USERNAME = "username"
-CONF_PASSWORD = "password"
+PLATFORMS = [Platform.CLIMATE]
 
 # Defaults
 DEFAULT_NAME = DOMAIN
