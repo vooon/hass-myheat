@@ -15,6 +15,8 @@ DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "0.0.0"
 
 ATTRIBUTION = "https://myheat.net"
+MANUFACTURER = "https://myheat.net"
+
 ISSUE_URL = "https://github.com/vooon/hass-myheat/issues"
 
 # Icons

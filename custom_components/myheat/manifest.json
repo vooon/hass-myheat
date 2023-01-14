@@ -1,6 +1,7 @@
 {
   "domain": "myheat",
   "name": "MyHeat",
+  "integration_type": "device",
   "documentation": "https://github.com/vooon/hass-myheat",
   "issue_tracker": "https://github.com/vooon/hass-myheat/issues",
   "dependencies": [],
