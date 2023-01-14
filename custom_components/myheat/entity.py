@@ -23,7 +23,7 @@ class MhEntity(CoordinatorEntity):
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": NAME,
             "model": VERSION,
-            "manufacturer": NAME,
+            "manufacturer": MANUFACTURER,
         }
 
     @property
