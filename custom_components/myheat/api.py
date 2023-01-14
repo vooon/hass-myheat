@@ -27,23 +27,28 @@ class MhApiClient:
     """
 
     def __init__(
-        self, username: str, api_key: str, session: aiohttp.ClientSession
+        self,
+        username: str,
+        api_key: str,
+        device_id: int,
+        session: aiohttp.ClientSession,
     ) -> None:
         """Sample API Client."""
         self._username = username
         self._api_key = api_key
+        self._device_id = device_id
         self._session = session
 
     async def async_get_devices(self) -> dict:
         """Get available devices"""
         return await self.rpc("getDevices")
 
-    async def async_get_device_info(self, device_id: int) -> dict:
+    async def async_get_device_info(self, device_id: int = None) -> dict:
         """Get device state and objects"""
         return await self.rpc("getDeviceInfo", deviceId=device_id)
 
     async def async_set_env_goal(
-        self, device_id: int, obj_id: int, goal: int, change_mode: bool = False
+        self, obj_id: int, goal: int, device_id: int = None, change_mode: bool = False
     ) -> None:
         """Set goal for environment"""
         await self.rpc(
@@ -54,7 +59,7 @@ class MhApiClient:
         )
 
     async def async_set_env_curve(
-        self, device_id: int, obj_id: int, curve: int, change_mode: bool = False
+        self, obj_id: int, curve: int, device_id: int = None, change_mode: bool = False
     ) -> None:
         """Set goal curve for environment"""
         await self.rpc(
@@ -66,7 +71,7 @@ class MhApiClient:
         )
 
     async def async_set_eng_goal(
-        self, device_id: int, obj_id: int, goal: int, change_mode: bool = False
+        self, obj_id: int, goal: int, device_id: int = None, change_mode: bool = False
     ) -> None:
         """Set goal for engineering component"""
         await self.rpc(
@@ -77,7 +82,7 @@ class MhApiClient:
         )
 
     async def async_set_heating_mode(
-        self, device_id: int, mode_id: int = None, schedule_id: int = None
+        self, device_id: int = None, mode_id: int = None, schedule_id: int = None
     ) -> None:
         """Set heating mode.
 
@@ -93,7 +98,11 @@ class MhApiClient:
 
         await self.rpc("setHeatingMode", deviceId=device_id, **kvs)
 
-    async def async_set_security_mode(self, device_id: int, mode: bool) -> None:
+    async def async_set_security_mode(
+        self,
+        mode: bool,
+        device_id: int = None,
+    ) -> None:
         """Set security alarm mode (on/off)"""
         await self.rpc("setSecurityMode", deviceId=device_id, mode=mode and 1 or 0)
 
@@ -105,6 +114,10 @@ class MhApiClient:
         kwargs["action"] = action
         kwargs["login"] = self._username
         kwargs["key"] = self._api_key
+
+        # If deviceId is passed, and it is None => use the id stored in the instance
+        if kwargs.get("deviceId", 1) is None:
+            kwargs["deviceId"] = self._device_id
 
         try:
             async with async_timeout.timeout(TIMEOUT, loop=asyncio.get_event_loop()):

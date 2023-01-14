@@ -18,8 +18,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .api import MhApiClient
-from .const import CONF_PASSWORD
-from .const import CONF_USERNAME
+from .const import CONF_USERNAME, CONF_NAME, CONF_API_KEY, CONF_DEVICE_ID
 from .const import DOMAIN
 from .const import PLATFORMS
 from .const import STARTUP_MESSAGE
@@ -41,10 +40,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.info(STARTUP_MESSAGE)
 
     username = entry.data.get(CONF_USERNAME)
-    password = entry.data.get(CONF_PASSWORD)
+    api_key = entry.data.get(CONF_API_KEY)
+    device_id = entry.data.get(CONF_DEVICE_ID)
 
     session = async_get_clientsession(hass)
-    client = MhApiClient(username, password, session)
+    client = MhApiClient(
+        username=username, api_key=api_key, device_id=device_id, session=session
+    )
 
     coordinator = MhDataUpdateCoordinator(hass, client=client)
     await coordinator.async_refresh()
@@ -82,7 +84,7 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
-            return await self.api.async_get_data()
+            return await self.api.async_get_device_info()
         except Exception as exception:
             raise UpdateFailed() from exception
 

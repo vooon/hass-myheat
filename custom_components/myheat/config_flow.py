@@ -93,7 +93,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Return true if credentials is valid."""
         try:
             session = async_create_clientsession(self.hass)
-            client = MhApiClient(username, api_key, session)
+            client = MhApiClient(username, api_key, None, session)
             return await client.async_get_devices()
         except Exception:  # pylint: disable=broad-except
             pass
