@@ -42,19 +42,39 @@ class MhApiClient:
         """Get device state and objects"""
         return await self.rpc("getDeviceInfo", deviceId=device_id)
 
-    async def async_set_env_goal(self, device_id: int, obj_id: int, goal: int) -> None:
+    async def async_set_env_goal(
+        self, device_id: int, obj_id: int, goal: int, change_mode: bool = False
+    ) -> None:
         """Set goal for environment"""
-        await self.rpc("setEnvGoal", deviceId=device_id, objId=obj_id)
+        await self.rpc(
+            "setEnvGoal",
+            deviceId=device_id,
+            objId=obj_id,
+            changeMode=change_mode and 1 or 0,
+        )
 
     async def async_set_env_curve(
-        self, device_id: int, obj_id: int, curve: int
+        self, device_id: int, obj_id: int, curve: int, change_mode: bool = False
     ) -> None:
         """Set goal curve for environment"""
-        await self.rpc("setEnvCurve", deviceId=device_id, objId=obj_id, curve=curve)
+        await self.rpc(
+            "setEnvCurve",
+            deviceId=device_id,
+            objId=obj_id,
+            curve=curve,
+            changeMode=change_mode and 1 or 0,
+        )
 
-    async def async_set_eng_goal(self, device_id: int, obj_id: int, goal: int) -> None:
+    async def async_set_eng_goal(
+        self, device_id: int, obj_id: int, goal: int, change_mode: bool = False
+    ) -> None:
         """Set goal for engineering component"""
-        await self.rpc("setEngGoal", deviceId=device_id, objId=obj_id)
+        await self.rpc(
+            "setEngGoal",
+            deviceId=device_id,
+            objId=obj_id,
+            changeMode=change_mode and 1 or 0,
+        )
 
     async def async_set_heating_mode(
         self, device_id: int, mode_id: int = None, schedule_id: int = None
