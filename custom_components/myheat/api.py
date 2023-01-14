@@ -122,7 +122,10 @@ class MhApiClient:
         try:
             async with async_timeout.timeout(TIMEOUT):
                 response = await self._session.post(url, headers=HEADERS, json=kwargs)
-                return await response.json()
+                data = await response.json()
+
+                _LOGGER.debug("Data: %s", data)
+                return data
 
         except asyncio.TimeoutError as exception:
             _LOGGER.exception(

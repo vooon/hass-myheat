@@ -24,8 +24,12 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
     _logger.debug(f"Setting up env entries: {coordinator.data}")
 
-    for env in coordinator.data.get("data", {}).get("envs", []):
-        async_add_devices([MhEnvClimate(coordinator, entry, env)])
+    async_add_devices(
+        [
+            MhEnvClimate(coordinator, entry, env)
+            for env in coordinator.data.get("data", {}).get("envs", [])
+        ]
+    )
 
 
 class MhEnvClimate(MhEntity, ClimateEntity):
