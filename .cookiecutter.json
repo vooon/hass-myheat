@@ -1,0 +1,10 @@
+{
+  "_template": "gh:oncleben31/cookiecutter-homeassistant-custom-component",
+  "class_name_prefix": "Mh",
+  "domain_name": "myheat",
+  "friendly_name": "MyHeat",
+  "github_user": "vooon",
+  "project_name": "myheat",
+  "test_suite": "yes",
+  "version": "0.0.0"
+}

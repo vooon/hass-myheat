@@ -1,0 +1,10 @@
+{
+  "domain": "myheat",
+  "name": "MyHeat",
+  "documentation": "https://github.com/vooon/myheat",
+  "issue_tracker": "https://github.com/vooon/myheat/issues",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["@vooon"],
+  "requirements": []
+}
