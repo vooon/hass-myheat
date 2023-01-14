@@ -87,6 +87,20 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         return f"{name} {self.env['name']}"
 
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{self.config_entry.entry_id}env{self.env.get('id')}"
+
+    # async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
+    #     """Set new target hvac mode."""
+    #     await self.hass.async_add_executor_job(self.set_hvac_mode, hvac_mode)
+
+    async def async_set_temperature(self, **kwargs) -> None:
+        """Set new target temperature."""
+
+        _logger.info(f"set t: {kwargs}")
+
     @callback
     def _handle_coordinator_update(self):
         """Get the latest state from the thermostat."""
