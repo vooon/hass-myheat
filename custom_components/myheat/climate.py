@@ -86,7 +86,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
         # self._attr_precision: float
         self._attr_preset_mode = PRESET_NONE
-        self._attr_preset_modes = PRESET_TO_ID.keys()
+        self._attr_preset_modes = list(PRESET_TO_ID.keys())
 
         # self._attr_swing_mode: str | None
         # self._attr_swing_modes: list[str] | None
