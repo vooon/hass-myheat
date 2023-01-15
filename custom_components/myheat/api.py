@@ -55,6 +55,7 @@ class MhApiClient:
             "setEnvGoal",
             deviceId=device_id,
             objId=obj_id,
+            goal=goal,
             changeMode=change_mode and 1 or 0,
         )
 

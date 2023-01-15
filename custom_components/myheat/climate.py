@@ -56,8 +56,8 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         self._attr_fan_modes = []
 
         self._attr_hvac_action = None
-        self._attr_hvac_mode = HVACMode.AUTO
-        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT, HVACMode.AUTO]
+        self._attr_hvac_mode = HVACMode.HEAT
+        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
 
         self._attr_is_aux_heat = False
 
@@ -92,9 +92,18 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         """Return a unique ID to use for this entity."""
         return f"{super().unique_id}env{self.env.get('id')}"
 
-    # async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
-    #     """Set new target hvac mode."""
-    #     await self.hass.async_add_executor_job(self.set_hvac_mode, hvac_mode)
+    async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
+        """Set new target hvac mode."""
+
+        if hvac_mode == HVACMode.OFF:
+            goal = None
+        else:
+            goal = self._attr_target_temperature
+
+        await self.coordinator.api.async_set_env_goal(obj_id=self.env["id"], goal=goal)
+        await self.coordinator.async_request_refresh()
+
+        await self.hass.async_add_executor_job(self.set_hvac_mode, hvac_mode)
 
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
@@ -114,7 +123,11 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         self._attr_hvac_action = (
             (HVACAction.HEATING if e.get("demand", False) else HVACAction.IDLE)
             if self._attr_target_temperature is not None
-            else HVACMode.OFF
+            else HVACAction.OFF
+        )
+
+        self._attr_hvac_mode = (
+            HVACMode.HEAT if self._attr_target_temperature is not None else HVACMode.OFF
         )
 
         self.async_write_ha_state()
