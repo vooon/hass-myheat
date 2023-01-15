@@ -3,9 +3,14 @@
 import logging
 
 from homeassistant.components.climate import (
+    PRESET_ACTIVITY,
+    PRESET_AWAY,
+    PRESET_BOOST,
     PRESET_COMFORT,
     PRESET_ECO,
+    PRESET_HOME,
     PRESET_NONE,
+    PRESET_SLEEP,
     ClimateEntity,
     ClimateEntityFeature,
     HVACAction,
@@ -20,6 +25,17 @@ from .const import CONF_NAME, DEFAULT_NAME, DOMAIN
 from .entity import MhEntity
 
 _logger = logging.getLogger(__package__)
+
+PRESET_TO_ID = {
+    # PRESET_ACTIVITY: 0,
+    PRESET_AWAY: 3,  # Режим: Отпуск
+    # PRESET_BOOST: 0,
+    # PRESET_COMFORT: 0,
+    PRESET_ECO: 2,  # Режим: На работе
+    PRESET_HOME: 1,  # Режим: Дома
+    PRESET_NONE: 0,
+    PRESET_SLEEP: 4,  # Режим: Лето
+}
 
 
 async def async_setup_entry(
@@ -47,7 +63,9 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         super().__init__(coordinator, config_entry)
         self.env = env
 
-        self._attr_supported_features = ClimateEntityFeature.TARGET_TEMPERATURE
+        self._attr_supported_features = (
+            ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+        )
 
         self._attr_current_humidity = None
         self._attr_current_temperature = None
@@ -67,8 +85,8 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         # self._attr_min_temp: float
 
         # self._attr_precision: float
-        # self._attr_preset_mode: str | None
-        # self._attr_preset_modes: list[str] | None
+        self._attr_preset_mode = PRESET_NONE
+        self._attr_preset_modes = PRESET_TO_ID.keys()
 
         # self._attr_swing_mode: str | None
         # self._attr_swing_modes: list[str] | None
@@ -99,8 +117,16 @@ class MhEnvClimate(MhEntity, ClimateEntity):
             goal = None
         else:
             goal = self._attr_target_temperature
+            if goal is None:
+                goal = 24  # NOTE(vooon): we need some reasonable value to turn on the heater and i like 22-26.
 
         await self.coordinator.api.async_set_env_goal(obj_id=self.env["id"], goal=goal)
+        await self.coordinator.async_request_refresh()
+
+    async def async_set_preset_mode(self, preset_mode: str) -> None:
+        """Set new preset mode."""
+        mode_id = PRESET_TO_ID[preset_mode]
+        await self.coordinator.api.async_set_heating_mode(mode_id=mode_id)
         await self.coordinator.async_request_refresh()
 
     async def async_set_temperature(self, **kwargs) -> None:
