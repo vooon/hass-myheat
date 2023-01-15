@@ -56,7 +56,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         self._attr_fan_modes = []
 
         self._attr_hvac_action = None
-        self._attr_hvac_mode = HVACMode.HEAT
+        self._attr_hvac_mode = HVACMode.OFF
         self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
 
         self._attr_is_aux_heat = False
@@ -102,8 +102,6 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
         await self.coordinator.api.async_set_env_goal(obj_id=self.env["id"], goal=goal)
         await self.coordinator.async_request_refresh()
-
-        await self.hass.async_add_executor_job(self.set_hvac_mode, hvac_mode)
 
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
