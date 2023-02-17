@@ -2,10 +2,10 @@
 import asyncio
 
 import aiohttp
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from custom_components.myheat.api import RPC_ENDPOINT
 from custom_components.myheat.api import MhApiClient
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 # Use data from api pdf
 GET_DEVIDES = {
