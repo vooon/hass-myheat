@@ -2,9 +2,8 @@
 import asyncio
 
 import aiohttp
-
-from custom_components.myheat.api import RPC_ENDPOINT
 from custom_components.myheat.api import MhApiClient
+from custom_components.myheat.api import RPC_ENDPOINT
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 # Use data from api pdf

@@ -7,7 +7,6 @@ from custom_components.myheat.const import DOMAIN
 from custom_components.myheat.const import PLATFORMS
 from custom_components.myheat.const import SENSOR
 from custom_components.myheat.const import SWITCH
-
 from homeassistant import config_entries
 from homeassistant import data_entry_flow
 from pytest_homeassistant_custom_component.common import MockConfigEntry
