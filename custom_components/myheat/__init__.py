@@ -4,7 +4,6 @@ Custom integration to integrate MyHeat with Home Assistant.
 For more details about this integration, please refer to
 https://github.com/vooon/hass-myheat
 """
-
 import asyncio
 import logging
 from datetime import timedelta
@@ -18,7 +17,10 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .api import MhApiClient
-from .const import CONF_USERNAME, CONF_NAME, CONF_API_KEY, CONF_DEVICE_ID
+from .const import CONF_API_KEY
+from .const import CONF_DEVICE_ID
+from .const import CONF_NAME
+from .const import CONF_USERNAME
 from .const import DOMAIN
 from .const import PLATFORMS
 from .const import STARTUP_MESSAGE

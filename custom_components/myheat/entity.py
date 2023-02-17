@@ -1,7 +1,11 @@
 """MhEntity class"""
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import ATTRIBUTION, DOMAIN, MANUFACTURER, NAME, VERSION
+from .const import ATTRIBUTION
+from .const import DOMAIN
+from .const import MANUFACTURER
+from .const import NAME
+from .const import VERSION
 
 
 class MhEntity(CoordinatorEntity):
