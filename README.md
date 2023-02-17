@@ -13,7 +13,7 @@
 **This component will set up the following platforms.**
 
 | Platform        | Description                         |
-| --------------- | ------------------------------------|
+| --------------- | ----------------------------------- |
 | `binary_sensor` | Show something `True` or `False`.   |
 | `sensor`        | Show info from MyHeat API.          |
 | `climate`       | Manage heating controller.          |

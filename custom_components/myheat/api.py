@@ -28,6 +28,7 @@ class MhApiClient:
 
     def __init__(
         self,
+        *,
         username: str,
         api_key: str,
         device_id: int,
@@ -43,12 +44,17 @@ class MhApiClient:
         """Get available devices"""
         return await self.rpc("getDevices")
 
-    async def async_get_device_info(self, device_id: int = None) -> dict:
+    async def async_get_device_info(self, *, device_id: int = None) -> dict:
         """Get device state and objects"""
         return await self.rpc("getDeviceInfo", deviceId=device_id)
 
     async def async_set_env_goal(
-        self, obj_id: int, goal: int, device_id: int = None, change_mode: bool = False
+        self,
+        *,
+        obj_id: int,
+        goal: int,
+        device_id: int = None,
+        change_mode: bool = False,
     ) -> None:
         """Set goal for environment"""
         await self.rpc(
@@ -60,7 +66,12 @@ class MhApiClient:
         )
 
     async def async_set_env_curve(
-        self, obj_id: int, curve: int, device_id: int = None, change_mode: bool = False
+        self,
+        *,
+        obj_id: int,
+        curve: int,
+        device_id: int = None,
+        change_mode: bool = False,
     ) -> None:
         """Set goal curve for environment"""
         await self.rpc(
@@ -72,7 +83,12 @@ class MhApiClient:
         )
 
     async def async_set_eng_goal(
-        self, obj_id: int, goal: int, device_id: int = None, change_mode: bool = False
+        self,
+        *,
+        obj_id: int,
+        goal: int,
+        device_id: int = None,
+        change_mode: bool = False,
     ) -> None:
         """Set goal for engineering component"""
         await self.rpc(
@@ -83,7 +99,7 @@ class MhApiClient:
         )
 
     async def async_set_heating_mode(
-        self, device_id: int = None, mode_id: int = None, schedule_id: int = None
+        self, *, device_id: int = None, mode_id: int = None, schedule_id: int = None
     ) -> None:
         """Set heating mode.
 
@@ -101,6 +117,7 @@ class MhApiClient:
 
     async def async_set_security_mode(
         self,
+        *,
         mode: bool,
         device_id: int = None,
     ) -> None:

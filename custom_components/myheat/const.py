@@ -1,12 +1,9 @@
 """Constants for MyHeat."""
-
-from homeassistant.const import (
-    CONF_API_KEY,
-    CONF_NAME,
-    CONF_USERNAME,
-    CONF_DEVICE_ID,
-    Platform,
-)
+from homeassistant.const import CONF_API_KEY
+from homeassistant.const import CONF_DEVICE_ID
+from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_USERNAME
+from homeassistant.const import Platform
 
 # Base component constants
 NAME = "MyHeat"
