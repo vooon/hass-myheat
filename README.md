@@ -15,8 +15,8 @@
 | Platform        | Description                                                               |
 | --------------- | ------------------------------------------------------------------------- |
 | `binary_sensor` | Show something `True` or `False`.                                         |
-| `sensor`        | Show info from MyHeat API. |
-| `climate`       | Manage heating controller. |
+| `sensor`        | Show info from MyHeat API.                                                |
+| `climate`       | Manage heating controller.                                                |
 | `switch`        | Switch something `True` or `False`.                                       |
 
 ## Installation

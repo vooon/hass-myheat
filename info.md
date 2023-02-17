@@ -10,7 +10,7 @@
 | Platform        | Description                         |
 | --------------- | ----------------------------------- |
 | `binary_sensor` | Show something `True` or `False`.   |
-| `climate`       | Manage heating controller. |
+| `climate`       | Manage heating controller.          |
 | `sensor`        | Show info from API.                 |
 | `switch`        | Switch something `True` or `False`. |
 

@@ -21,7 +21,6 @@
     "error": {
       "auth": "Username/Key is wrong."
     },
-    "abort": {
-    }
+    "abort": {}
   }
 }

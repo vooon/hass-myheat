@@ -1,0 +1,26 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Аккаунт MyHeat",
+        "description": "Получите ключ API на странице настроек пользователя https://my.myheat.net",
+        "data": {
+          "username": "Логин",
+          "api_key": "Ключ API"
+        }
+      },
+      "device": {
+        "title": "Контроллер MyHeat",
+        "description": "Пожалуйста выберите подключенное устройство",
+        "data": {
+          "name": "Имя",
+          "device_id": "Устройство"
+        }
+      }
+    },
+    "error": {
+      "auth": "Не верный логин ил пароль."
+    },
+    "abort": {}
+  }
+}
