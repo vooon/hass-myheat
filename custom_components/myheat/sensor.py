@@ -1,5 +1,4 @@
 """Sensor platform for MyHeat."""
-
 from .const import DEFAULT_NAME
 from .const import DOMAIN
 from .const import ICON

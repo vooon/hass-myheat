@@ -5,10 +5,10 @@ from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate import ClimateEntityFeature
 from homeassistant.components.climate import HVACAction
 from homeassistant.components.climate import HVACMode
-from homeassistant.components.climate import PRESET_ACTIVITY
+from homeassistant.components.climate import PRESET_ACTIVITY  # noqa
 from homeassistant.components.climate import PRESET_AWAY
-from homeassistant.components.climate import PRESET_BOOST
-from homeassistant.components.climate import PRESET_COMFORT
+from homeassistant.components.climate import PRESET_BOOST  # noqa
+from homeassistant.components.climate import PRESET_COMFORT  # noqa
 from homeassistant.components.climate import PRESET_ECO
 from homeassistant.components.climate import PRESET_HOME
 from homeassistant.components.climate import PRESET_NONE

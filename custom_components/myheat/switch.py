@@ -1,5 +1,4 @@
 """Switch platform for MyHeat."""
-
 from homeassistant.components.switch import SwitchEntity
 
 from .const import DEFAULT_NAME

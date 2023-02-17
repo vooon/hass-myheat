@@ -19,7 +19,7 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from .api import MhApiClient
 from .const import CONF_API_KEY
 from .const import CONF_DEVICE_ID
-from .const import CONF_NAME
+from .const import CONF_NAME  # noqa
 from .const import CONF_USERNAME
 from .const import DOMAIN
 from .const import PLATFORMS
