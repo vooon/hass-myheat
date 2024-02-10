@@ -5,7 +5,6 @@ import logging
 import socket
 
 import aiohttp
-import async_timeout
 
 from .const import VERSION
 
@@ -139,14 +138,14 @@ class MhApiClient:
             kwargs["deviceId"] = self._device_id
 
         try:
-            async with async_timeout.timeout(TIMEOUT):
+            async with asyncio.timeout(TIMEOUT):
                 response = await self._session.post(url, headers=HEADERS, json=kwargs)
                 data = await response.json()
 
                 _LOGGER.debug("Data: %s", data)
                 return data
 
-        except asyncio.TimeoutError as exception:
+        except (asyncio.TimeoutError, asyncio.CancelledError) as exception:
             _LOGGER.exception(
                 "Timeout error fetching information from %s - %s",
                 url,
@@ -166,3 +165,6 @@ class MhApiClient:
             )
         except Exception as exception:  # pylint: disable=broad-except
             _LOGGER.exception("Something really wrong happened! - %s", exception)
+
+        # re-raise exception
+        raise
