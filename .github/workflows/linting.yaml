@@ -1,0 +1,35 @@
+name: Linting
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - uses: pre-commit/action@v3
+
+  hacs:
+    runs-on: "ubuntu-latest"
+    name: HACS
+    steps:
+      - uses: actions/checkout@v4
+      - name: HACS validation
+        uses: "hacs/action@main"
+        with:
+          category: "integration"
+          ignore: brands
+
+  hassfest:
+    runs-on: "ubuntu-latest"
+    name: Hassfest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: "home-assistant/actions/hassfest@master"
