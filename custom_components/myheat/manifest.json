@@ -1,14 +1,14 @@
 {
   "domain": "myheat",
   "name": "MyHeat",
-  "integration_type": "device",
-  "documentation": "https://github.com/vooon/hass-myheat",
-  "issue_tracker": "https://github.com/vooon/hass-myheat/issues",
-  "dependencies": [],
-  "config_flow": true,
   "codeowners": ["@vooon"],
-  "requirements": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/vooon/hass-myheat",
+  "integration_type": "device",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/vooon/hass-myheat/issues",
   "loggers": ["myheat"],
+  "requirements": [],
   "version": "0.2.0"
 }

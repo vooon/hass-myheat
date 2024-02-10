@@ -24,7 +24,7 @@ def skip_notifications_fixture():
 @pytest.fixture(name="bypass_get_data")
 def bypass_get_data_fixture():
     """Skip calls to get data from API."""
-    with patch("custom_components.myheat.MhApiClient.async_get_data"):
+    with patch("custom_components.myheat.MhApiClient.rpc"):
         yield
 
 
@@ -34,7 +34,7 @@ def bypass_get_data_fixture():
 def error_get_data_fixture():
     """Simulate error when retrieving data from API."""
     with patch(
-        "custom_components.myheat.MhApiClient.async_get_data",
+        "custom_components.myheat.MhApiClient.rpc",
         side_effect=Exception,
     ):
         yield
