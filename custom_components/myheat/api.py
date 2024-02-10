@@ -1,4 +1,5 @@
 """Sample API Client."""
+
 import asyncio
 import logging
 import socket

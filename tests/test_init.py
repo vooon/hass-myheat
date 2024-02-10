@@ -1,4 +1,5 @@
 """Test MyHeat setup process."""
+
 import pytest
 from custom_components.myheat import async_reload_entry
 from custom_components.myheat import async_setup_entry

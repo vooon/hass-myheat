@@ -1,4 +1,5 @@
 """Adds config flow for MyHeat."""
+
 import logging
 
 import voluptuous as vol

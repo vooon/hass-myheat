@@ -1,4 +1,5 @@
 """Constants for MyHeat tests."""
+
 from custom_components.myheat.const import CONF_API_KEY
 from custom_components.myheat.const import CONF_USERNAME
 

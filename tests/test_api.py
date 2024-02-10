@@ -1,4 +1,5 @@
 """Tests for MyHeat api."""
+
 import asyncio
 
 import aiohttp

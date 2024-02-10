@@ -1,4 +1,5 @@
 """Climate platform for MyHeat."""
+
 import logging
 
 from homeassistant.components.climate import ClimateEntity

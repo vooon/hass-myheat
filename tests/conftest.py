@@ -1,4 +1,5 @@
 """Global fixtures for MyHeat integration."""
+
 from unittest.mock import patch
 
 import pytest
