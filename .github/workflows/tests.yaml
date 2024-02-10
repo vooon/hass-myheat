@@ -11,7 +11,7 @@ on:
     - cron: "0 0 * * *"
 
 env:
-  DEFAULT_PYTHON: "3.10"
+  DEFAULT_PYTHON: "3.12"
 
 jobs:
   pre-commit:
@@ -61,6 +61,7 @@ jobs:
 
       - name: Hassfest validation
         uses: "home-assistant/actions/hassfest@master"
+
   tests:
     runs-on: "ubuntu-latest"
     name: Run tests
