@@ -8,21 +8,22 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aiohttp = "^3.9"
+#aiohttp = "^3.9"
 #home-assistant-bluetooth = "^1"
-homeassistant = ">=2023"
-voluptuous = ">=0.12.1"
+#homeassistant = "^2024"
+#voluptuous = ">=0.12.1"
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "*"
-reorder-python-imports = "*"
-pytest-homeassistant-custom-component = "*"
-bandit = "*"
-black = {version = "*", allow-prereleases = true}
-mypy = "*"
-pre-commit = "*"
-pydocstyle = ">=6.0.0"
-prospector = {extras = ["with_vulture"], version = "*"}
+#flake8 = "*"
+#reorder-python-imports = "*"
+#pytest = "^8"
+#pytest-homeassistant-custom-component = ">=0.13"
+#bandit = "*"
+#black = {version = "*", allow-prereleases = true}
+#mypy = "*"
+#pre-commit = "*"
+#pydocstyle = ">=6.0.0"
+#prospector = {extras = ["with_vulture"], version = "*"}
 
 [build-system]
 requires = ["poetry-core"]

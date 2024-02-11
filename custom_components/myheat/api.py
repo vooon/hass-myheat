@@ -21,9 +21,7 @@ RPC_ENDPOINT = "https://my.myheat.net/api/request/"
 
 
 class MhApiClient:
-    """
-    API helper to manipulate with myheat.net cloud
-    """
+    """API helper to manipulate with myheat.net cloud"""
 
     def __init__(
         self,

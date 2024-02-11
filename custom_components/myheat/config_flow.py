@@ -1,28 +1,40 @@
 """Adds config flow for MyHeat."""
 
 import logging
+from typing import Any
 
-import voluptuous as vol
-from homeassistant import config_entries
+from homeassistant.config_entries import ConfigEntry, ConfigFlow
+from homeassistant.core import HomeAssistant
+from homeassistant.data_entry_flow import FlowResult
+from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+import voluptuous as vol
 
 from .api import MhApiClient
-from .const import CONF_API_KEY
-from .const import CONF_DEVICE_ID
-from .const import CONF_NAME
-from .const import CONF_USERNAME
-from .const import DOMAIN
+from .const import CONF_API_KEY, CONF_DEVICE_ID, CONF_NAME, CONF_USERNAME, DOMAIN
 
 _logger = logging.getLogger(__package__)
 
+DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_NAME): cv.string,
+        vol.Required(CONF_USERNAME): cv.string,
+        vol.Required(CONF_API_KEY): cv.string,
+        vol.Required(CONF_DEVICE_ID): cv.positive_int,
+    }
+)
 
-class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+
+class MhFlowHandler(ConfigFlow, domain=DOMAIN):
     """Config flow for myheat."""
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
-    def __init__(self):
+    # entry:ConfigEntry|None=None
+
+    def __init__(self) -> None:
         """Initialize."""
         self._devices = {}
         self._errors = {}
@@ -30,19 +42,14 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     @property
     def data_schema(self):
-        return vol.Schema(
-            {
-                vol.Required(CONF_NAME): str,
-                vol.Required(CONF_USERNAME): str,
-                vol.Required(CONF_API_KEY): str,
-                vol.Required(CONF_DEVICE_ID): int,
-            }
-        )
+        return DATA_SCHEMA
 
-    async def async_step_user(self, user_input=None):
+    async def async_step_user(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
         """Handle a flow initialized by the user."""
         if user_input is None:
-            return await self._show_auth_config_form(user_input)
+            return self._show_auth_config_form(user_input)
 
         self._devices = await self._get_devices(
             username=user_input[CONF_USERNAME],
@@ -50,10 +57,10 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         )
         if not self._devices:
             self._errors["base"] = "auth"
-            return await self._show_auth_config_form(user_input)
+            return self._show_auth_config_form(user_input)
 
         self._auth = user_input
-        return await self.async_step_device()
+        return self.async_step_device()
 
     async def _show_auth_config_form(
         self, user_input
@@ -70,7 +77,9 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def async_step_device(self, user_input=None):
+    async def async_step_device(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
         """Show the configuration form to choose the device."""
         if not user_input:
             devices = [
@@ -97,7 +106,7 @@ class MhFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
 
-    async def _get_devices(self, username, api_key):
+    async def _get_devices(self, username: str, api_key: str) -> dict[str, Any]:
         """Return true if credentials is valid."""
         try:
             session = async_create_clientsession(self.hass)
