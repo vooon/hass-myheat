@@ -8,8 +8,8 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aiohttp = "*"
-home-assistant-bluetooth = "^1"
+aiohttp = "^3.9"
+#home-assistant-bluetooth = "^1"
 homeassistant = ">=2023"
 voluptuous = ">=0.12.1"
 
@@ -18,7 +18,7 @@ flake8 = "*"
 reorder-python-imports = "*"
 pytest-homeassistant-custom-component = "*"
 bandit = "*"
-black = {version = "*", allow-prereleases = true}
+black = {version = "<24", allow-prereleases = true}
 mypy = "*"
 pre-commit = "*"
 pydocstyle = ">=6.0.0"
