@@ -10,7 +10,6 @@ from .const import VERSION
 
 TIMEOUT = 10
 
-
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 HEADERS = {
@@ -35,10 +34,10 @@ class MhApiClient:
         session: aiohttp.ClientSession,
     ) -> None:
         """Sample API Client."""
-        self._username :str= username
-        self._api_key :str= api_key
-        self._device_id:int = device_id
-        self._session :aiohttp.ClientSession= session
+        self._username: str = username
+        self._api_key: str = api_key
+        self._device_id: int = device_id
+        self._session: aiohttp.ClientSession = session
 
     async def async_get_devices(self) -> dict:
         """Get available devices"""
