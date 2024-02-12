@@ -78,6 +78,10 @@ class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
         return d
 
     def _heater(self) -> dict:
+        if not self.coordinator.data.get("dataActual", False):
+            _logger.warninig("data not actual! %s", self.coordinator.data)
+            return {}
+
         heaters = self.coordinator.data.get("heaters", [])
         for h in heaters:
             if h["id"] == self.heater_id:
@@ -130,6 +134,7 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
 
         return severity > 1
 
+    @property
     def extra_state_attributes(self):
         desc = self.coordinator.data.get("severityDesc")
         return {
@@ -168,6 +173,10 @@ class MhEngBinarySensor(MhEntity, BinarySensorEntity):
         return d
 
     def _eng(self) -> dict:
+        if not self.coordinator.data.get("dataActual", False):
+            _logger.warninig("data not actual! %s", self.coordinator.data)
+            return {}
+
         engs = self.coordinator.data.get("engs", [])
         for e in engs:
             if e["id"] == self.eng_id:

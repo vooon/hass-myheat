@@ -72,6 +72,10 @@ class MhHeaterSensor(MhEntity, SensorEntity):
         return d
 
     def _heater(self) -> dict:
+        if not self.coordinator.data.get("dataActual", False):
+            _logger.warninig("data not actual! %s", self.coordinator.data)
+            return {}
+
         heaters = self.coordinator.data.get("heaters", [])
         for h in heaters:
             if h["id"] == self.heater_id:
