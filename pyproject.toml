@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hass-myheat"
-version = "0.2.6"
+version = "0.2.7"
 description = "MyHeat integration plugin for HomeAssistant"
 authors = ["Vladimir Ermakov <vooon341@gmail.com>"]
 readme = "README.md"
