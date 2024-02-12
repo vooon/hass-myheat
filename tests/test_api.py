@@ -8,166 +8,7 @@ import pytest
 
 from custom_components.myheat.api import RPC_ENDPOINT, MhApiClient
 
-# Use data from api pdf
-GET_DEVIDES = {
-    "data": {
-        "devices": [
-            {
-                "id": 12,
-                "name": "У Моста",
-                "city": "Новошешминск",
-                "severity": 1,
-                "severityDesc": "Система работает нормально.",
-            },
-            {
-                "id": 10,
-                "name": "Хорошее место",
-                "city": "Новошешминск",
-                "severity": 1,
-                "severityDesc": "Система работает нормально.",
-            },
-        ]
-    },
-    "err": 0,
-    "refreshPage": False,
-}
-
-GET_DEVIDE_INFO = {
-    "data": {
-        "heaters": [
-            {
-                "id": 13,
-                "name": "Vaillant правый",
-                "disabled": False,
-                "flowTemp": 56,
-                "returnTemp": 56,
-                "pressure": 2.223,
-                "targetTemp": 0,
-                "burnerHeating": False,
-                "burnerWater": False,
-                "modulation": 0,
-            },
-            {
-                "id": 37,
-                "name": "Vaillant левый",
-                "disabled": False,
-                "flowTemp": 56,
-                "returnTemp": 57,
-                "pressure": 2.436,
-                "targetTemp": 0,
-                "burnerHeating": False,
-                "burnerWater": False,
-                "modulation": 0,
-            },
-        ],
-        "envs": [
-            {
-                "id": 21,
-                "type": "boiler_temperature",
-                "name": "Бойлер",
-                "value": 46.687,
-                "target": 45,
-                "demand": False,
-                "severity": 1,
-                "severityDesc": "Нормальное состояние.",
-            },
-            {
-                "id": 22,
-                "type": "room_temperature",
-                "name": "Кафе",
-                "value": 24.812,
-                "target": 23,
-                "demand": False,
-                "severity": 1,
-                "severityDesc": "Нормальное состояние.",
-            },
-            {
-                "id": 24,
-                "type": "circuit_temperature",
-                "name": "Контур отопления",
-                "value": 56,
-                "target": None,
-                "demand": False,
-                "severity": 1,
-                "severityDesc": "Нормальное состояние.",
-            },
-            {
-                "id": 23,
-                "type": "room_temperature",
-                "name": "Магазин",
-                "value": 24.187,
-                "target": 23,
-                "demand": False,
-                "severity": 1,
-                "severityDesc": "Нормальное состояние.",
-            },
-            {
-                "id": 20,
-                "type": "room_temperature",
-                "name": "Бухгалтерия",
-                "value": 29.812,
-                "target": None,
-                "demand": False,
-                "severity": 1,
-                "severityDesc": "Нормальное состояние.",
-            },
-            {
-                "id": 19,
-                "type": "room_temperature",
-                "name": "Котельная",
-                "value": 27.25,
-                "target": None,
-                "demand": False,
-                "severity": 1,
-                "severityDesc": "Нормальное состояние.",
-            },
-        ],
-        "engs": [
-            {
-                "id": 40,
-                "type": "pump",
-                "name": "Насос магазин",
-                "turnedOn": False,
-                "severity": 1,
-                "severityDesc": "Насос работает исправно.",
-            },
-            {
-                "id": 41,
-                "type": "pump",
-                "name": "Насос бойлер",
-                "turnedOn": False,
-                "severity": 1,
-                "severityDesc": "Насос работает исправно.",
-            },
-            {
-                "id": 38,
-                "type": "pump",
-                "name": "Насос кафе",
-                "turnedOn": False,
-                "severity": 1,
-                "severityDesc": "Насос работает исправно.",
-            },
-            {
-                "id": 39,
-                "type": "pump",
-                "name": "Насос бухгалтерия",
-                "turnedOn": False,
-                "severity": 1,
-                "severityDesc": "Насос работает исправно.",
-            },
-        ],
-        "alarms": {},
-        "dataActual": True,
-        "severity": 1,
-        "severityDesc": "Система работает нормально.",
-        "weatherTemp": "-6.78999999999996",
-        "city": "Новошешминск",
-    },
-    "err": 0,
-    "refreshPage": False,
-}
-
-NO_ERR = {"err": 0, "refreshPage": False}
+from .const import MOCK_GET_DEVIDE_INFO, MOCK_GET_DEVIDES, MOCK_NO_ERR
 
 
 def api_client(hass) -> MhApiClient:
@@ -186,8 +27,8 @@ async def test_api_get_devices(
     """Test API calls."""
     api = api_client(hass)
 
-    aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDES)
-    assert await api.async_get_devices() == GET_DEVIDES["data"]
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_GET_DEVIDES)
+    assert await api.async_get_devices() == MOCK_GET_DEVIDES["data"]
 
 
 async def test_api_get_device_info(
@@ -197,8 +38,8 @@ async def test_api_get_device_info(
     """Test API calls."""
     api = api_client(hass)
 
-    aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDE_INFO)
-    assert await api.async_get_device_info() == GET_DEVIDE_INFO["data"]
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_GET_DEVIDE_INFO)
+    assert await api.async_get_device_info() == MOCK_GET_DEVIDE_INFO["data"]
 
 
 async def test_api_set(
@@ -208,22 +49,22 @@ async def test_api_set(
     """Test API calls."""
     api = api_client(hass)
 
-    aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
     assert await api.async_set_env_goal(obj_id=21, goal=24) is None
 
-    aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
     assert await api.async_set_env_curve(obj_id=21, curve=0) is None
 
-    aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
     assert await api.async_set_eng_goal(obj_id=21, goal=-1) is None
 
-    aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
     assert await api.async_set_heating_mode(mode_id=2) is None
 
-    aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
     assert await api.async_set_heating_mode(mode_id=0, schedule_id=1) is None
 
-    aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
     assert await api.async_set_security_mode(mode=True) is None
 
 

@@ -1,13 +1,16 @@
 """Test MyHeat setup process."""
 
-import pytest
-from custom_components.myheat import async_reload_entry
-from custom_components.myheat import async_setup_entry
-from custom_components.myheat import async_unload_entry
-from custom_components.myheat import MhDataUpdateCoordinator
-from custom_components.myheat.const import DOMAIN
 from homeassistant.exceptions import ConfigEntryNotReady
+import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+
+from custom_components.myheat import (
+    MhDataUpdateCoordinator,
+    async_reload_entry,
+    async_setup_entry,
+    async_unload_entry,
+)
+from custom_components.myheat.const import DOMAIN
 
 from .const import MOCK_CONFIG
 
@@ -17,7 +20,7 @@ from .const import MOCK_CONFIG
 # Home Assistant using the pytest_homeassistant_custom_component plugin.
 # Assertions allow you to verify that the return value of whatever is on the left
 # side of the assertion matches with the right side.
-async def test_setup_unload_and_reload_entry(hass, bypass_get_data):
+async def test_setup_unload_and_reload_entry(hass, bypass_get_device_info):
     """Test entry setup and unload."""
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
