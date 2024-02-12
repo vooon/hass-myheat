@@ -7,7 +7,7 @@ from homeassistant.const import CONF_USERNAME  # noqa
 from homeassistant.const import Platform
 
 # Base component constants
-NAME = "MyHeat"
+NAME = "MyHeat.net"
 DOMAIN = "myheat"
 DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "0.2.3"
@@ -17,8 +17,6 @@ MANUFACTURER = "https://myheat.net"
 
 ISSUE_URL = "https://github.com/vooon/hass-myheat/issues"
 
-# Icons
-ICON = "mdi:format-quote-close"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
@@ -28,7 +26,7 @@ BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
 
-PLATFORMS = [Platform.CLIMATE]
+PLATFORMS = [Platform.CLIMATE, Platform.SENSOR]
 
 # Defaults
 DEFAULT_NAME = DOMAIN

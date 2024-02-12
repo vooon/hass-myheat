@@ -91,7 +91,7 @@ RPC_SCHEMA = vol.Schema(
                             extra=vol.ALLOW_EXTRA,
                         ),
                     ],
-                    "alarms": dict,
+                    "alarms": list,
                     "dataActual": bool,
                     "severity": int,
                     "severityDesc": str,

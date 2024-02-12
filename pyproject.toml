@@ -21,7 +21,7 @@ reorder-python-imports = "*"
 #pytest-homeassistant-custom-component = "0.13.100"
 pytest-homeassistant-custom-component = ">=0.13.100"
 #bandit = "*"
-#black = {version = "*", allow-prereleases = true}
+black = {version = "*", allow-prereleases = true}
 mypy = "*"
 pre-commit = "*"
 #pydocstyle = ">=6.0.0"
