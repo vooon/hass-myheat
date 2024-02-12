@@ -29,16 +29,68 @@ RPC_SCHEMA = vol.Schema(
             # getDevices
             vol.Schema(
                 {
-                    "devices": list,
+                    "devices": [
+                        vol.Schema(
+                            {
+                                "id": int,
+                                "name": str,
+                                "severity": int,
+                                "severityDesc": str,
+                            },
+                            extra=vol.ALLOW_EXTRA,
+                        ),
+                    ],
                 },
                 extra=vol.ALLOW_EXTRA,
             ),
             # getDeviceInfo
             vol.Schema(
                 {
-                    "heaters": list,
-                    "envs": list,
-                    "engs": list,
+                    "heaters": [
+                        vol.Schema(
+                            {
+                                "id": int,
+                                "name": str,
+                                "disabled": bool,
+                                "flowTemp": float,
+                                "returnTemp": float,
+                                "pressure": vol.Any[None, float],
+                                "targetTemp": float,
+                                "burnerHeating": bool,
+                                "burnerWater": bool,
+                                "modulation": int,
+                            },
+                            extra=vol.ALLOW_EXTRA,
+                        ),
+                    ],
+                    "envs": [
+                        vol.Schema(
+                            {
+                                "id": int,
+                                "type": str,
+                                "name": str,
+                                "value": float,
+                                "target": vol.Any[None, float],
+                                "demand": bool,
+                                "severity": int,
+                                "severityDesc": str,
+                            },
+                            extra=vol.ALLOW_EXTRA,
+                        ),
+                    ],
+                    "engs": [
+                        vol.Schema(
+                            {
+                                "id": int,
+                                "type": str,
+                                "name": str,
+                                "turnedOn": bool,
+                                "severity": int,
+                                "severityDesc": str,
+                            },
+                            extra=vol.ALLOW_EXTRA,
+                        ),
+                    ],
                     "alarms": dict,
                     "dataActual": bool,
                     "severity": int,

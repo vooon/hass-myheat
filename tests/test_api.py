@@ -180,21 +180,30 @@ async def api_client(hass) -> MhApiClient:
     )
 
 
-async def test_api_get_devices(api_client, aioclient_mock, caplog):
+async def test_api_get_devices(
+    api_client,
+    aioclient_mock,
+):
     """Test API calls."""
 
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDES)
     assert await api_client.async_get_devices() == GET_DEVIDES["data"]
 
 
-async def test_api_get_device_info(api_client, aioclient_mock, caplog):
+async def test_api_get_device_info(
+    api_client,
+    aioclient_mock,
+):
     """Test API calls."""
 
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDE_INFO)
     assert await api_client.async_get_device_info() == GET_DEVIDE_INFO["data"]
 
 
-async def test_api_set(api_client, aioclient_mock, caplog):
+async def test_api_set(
+    api_client,
+    aioclient_mock,
+):
     """Test API calls."""
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
