@@ -171,7 +171,7 @@ NO_ERR = {"err": 0, "refreshPage": False}
 
 
 @pytest.fixture
-def api_client(hass) -> MhApiClient:
+async def api_client(hass) -> MhApiClient:
     return MhApiClient(
         username="test_user",
         api_key="test_api_key",

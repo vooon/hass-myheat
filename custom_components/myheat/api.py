@@ -56,6 +56,8 @@ RPC_SCHEMA = vol.Schema(
 
 
 class RPCError(Exception):
+    """API returned error"""
+
     code: int
     _full_response: dict[str, Any]
 
@@ -195,26 +197,29 @@ class MhApiClient:
 
                 return data.get("data", {})
 
-        except (asyncio.TimeoutError, asyncio.CancelledError) as exception:
+        except (asyncio.TimeoutError, asyncio.CancelledError) as ex:
             _LOGGER.exception(
                 "Timeout error fetching information from %s - %s",
                 url,
-                exception,
+                ex,
             )
-        except (KeyError, TypeError) as exception:
+            raise
+        except (KeyError, TypeError) as ex:
             _LOGGER.exception(
                 "Error parsing information from %s - %s",
                 url,
-                exception,
+                ex,
             )
-        except (aiohttp.ClientError, socket.gaierror) as exception:
+            raise
+        except (aiohttp.ClientError, socket.gaierror) as ex:
             _LOGGER.exception(
                 "Error fetching information from %s - %s",
                 url,
-                exception,
+                ex,
             )
-        except Exception as exception:  # pylint: disable=broad-except
-            _LOGGER.exception("Something really wrong happened! - %s", exception)
+            raise
+        except Exception as ex:  # pylint: disable=broad-except
+            _LOGGER.exception("Something really wrong happened! - %s", ex)
+            raise
 
-        # re-raise exception
-        raise
+        raise AssertionError("reached unreachable code")
