@@ -170,8 +170,7 @@ GET_DEVIDE_INFO = {
 NO_ERR = {"err": 0, "refreshPage": False}
 
 
-@pytest.fixture
-async def api_client(hass) -> MhApiClient:
+def api_client(hass) -> MhApiClient:
     return MhApiClient(
         username="test_user",
         api_key="test_api_key",
@@ -181,52 +180,57 @@ async def api_client(hass) -> MhApiClient:
 
 
 async def test_api_get_devices(
-    api_client,
+    hass,
     aioclient_mock,
 ):
     """Test API calls."""
 
+    api = api_client(hass)
+
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDES)
-    assert await api_client.async_get_devices() == GET_DEVIDES["data"]
+    assert await api.async_get_devices() == GET_DEVIDES["data"]
 
 
 async def test_api_get_device_info(
-    api_client,
+    hass,
     aioclient_mock,
 ):
     """Test API calls."""
+    api = api_client(hass)
 
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDE_INFO)
-    assert await api_client.async_get_device_info() == GET_DEVIDE_INFO["data"]
+    assert await api.async_get_device_info() == GET_DEVIDE_INFO["data"]
 
 
 async def test_api_set(
-    api_client,
+    hass,
     aioclient_mock,
 ):
     """Test API calls."""
+    api = api_client(hass)
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
-    assert await api_client.async_set_env_goal(obj_id=21, goal=24) is None
+    assert await api.async_set_env_goal(obj_id=21, goal=24) is None
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
-    assert await api_client.async_set_env_curve(obj_id=21, curve=0) is None
+    assert await api.async_set_env_curve(obj_id=21, curve=0) is None
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
-    assert await api_client.async_set_eng_goal(obj_id=21, goal=-1) is None
+    assert await api.async_set_eng_goal(obj_id=21, goal=-1) is None
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
-    assert await api_client.async_set_heating_mode(mode_id=2) is None
+    assert await api.async_set_heating_mode(mode_id=2) is None
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
-    assert await api_client.async_set_heating_mode(mode_id=0, schedule_id=1) is None
+    assert await api.async_set_heating_mode(mode_id=0, schedule_id=1) is None
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
-    assert await api_client.async_set_security_mode(mode=True) is None
+    assert await api.async_set_security_mode(mode=True) is None
 
 
-async def test_api_rpc_errors(api_client, aioclient_mock, caplog):
+async def test_api_rpc_errors(hass, aioclient_mock, caplog):
     """Test API calls."""
+    api = api_client(hass)
 
     # In order to get 100% coverage, we need to test `api_wrapper` to test the code
     # that isn't already called by `async_get_data` and `async_set_title`. Because the
