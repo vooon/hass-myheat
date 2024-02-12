@@ -73,7 +73,7 @@ class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
 
     @property
     def _mh_dev_name_suffix(self):
-        return f" Heater {self.heater_name}"
+        return f" {self.heater_name}"
 
     @property
     def _mh_identifiers(self):
@@ -170,7 +170,7 @@ class MhEngBinarySensor(MhEntity, BinarySensorEntity):
 
     @property
     def _mh_dev_name_suffix(self):
-        return f" Eng {self.eng_name}"
+        return f" {self.eng_name}"
 
     @property
     def _mh_identifiers(self):

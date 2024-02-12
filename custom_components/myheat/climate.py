@@ -59,9 +59,10 @@ async def async_setup_entry(
 class MhEnvClimate(MhEntity, ClimateEntity):
     """myheat Climate class."""
 
-    def __init__(self, coordinator, config_entry, env):
+    def __init__(self, coordinator, config_entry, env: dict):
         super().__init__(coordinator, config_entry)
-        self.env = env
+        self.env_name = env["name"]
+        self.env_id = env["id"]
 
         self._attr_supported_features = (
             ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
@@ -103,12 +104,12 @@ class MhEnvClimate(MhEntity, ClimateEntity):
     def name(self):
         """Return the name of the sensor."""
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        return f"{name} {self.env['name']}"
+        return f"{name} {self.env_name}"
 
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}env{self.env.get('id')}"
+        return f"{super().unique_id}env{self.env_id}"
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new target hvac mode."""
@@ -120,7 +121,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
             if goal is None:
                 goal = 24  # NOTE(vooon): we need some reasonable value to turn on the heater and i like 22-26.
 
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env["id"], goal=goal)
+        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
         await self.coordinator.async_request_refresh()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
@@ -132,7 +133,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
         goal = kwargs.get("temperature", 0)
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env["id"], goal=goal)
+        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
         await self.coordinator.async_request_refresh()
 
     @callback
@@ -158,11 +159,11 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
     @property
     def _mh_dev_name_suffix(self):
-        return f" Env {self.env['name']}"
+        return f" {self.env_name}"
 
     @property
     def _mh_identifiers(self):
-        return (DOMAIN, self.unique_id)
+        return (DOMAIN, f"{super().unique_id}env{self.env_id}")
 
     def _env(self) -> dict:
         if not self.coordinator.data.get("dataActual", False):
@@ -171,7 +172,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
         envs = self.coordinator.data.get("envs", [])
         for e in envs:
-            if e["id"] == self.env["id"]:
+            if e["id"] == self.env_id:
                 return e
 
         return {}
