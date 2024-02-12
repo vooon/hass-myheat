@@ -242,7 +242,7 @@ async def test_api_rpc_errors(hass, aioclient_mock, caplog):
     caplog.clear()
     aioclient_mock.post(RPC_ENDPOINT, exc=asyncio.TimeoutError)
 
-    with pytest.raises(asyncio.Timeout):
+    with pytest.raises(asyncio.TimeoutError):
         assert await api.rpc("timeout") is None
         assert (
             len(caplog.record_tuples) == 1

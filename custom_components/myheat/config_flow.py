@@ -41,7 +41,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
         self._auth = {}
 
     @property
-    def data_schema(self):
+    def data_schema(self) -> vol.Schema:
         return DATA_SCHEMA
 
     async def async_step_user(
@@ -63,8 +63,8 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
         return self.async_step_device()
 
     async def _show_auth_config_form(
-        self, user_input
-    ):  # pylint: disable=unused-argument
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:  # pylint: disable=unused-argument
         """Show the configuration form to edit auth data."""
         return self.async_show_form(
             step_id="user",
@@ -84,7 +84,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
         if not user_input:
             devices = [
                 f"{v['id']} - {v['name']} - {v['city']}"
-                for v in self._devices["data"]["devices"]
+                for v in self._devices["devices"]
             ]
 
             return self.async_show_form(
