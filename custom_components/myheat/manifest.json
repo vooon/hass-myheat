@@ -1,6 +1,6 @@
 {
   "domain": "myheat",
-  "name": "MyHeat",
+  "name": "MyHeat.net",
   "codeowners": ["@vooon"],
   "config_flow": true,
   "dependencies": [],

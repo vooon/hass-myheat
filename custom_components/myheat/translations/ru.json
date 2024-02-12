@@ -5,26 +5,26 @@
         "title": "Аккаунт MyHeat",
         "description": "Получите ключ API на странице настроек пользователя https://my.myheat.net",
         "data": {
-          "username": "[%key:common::config_flow::data::username%]",
-          "api_key": "[%key:common::config_flow::data::api_key%]"
+          "username": "Логин",
+          "api_key": "Ключ API"
         }
       },
       "device": {
         "title": "Контроллер MyHeat",
         "description": "Пожалуйста выберите подключенное устройство",
         "data": {
-          "name": "[%key:common::config_flow::data::name%]",
-          "device_id": "[%key:common::config_flow::data::device_id%]"
+          "name": "Имя",
+          "device_id": "Устройство"
         }
       }
     },
     "error": {
-      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
-      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
-      "unknown": "[%key:common::config_flow::error::unknown%]"
+      "cannot_connect": "Ошибка подключения",
+      "invalid_auth": "Ошибка аутентификации",
+      "unknown": "Неизвестная ошибка"
     },
     "abort": {
-      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+      "already_configured": "Устройство уже настроено"
     }
   }
 }
