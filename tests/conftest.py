@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from .const import MOCK_GET_DEVICE_INFO
+from .const import MOCK_GET_DEVICE_INFO, MOCK_GET_DEVICES
 
 
 @pytest.fixture(autouse=True)
@@ -29,7 +29,7 @@ def bypass_get_device_info():
     """Skip calls to get data from API."""
     with patch(
         "custom_components.myheat.MhApiClient.async_get_device_info",
-        return_value=MOCK_GET_DEVIDE_INFO["data"],
+        return_value=MOCK_GET_DEVICE_INFO["data"],
     ):
         yield
 
@@ -39,7 +39,7 @@ def bypass_get_devices():
     """Skip calls to get data from API."""
     with patch(
         "custom_components.myheat.MhApiClient.async_get_devices",
-        return_value=MOCK_GET_DEVIDE_INFO["data"],
+        return_value=MOCK_GET_DEVICES["data"],
     ):
         yield
 
