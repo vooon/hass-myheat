@@ -41,8 +41,7 @@ async def async_setup_entry(
 class MhHeaterSensor(MhEntity, SensorEntity):
     """myheat Sensor class."""
 
-    _attr_name = ""
-    _icon = "mdi:water-boiler"
+    _key = ""
 
     def __init__(self, coordinator, config_entry, heater: dict):
         super().__init__(coordinator, config_entry)
@@ -53,17 +52,17 @@ class MhHeaterSensor(MhEntity, SensorEntity):
     def name(self):
         """Return the name of the sensor."""
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        return f"{name} {self.heater_name} {self._attr_name}"
+        return f"{name} {self.heater_name} {self._key}"
 
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._heater().get(self._attr_name)
+        return self._heater().get(self._key)
 
     @property
-    def icon(self):
-        """Return the icon of the sensor."""
-        return self._icon
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{super().unique_id}htr{self.heater_id}{self._key}"
 
     @property
     def device_info(self) -> dict:
@@ -80,30 +79,30 @@ class MhHeaterSensor(MhEntity, SensorEntity):
 
 
 class MhHeaterFlowTempSensor(MhHeaterSensor):
-    _attr_name = "flowTemp"
-    _icon = "mdi:coolant-temperature"
+    _key = "flowTemp"
+    _attr_icon = "mdi:coolant-temperature"
     _attr_device_class = "temperature"
 
 
 class MhHeaterReturnTempSensor(MhHeaterSensor):
-    _attr_name = "returnTemp"
-    _icon = "mdi:coolant-temperature"
+    _key = "returnTemp"
+    _attr_icon = "mdi:coolant-temperature"
     _attr_device_class = "temperature"
 
 
 class MhHeaterTargetTempSensor(MhHeaterSensor):
-    _attr_name = "targetTemp"
-    _icon = "mdi:coolant-temperature"
+    _key = "targetTemp"
+    _attr_icon = "mdi:coolant-temperature"
     _attr_device_class = "temperature"
 
 
 class MhHeaterPressureSensor(MhHeaterSensor):
-    _attr_name = "pressure"
-    _icon = "mdi:gauge"
+    _key = "pressure"
+    _attr_icon = "mdi:gauge"
     _attr_device_class = "pressure"
 
 
 class MhHeaterModulationSensor(MhHeaterSensor):
-    _attr_name = "modulation"
-    _icon = "mdi:gas-burner"
+    _key = "modulation"
+    _attr_icon = "mdi:gas-burner"
     _attr_device_class = None

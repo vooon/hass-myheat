@@ -25,7 +25,10 @@ async def async_setup_entry(
     _logger.info(f"Setting up heater entries: {coordinator.data}")
 
     async_add_entities(
-        flatten(
+        [
+            MhSeverityBinarySensor(coordinator, entry),
+        ]
+        + flatten(
             [
                 MhHeaterDisabledBinarySensor(coordinator, entry, heater),
                 MhHeaterBurnerWaterBinarySensor(coordinator, entry, heater),
@@ -39,8 +42,7 @@ async def async_setup_entry(
 class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
     """myheat Binary Sensor class."""
 
-    _attr_name = ""
-    _icon = "mdi:water-boiler"
+    _key = ""
 
     def __init__(self, coordinator, config_entry, heater: dict):
         super().__init__(coordinator, config_entry)
@@ -51,17 +53,17 @@ class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
     def name(self):
         """Return the name of the sensor."""
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        return f"{name} {self.heater_name} {self._attr_name}"
+        return f"{name} {self.heater_name} {self._key}"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{super().unique_id}htr{self.heater_id}{self._key}"
 
     @property
     def is_on(self):
         """Return true if the binary_sensor is on."""
-        return self._heater().get(self._attr_name)
-
-    @property
-    def icon(self):
-        """Return the icon of the sensor."""
-        return self._icon
+        return self._heater().get(self._key)
 
     @property
     def device_info(self) -> dict:
@@ -78,18 +80,53 @@ class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
 
 
 class MhHeaterDisabledBinarySensor(MhHeaterBinarySensor):
-    _attr_name = "disabled"
-    _icon = "mdi:electric-switch"
+    _key = "disabled"
+    _attr_icon = "mdi:electric-switch"
     _attr_device_class = None
 
 
 class MhHeaterBurnerWaterBinarySensor(MhHeaterBinarySensor):
-    _attr_name = "burnerWater"
-    _icon = "mdi:fire"
+    _key = "burnerWater"
+    _attr_icon = "mdi:fire"
     _attr_device_class = "heat"
 
 
 class MhHeaterBurnerHeatingBinarySensor(MhHeaterBinarySensor):
-    _attr_name = "burnerHeating"
-    _icon = "mdi:fire"
+    _key = "burnerHeating"
+    _attr_icon = "mdi:fire"
     _attr_device_class = "heat"
+
+
+class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
+    """myheat Binary Sensor class."""
+
+    _attr_device_class = "problem"
+    _attr_icon = "mdi:water-boiler-alert"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
+        return f"{name} {self.heater_name} severity"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{super().unique_id}severity"
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return true if the binary_sensor is on."""
+
+        severity = self.coordinator.data.get("severity")
+
+        if severity is None:
+            return None
+
+        return severity > 1
+
+    def extra_state_attributes(self):
+        desc = self.coordinator.data.get("severityDesc")
+        return {
+            "description": desc,
+        }

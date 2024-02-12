@@ -2,11 +2,7 @@
 
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import ATTRIBUTION
-from .const import DOMAIN
-from .const import MANUFACTURER
-from .const import NAME
-from .const import VERSION
+from .const import ATTRIBUTION, CONF_DEVICE_ID, DOMAIN, MANUFACTURER, NAME, VERSION
 
 
 class MhEntity(CoordinatorEntity):
@@ -33,6 +29,6 @@ class MhEntity(CoordinatorEntity):
         """Return the state attributes."""
         return {
             "attribution": ATTRIBUTION,
-            "id": str(self.coordinator.data.get("id")),
+            "id": str(self.config_entry.data.get(CONF_DEVICE_ID)),
             "integration": DOMAIN,
         }
