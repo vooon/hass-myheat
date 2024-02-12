@@ -184,7 +184,6 @@ async def test_api_get_devices(
     aioclient_mock,
 ):
     """Test API calls."""
-
     api = api_client(hass)
 
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDES)
@@ -242,32 +241,38 @@ async def test_api_rpc_errors(hass, aioclient_mock, caplog):
     # exception handling is a logging statement
     caplog.clear()
     aioclient_mock.post(RPC_ENDPOINT, exc=asyncio.TimeoutError)
-    assert await api.rpc("timeout") is None
-    assert (
-        len(caplog.record_tuples) == 1
-        and "Timeout error fetching information from" in caplog.record_tuples[0][2]
-    )
+
+    with pytest.raises(asyncio.Timeout):
+        assert await api.rpc("timeout") is None
+        assert (
+            len(caplog.record_tuples) == 1
+            and "Timeout error fetching information from" in caplog.record_tuples[0][2]
+        )
 
     caplog.clear()
     aioclient_mock.post(RPC_ENDPOINT, exc=aiohttp.ClientError)
-    assert await api.rpc("client_error") is None
-    assert (
-        len(caplog.record_tuples) == 1
-        and "Error fetching information from" in caplog.record_tuples[0][2]
-    )
+
+    with pytest.raises(aiohttp.ClientError):
+        assert await api.rpc("client_error") is None
+        assert (
+            len(caplog.record_tuples) == 1
+            and "Error fetching information from" in caplog.record_tuples[0][2]
+        )
 
     caplog.clear()
     aioclient_mock.post(RPC_ENDPOINT, exc=Exception)
-    assert await api.rpc("exc") is None
-    assert (
-        len(caplog.record_tuples) == 1
-        and "Something really wrong happened!" in caplog.record_tuples[0][2]
-    )
+    with pytest.raises(Exception):
+        assert await api.rpc("exc") is None
+        assert (
+            len(caplog.record_tuples) == 1
+            and "Something really wrong happened!" in caplog.record_tuples[0][2]
+        )
 
     caplog.clear()
     aioclient_mock.post(RPC_ENDPOINT, exc=TypeError)
-    assert await api.rpc("type_error") is None
-    assert (
-        len(caplog.record_tuples) == 1
-        and "Error parsing information from" in caplog.record_tuples[0][2]
-    )
+    with pytest.raises(TypeError):
+        assert await api.rpc("type_error") is None
+        assert (
+            len(caplog.record_tuples) == 1
+            and "Error parsing information from" in caplog.record_tuples[0][2]
+        )
