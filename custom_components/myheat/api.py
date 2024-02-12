@@ -245,7 +245,8 @@ class MhApiClient:
                 response = await self._session.post(url, headers=HEADERS, json=kwargs)
                 data = await response.json()
 
-                _LOGGER.debug("Data: %s", data)
+                # _LOGGER.debug("Data: %s", data)
+                _LOGGER.info("Data: %s", data)
 
                 data = RPC_SCHEMA(data)
                 if data["err"] != 0:
