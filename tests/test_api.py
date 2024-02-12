@@ -180,10 +180,10 @@ async def test_api(hass, aioclient_mock, caplog):
     )
 
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDES)
-    assert await api.async_get_devices() == GET_DEVIDES
+    assert await api.async_get_devices() == GET_DEVIDES["data"]
 
     aioclient_mock.post(RPC_ENDPOINT, json=GET_DEVIDE_INFO)
-    assert await api.async_get_device_info() == GET_DEVIDE_INFO
+    assert await api.async_get_device_info() == GET_DEVIDE_INFO["data"]
 
     aioclient_mock.post(RPC_ENDPOINT, json=NO_ERR)
     assert await api.async_set_env_goal(obj_id=21, goal=24) is None
