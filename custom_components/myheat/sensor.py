@@ -5,6 +5,7 @@ import logging
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -62,7 +63,7 @@ class MhHeaterSensor(MhEntity, SensorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}htr{self.heater_id}{self._key}"
+        return f"{super().unique_id}htr{self.heater_id}"
 
     @property
     def device_info(self) -> dict:
@@ -82,18 +83,21 @@ class MhHeaterFlowTempSensor(MhHeaterSensor):
     _key = "flowTemp"
     _attr_icon = "mdi:coolant-temperature"
     _attr_device_class = "temperature"
+    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
 
 
 class MhHeaterReturnTempSensor(MhHeaterSensor):
     _key = "returnTemp"
     _attr_icon = "mdi:coolant-temperature"
     _attr_device_class = "temperature"
+    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
 
 
 class MhHeaterTargetTempSensor(MhHeaterSensor):
     _key = "targetTemp"
     _attr_icon = "mdi:coolant-temperature"
     _attr_device_class = "temperature"
+    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
 
 
 class MhHeaterPressureSensor(MhHeaterSensor):
@@ -106,3 +110,4 @@ class MhHeaterModulationSensor(MhHeaterSensor):
     _key = "modulation"
     _attr_icon = "mdi:gas-burner"
     _attr_device_class = None
+    _attr_unit_of_measurement = "%"

@@ -25,18 +25,18 @@ async def async_setup_entry(
     _logger.info(f"Setting up heater entries: {coordinator.data}")
 
     async_add_entities(
-        chain.from_iterable(
-            [
-                MhSeverityBinarySensor(coordinator, entry),
-            ],
-            [
+        [
+            MhSeverityBinarySensor(coordinator, entry),
+        ]
+        + list(
+            chain.from_iterable(
                 [
                     MhHeaterDisabledBinarySensor(coordinator, entry, heater),
                     MhHeaterBurnerWaterBinarySensor(coordinator, entry, heater),
                     MhHeaterBurnerHeatingBinarySensor(coordinator, entry, heater),
                 ]
                 for heater in coordinator.data.get("heaters", [])
-            ],
+            )
         )
     )
 
@@ -60,7 +60,7 @@ class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}htr{self.heater_id}{self._key}"
+        return f"{super().unique_id}htr{self.heater_id}"
 
     @property
     def is_on(self):
@@ -110,11 +110,6 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
         """Return the name of the sensor."""
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         return f"{name} {self.heater_name} severity"
-
-    @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}severity"
 
     @property
     def is_on(self) -> bool | None:
