@@ -7,13 +7,18 @@ from custom_components.myheat.const import (
     CONF_USERNAME,
 )
 
-MOCK_CONFIG = {
+MOCK_USER_CONFIG = {
     CONF_USERNAME: "test_username",
     CONF_API_KEY: "test_password",
+}
+MOCK_DEVICE_CONFIG = {
     CONF_NAME: "test",
     CONF_DEVICE_ID: 12,
 }
 
+MOCK_CONFIG = {}
+MOCK_CONFIG.update(MOCK_USER_CONFIG)
+MOCK_CONFIG.update(MOCK_DEVICE_CONFIG)
 
 # Use data from api pdf
 MOCK_GET_DEVICES = {
