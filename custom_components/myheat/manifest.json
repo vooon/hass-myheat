@@ -10,5 +10,5 @@
   "issue_tracker": "https://github.com/vooon/hass-myheat/issues",
   "loggers": ["myheat"],
   "requirements": [],
-  "version": "0.2.14"
+  "version": "0.3.0"
 }
