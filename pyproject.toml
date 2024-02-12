@@ -16,7 +16,7 @@ python = ">=3.12,<3.13"
 
 [tool.poetry.group.dev.dependencies]
 #flake8 = "*"
-#reorder-python-imports = "*"
+reorder-python-imports = "*"
 #pytest = "^8"
 #pytest-homeassistant-custom-component = "0.13.100"
 pytest-homeassistant-custom-component = ">=0.13.100"
