@@ -3,10 +3,10 @@
 import asyncio
 import logging
 import socket
-from typing import Any
+from typing import Any, Union
 
 import aiohttp
-import voluptious as vol
+import voluptuous as vol
 
 from .const import VERSION
 
@@ -89,7 +89,7 @@ class MhApiClient:
         self,
         *,
         obj_id: int,
-        goal: int,
+        goal: Union[int, float],
         device_id: int = None,
         change_mode: bool = False,
     ) -> None:
@@ -123,7 +123,7 @@ class MhApiClient:
         self,
         *,
         obj_id: int,
-        goal: int,
+        goal: Union[int, float],
         device_id: int = None,
         change_mode: bool = False,
     ) -> None:
@@ -132,6 +132,7 @@ class MhApiClient:
             "setEngGoal",
             deviceId=device_id,
             objId=obj_id,
+            goal=goal,
             changeMode=change_mode and 1 or 0,
         )
 

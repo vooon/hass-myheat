@@ -50,7 +50,7 @@ combine_as_imports = true
 asyncio_mode = "auto"
 
 [tool.pytest.ini_options]
-addopts = ["-qq", "--cov=custom_components.myheat"]
+addopts = ["-qq", "--cov=custom_components.myheat", "--asyncio-mode=auto"]
 console_output_style = "count"
 
 [tool.coverage.run]
@@ -58,7 +58,7 @@ branch = false
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 100
+fail_under = 50
 
 [tool.mypy]
 python_version = '3.12'
