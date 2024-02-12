@@ -109,7 +109,7 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
     def name(self) -> str:
         """Return the name of the sensor."""
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        return f"{name} {self.heater_name} severity"
+        return f"{name} severity"
 
     @property
     def is_on(self) -> bool | None:
