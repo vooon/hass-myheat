@@ -157,10 +157,12 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         self.async_write_ha_state()
 
     @property
-    def device_info(self) -> dict:
-        d = super().device_info
-        d["name"] += f" Env {self.env['name']}"
-        return d
+    def _mh_dev_name_suffix(self):
+        return f" Env {self.env['name']}"
+
+    @property
+    def _mh_identifiers(self):
+        return (DOMAIN, self.unique_id)
 
     def _env(self) -> dict:
         if not self.coordinator.data.get("dataActual", False):

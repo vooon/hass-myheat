@@ -66,10 +66,12 @@ class MhHeaterSensor(MhEntity, SensorEntity):
         return f"{super().unique_id}htr{self.heater_id}{self._key}"
 
     @property
-    def device_info(self) -> dict:
-        d = super().device_info
-        d["name"] += f" Heater {self.heater_name}"
-        return d
+    def _mh_dev_name_suffix(self):
+        return f" Heater {self.heater_name}"
+
+    @property
+    def _mh_identifiers(self):
+        return (DOMAIN, f"{super().unique_id}htr{self.heater_id}")
 
     def _heater(self) -> dict:
         if not self.coordinator.data.get("dataActual", False):

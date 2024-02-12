@@ -27,19 +27,27 @@ class MhEntity(CoordinatorEntity):
     @property
     def device_info(self) -> dict:
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
+        name += self._mh_dev_name_suffix
         info = {
-            "identifiers": {(DOMAIN, self.unique_id)},
+            "identifiers": {self._mh_identifiers},
             "name": name,
             "model": VERSION,
             "manufacturer": MANUFACTURER,
         }
-        if self.unique_id != self.config_entry.entry_id:
+        if self._mh_identifiers != self._mh_via_device:
             info["via_device"] = self._mh_via_device
         return info
 
     @property
+    def _mh_dev_name_suffix(self):
+        return ""
+
+    @property
+    def _mh_identifiers(self):
+        return (DOMAIN, self.config_entry.entry_id)
+
+    @property
     def _mh_via_device(self):
-        """Return a unique ID to use for this entity."""
         return (DOMAIN, self.config_entry.entry_id)
 
     @property
