@@ -1,6 +1,6 @@
 """Sensor platform for MyHeat."""
 
-from itertools import flatten
+from itertools import chain
 import logging
 
 from homeassistant.components.sensor import SensorEntity
@@ -25,7 +25,7 @@ async def async_setup_entry(
     _logger.info(f"Setting up heater entries: {coordinator.data}")
 
     async_add_entities(
-        flatten(
+        chain.from_iterable(
             [
                 MhHeaterFlowTempSensor(coordinator, entry, heater),
                 MhHeaterReturnTempSensor(coordinator, entry, heater),

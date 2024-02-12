@@ -1,6 +1,6 @@
 """Binary sensor platform for MyHeat."""
 
-from itertools import flatten
+from itertools import chain
 import logging
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
@@ -25,16 +25,18 @@ async def async_setup_entry(
     _logger.info(f"Setting up heater entries: {coordinator.data}")
 
     async_add_entities(
-        [
-            MhSeverityBinarySensor(coordinator, entry),
-        ]
-        + flatten(
+        chain.from_iterable(
             [
-                MhHeaterDisabledBinarySensor(coordinator, entry, heater),
-                MhHeaterBurnerWaterBinarySensor(coordinator, entry, heater),
-                MhHeaterBurnerHeatingBinarySensor(coordinator, entry, heater),
-            ]
-            for heater in coordinator.data.get("heaters", [])
+                MhSeverityBinarySensor(coordinator, entry),
+            ],
+            [
+                [
+                    MhHeaterDisabledBinarySensor(coordinator, entry, heater),
+                    MhHeaterBurnerWaterBinarySensor(coordinator, entry, heater),
+                    MhHeaterBurnerHeatingBinarySensor(coordinator, entry, heater),
+                ]
+                for heater in coordinator.data.get("heaters", [])
+            ],
         )
     )
 
