@@ -52,7 +52,7 @@ async def async_setup_entry(
     async_add_entities(
         [
             MhEnvClimate(coordinator, entry, env)
-            for env in coordinator.data.get("data", {}).get("envs", [])
+            for env in coordinator.data.get("envs", [])
         ]
     )
 
@@ -164,11 +164,11 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         return d
 
     def _env(self) -> dict:
-        if not self.coordinator.data.get("data", {}).get("dataActual", False):
+        if not self.coordinator.data.get("dataActual", False):
             _logger.warninig("data not actual! %s", self.coordinator.data)
             return {}
 
-        envs = self.coordinator.data.get("data", {}).get("envs", [])
+        envs = self.coordinator.data.get("envs", [])
         for e in envs:
             if e["id"] == self.env["id"]:
                 return e
