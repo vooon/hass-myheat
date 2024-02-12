@@ -40,6 +40,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle a flow initialized by the user."""
+
         if user_input is None:
             return self._show_auth_config_form(user_input)
 
@@ -53,7 +54,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
             )
 
         self._auth = user_input
-        return self.async_step_device()
+        return await self.async_step_device()
 
     def _show_auth_config_form(
         self,
@@ -76,6 +77,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Show the configuration form to choose the device."""
+
         if not user_input:
             devices = [f"{v['id']} - {v['name']} - {v['city']}" for v in self._devices]
 

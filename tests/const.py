@@ -12,13 +12,15 @@ MOCK_USER_CONFIG = {
     CONF_API_KEY: "test_password",
 }
 MOCK_DEVICE_CONFIG = {
-    CONF_NAME: "test",
-    CONF_DEVICE_ID: 12,
+    CONF_NAME: "test_device",
+    CONF_DEVICE_ID: "12 - У Моста - Новошешминск",
 }
+
 
 MOCK_CONFIG = {}
 MOCK_CONFIG.update(MOCK_USER_CONFIG)
 MOCK_CONFIG.update(MOCK_DEVICE_CONFIG)
+MOCK_CONFIG[CONF_DEVICE_ID] = 12
 
 # Use data from api pdf
 MOCK_GET_DEVICES = {

@@ -57,7 +57,7 @@ async def test_successful_config_flow(hass, bypass_get_devices):
     # for password, it would result in this function call
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
-        user_input={"name": "test_device", "device_id": "12"},
+        user_input=MOCK_DEVICE_CONFIG,
     )
 
     # Check that the config flow is complete and a new entry is created with
@@ -72,7 +72,7 @@ async def test_successful_config_flow(hass, bypass_get_devices):
 # We use the `error_on_get_data` mock instead of `bypass_get_data`
 # (note the function parameters) to raise an Exception during
 # validation of the input config.
-async def _test_failed_config_flow(hass, error_on_get_data):
+async def test_failed_config_flow(hass, error_on_get_data):
     """Test a failed config flow due to credential validation failure."""
 
     result = await hass.config_entries.flow.async_init(
@@ -83,8 +83,9 @@ async def _test_failed_config_flow(hass, error_on_get_data):
     assert result["step_id"] == "user"
 
     result = await hass.config_entries.flow.async_configure(
-        result["flow_id"], user_input=MOCK_CONFIG
+        result["flow_id"],
+        user_input=MOCK_USER_CONFIG,
     )
 
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-    assert result["errors"] == {"base": "auth"}
+    assert result["errors"] == {"base": "invalid_auth"}
