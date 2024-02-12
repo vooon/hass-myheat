@@ -32,16 +32,15 @@ class MhEntity(CoordinatorEntity):
             "name": name,
             "model": VERSION,
             "manufacturer": MANUFACTURER,
-            "via_device": self._mh_via_device,
         }
-        if info["identifiers"] == info["via_device"]:
-            del info["via_device"]
+        if self.unique_id != self.config_entry.entry_id:
+            info["via_device"] = self._mh_via_device
         return info
 
     @property
     def _mh_via_device(self):
         """Return a unique ID to use for this entity."""
-        return {(DOMAIN, self.config_entry.entry_id)}
+        return (DOMAIN, self.config_entry.entry_id)
 
     @property
     def device_state_attributes(self):
