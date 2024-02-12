@@ -32,7 +32,7 @@ def bypass_setup_fixture():
 # Here we simiulate a successful config flow from the backend.
 # Note that we use the `bypass_get_data` fixture here because
 # we want the config flow validation to succeed during the test.
-async def _test_successful_config_flow(hass, bypass_get_data):
+async def test_successful_config_flow(hass, bypass_get_device_info):
     """Test a successful config flow."""
     # Initialize a config flow
     result = await hass.config_entries.flow.async_init(

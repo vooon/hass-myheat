@@ -32,21 +32,9 @@
 Using your HA configuration directory (folder) as a starting point you should now also have this:
 
 ```text
-custom_components/myheat/translations/en.json
-custom_components/myheat/translations/fr.json
-custom_components/myheat/translations/nb.json
-custom_components/myheat/translations/sensor.en.json
-custom_components/myheat/translations/sensor.fr.json
-custom_components/myheat/translations/sensor.nb.json
-custom_components/myheat/translations/sensor.nb.json
-custom_components/myheat/__init__.py
-custom_components/myheat/api.py
-custom_components/myheat/binary_sensor.py
-custom_components/myheat/config_flow.py
-custom_components/myheat/const.py
+custom_components/myheat/translations/*.json
+custom_components/myheat/*.py
 custom_components/myheat/manifest.json
-custom_components/myheat/sensor.py
-custom_components/myheat/switch.py
 ```
 
 ## Configuration is done in the UI

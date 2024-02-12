@@ -142,7 +142,7 @@ class MhApiClient:
         """Get available devices"""
         return await self.rpc("getDevices")
 
-    async def async_get_device_info(self, *, device_id: int = None) -> dict:
+    async def async_get_device_info(self, *, device_id: int | None = None) -> dict:
         """Get device state and objects"""
         return await self.rpc("getDeviceInfo", deviceId=device_id)
 
@@ -151,7 +151,7 @@ class MhApiClient:
         *,
         obj_id: int,
         goal: Union[int, float],
-        device_id: int = None,
+        device_id: int | None = None,
         change_mode: bool = False,
     ) -> None:
         """Set goal for environment"""
@@ -168,7 +168,7 @@ class MhApiClient:
         *,
         obj_id: int,
         curve: int,
-        device_id: int = None,
+        device_id: int | None = None,
         change_mode: bool = False,
     ) -> None:
         """Set goal curve for environment"""
@@ -185,7 +185,7 @@ class MhApiClient:
         *,
         obj_id: int,
         goal: Union[int, float],
-        device_id: int = None,
+        device_id: int | None = None,
         change_mode: bool = False,
     ) -> None:
         """Set goal for engineering component"""
@@ -198,7 +198,11 @@ class MhApiClient:
         )
 
     async def async_set_heating_mode(
-        self, *, device_id: int = None, mode_id: int = None, schedule_id: int = None
+        self,
+        *,
+        device_id: int | None = None,
+        mode_id: int | None = None,
+        schedule_id: int | None = None,
     ) -> None:
         """Set heating mode.
 
@@ -218,7 +222,7 @@ class MhApiClient:
         self,
         *,
         mode: bool,
-        device_id: int = None,
+        device_id: int | None = None,
     ) -> None:
         """Set security alarm mode (on/off)"""
         await self.rpc("setSecurityMode", deviceId=device_id, mode=mode and 1 or 0)

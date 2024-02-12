@@ -8,7 +8,7 @@ import pytest
 
 from custom_components.myheat.api import RPC_ENDPOINT, MhApiClient
 
-from .const import MOCK_GET_DEVIDE_INFO, MOCK_GET_DEVIDES, MOCK_NO_ERR
+from .const import MOCK_GET_DEVICE_INFO, MOCK_GET_DEVICES, MOCK_NO_ERR
 
 
 def api_client(hass) -> MhApiClient:
@@ -27,8 +27,8 @@ async def test_api_get_devices(
     """Test API calls."""
     api = api_client(hass)
 
-    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_GET_DEVIDES)
-    assert await api.async_get_devices() == MOCK_GET_DEVIDES["data"]
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_GET_DEVICES)
+    assert await api.async_get_devices() == MOCK_GET_DEVICES["data"]
 
 
 async def test_api_get_device_info(
@@ -38,8 +38,8 @@ async def test_api_get_device_info(
     """Test API calls."""
     api = api_client(hass)
 
-    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_GET_DEVIDE_INFO)
-    assert await api.async_get_device_info() == MOCK_GET_DEVIDE_INFO["data"]
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_GET_DEVICE_INFO)
+    assert await api.async_get_device_info() == MOCK_GET_DEVICE_INFO["data"]
 
 
 async def test_api_set(

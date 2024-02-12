@@ -36,6 +36,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         """Initialize."""
+        super().__init__()
         self._devices = {}
         self._errors = {}
         self._auth = {}
@@ -56,7 +57,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
             api_key=user_input[CONF_API_KEY],
         )
         if not self._devices:
-            self._errors["base"] = "auth"
+            self._errors["base"] = "invalid_auth"
             return self._show_auth_config_form(user_input)
 
         self._auth = user_input

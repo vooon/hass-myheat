@@ -16,7 +16,7 @@ MOCK_CONFIG = {
 
 
 # Use data from api pdf
-MOCK_GET_DEVIDES = {
+MOCK_GET_DEVICES = {
     "data": {
         "devices": [
             {
@@ -39,7 +39,7 @@ MOCK_GET_DEVIDES = {
     "refreshPage": False,
 }
 
-MOCK_GET_DEVIDE_INFO = {
+MOCK_GET_DEVICE_INFO = {
     "data": {
         "heaters": [
             {
