@@ -4,6 +4,9 @@ from itertools import flatten
 import logging
 
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_NAME, DEFAULT_NAME, DOMAIN
 from .entity import MhEntity
@@ -11,11 +14,15 @@ from .entity import MhEntity
 _logger = logging.getLogger(__package__)
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
-    _logger.info(f"Setting up env entries: {coordinator.data}")
+    _logger.info(f"Setting up heater entries: {coordinator.data}")
 
     async_add_entities(
         flatten(
