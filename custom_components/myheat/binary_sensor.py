@@ -118,7 +118,7 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}htr{self.heater_id}severity"
+        return f"{super().unique_id}severity"
 
     @property
     def is_on(self) -> bool | None:
