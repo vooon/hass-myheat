@@ -3,8 +3,10 @@
 import asyncio
 import logging
 import socket
+from typing import Any
 
 import aiohttp
+import voluptious as vol
 
 from .const import VERSION
 
@@ -18,6 +20,44 @@ HEADERS = {
 }
 
 RPC_ENDPOINT = "https://my.myheat.net/api/request/"
+
+RPC_SCHEMA = vol.Schema(
+    {
+        vol.Required("err"): int,
+        vol.Optional("refreshPage"): bool,
+        vol.Optional("data"): vol.Schema(
+            {
+                # getDevices
+                "devices": list,
+                # getDeviceInfo
+                "heaters": list,
+                "envs": list,
+                "engs": list,
+                "alarms": dict,
+                "dataActual": bool,
+                "severity": int,
+                "severityDesc": str,
+                "weatherTemp": float,
+                "city": str,
+                # nothing more yet documented
+            },
+            extra=vol.ALLOW_EXTRA,
+        ),
+    },
+    extra=vol.ALLOW_EXTRA,
+)
+
+
+class RPCError(Exception):
+    code: int
+    _full_response: dict[str, Any]
+
+    def __init__(self, resp: dict[str, Any]):
+        self.code = resp["err"]
+        self._full_response = resp
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} code: {self.code}>"
 
 
 class MhApiClient:
@@ -140,7 +180,12 @@ class MhApiClient:
                 data = await response.json()
 
                 _LOGGER.debug("Data: %s", data)
-                return data
+
+                data = RPC_SCHEMA(data)
+                if data["err"] != 0:
+                    raise RPCError(data)
+
+                return data.get("data", {})
 
         except (asyncio.TimeoutError, asyncio.CancelledError) as exception:
             _LOGGER.exception(

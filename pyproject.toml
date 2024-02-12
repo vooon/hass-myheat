@@ -26,6 +26,7 @@ pytest-homeassistant-custom-component = ">=0.13.100"
 #pre-commit = "*"
 #pydocstyle = ">=6.0.0"
 #prospector = {extras = ["with_vulture"], version = "*"}
+pytest-asyncio = "*"
 
 [build-system]
 requires = ["poetry-core"]
@@ -44,6 +45,9 @@ sections = "FUTURE,STDLIB,INBETWEENS,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 default_section = "THIRDPARTY"
 known_first_party = "custom_components.myheat, tests"
 combine_as_imports = true
+
+[tool.pytest]
+asyncio_mode = "auto"
 
 [tool.pytest.ini_options]
 addopts = ["-qq", "--cov=custom_components.myheat"]
