@@ -25,23 +25,30 @@ RPC_SCHEMA = vol.Schema(
     {
         vol.Required("err"): int,
         vol.Optional("refreshPage"): bool,
-        vol.Optional("data"): vol.Schema(
-            {
-                # getDevices
-                "devices": list,
-                # getDeviceInfo
-                "heaters": list,
-                "envs": list,
-                "engs": list,
-                "alarms": dict,
-                "dataActual": bool,
-                "severity": int,
-                "severityDesc": str,
-                "weatherTemp": float,
-                "city": str,
-                # nothing more yet documented
-            },
-            extra=vol.ALLOW_EXTRA,
+        vol.Optional("data"): vol.Any(
+            # getDevices
+            vol.Schema(
+                {
+                    "devices": list,
+                },
+                extra=vol.ALLOW_EXTRA,
+            ),
+            # getDeviceInfo
+            vol.Schema(
+                {
+                    "heaters": list,
+                    "envs": list,
+                    "engs": list,
+                    "alarms": dict,
+                    "dataActual": bool,
+                    "severity": int,
+                    "severityDesc": str,
+                    "weatherTemp": float,
+                    "city": str,
+                },
+                extra=vol.ALLOW_EXTRA,
+            ),
+            # nothing more yet documented
         ),
     },
     extra=vol.ALLOW_EXTRA,
