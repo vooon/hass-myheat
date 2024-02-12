@@ -2,7 +2,16 @@
 
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import ATTRIBUTION, CONF_DEVICE_ID, DOMAIN, MANUFACTURER, NAME, VERSION
+from .const import (
+    ATTRIBUTION,
+    CONF_DEVICE_ID,
+    CONF_NAME,
+    DEFAULT_NAME,
+    DOMAIN,
+    MANUFACTURER,
+    NAME,
+    VERSION,
+)
 
 
 class MhEntity(CoordinatorEntity):
@@ -17,9 +26,10 @@ class MhEntity(CoordinatorEntity):
 
     @property
     def device_info(self) -> dict:
+        name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         return {
             "identifiers": {(DOMAIN, self.unique_id)},
-            "name": NAME,
+            "name": name,
             "model": VERSION,
             "manufacturer": MANUFACTURER,
         }

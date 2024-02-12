@@ -63,7 +63,7 @@ class MhHeaterSensor(MhEntity, SensorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}htr{self.heater_id}"
+        return f"{super().unique_id}htr{self.heater_id}{self._key}"
 
     @property
     def device_info(self) -> dict:

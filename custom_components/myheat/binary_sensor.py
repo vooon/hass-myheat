@@ -64,7 +64,7 @@ class MhHeaterBinarySensor(MhEntity, BinarySensorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}htr{self.heater_id}"
+        return f"{super().unique_id}htr{self.heater_id}{self._key}"
 
     @property
     def is_on(self):
@@ -114,6 +114,11 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
         """Return the name of the sensor."""
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         return f"{name} severity"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{super().unique_id}htr{self.heater_id}severity"
 
     @property
     def is_on(self) -> bool | None:
