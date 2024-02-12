@@ -32,15 +32,6 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
     VERSION = 1
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
-    # entry:ConfigEntry|None=None
-
-    def __init__(self) -> None:
-        """Initialize."""
-        super().__init__()
-        self._devices = {}
-        self._errors = {}
-        self._auth = {}
-
     @property
     def data_schema(self) -> vol.Schema:
         return DATA_SCHEMA
@@ -57,14 +48,17 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
             api_key=user_input[CONF_API_KEY],
         )
         if not self._devices:
-            self._errors["base"] = "invalid_auth"
-            return self._show_auth_config_form(user_input)
+            return self._show_auth_config_form(
+                user_input, errors={"base": "invalid_auth"}
+            )
 
         self._auth = user_input
         return self.async_step_device()
 
-    async def _show_auth_config_form(
-        self, user_input: dict[str, Any] | None = None
+    def _show_auth_config_form(
+        self,
+        user_input: dict[str, Any] | None = None,
+        errors: dict[str, str] = {},
     ) -> FlowResult:  # pylint: disable=unused-argument
         """Show the configuration form to edit auth data."""
         return self.async_show_form(
@@ -75,7 +69,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_API_KEY): str,
                 }
             ),
-            errors=self._errors,
+            errors=errors,
         )
 
     async def async_step_device(
@@ -83,10 +77,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         """Show the configuration form to choose the device."""
         if not user_input:
-            devices = [
-                f"{v['id']} - {v['name']} - {v['city']}"
-                for v in self._devices["devices"]
-            ]
+            devices = [f"{v['id']} - {v['name']} - {v['city']}" for v in self._devices]
 
             return self.async_show_form(
                 step_id="device",
@@ -98,21 +89,24 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
                 ),
             )
 
-        user_input.update(self._auth)
         device_id = int(user_input[CONF_DEVICE_ID].strip().split(" ")[0])
         unique_id = f"myheat{device_id}"
+
+        user_input.update(self._auth)
+        user_input[CONF_DEVICE_ID] = device_id
 
         await self.async_set_unique_id(unique_id)
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
 
-    async def _get_devices(self, username: str, api_key: str) -> dict[str, Any]:
+    async def _get_devices(self, username: str, api_key: str) -> list[Any]:
         """Return true if credentials is valid."""
         try:
             session = async_create_clientsession(self.hass)
             client = MhApiClient(username, api_key, None, session)
-            return await client.async_get_devices()
+            result = await client.async_get_devices()
+            return result["devices"]
         except Exception:  # pylint: disable=broad-except
             pass
-        return {}
+        return []

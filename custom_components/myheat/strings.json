@@ -14,7 +14,7 @@
         "description": "Please select the connected device",
         "data": {
           "name": "[%key:common::config_flow::data::name%]",
-          "device_id": "[%key:common::config_flow::data::device%]"
+          "device_id": "[%key:common::config_flow::data::device_id%]"
         }
       }
     },
