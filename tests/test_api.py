@@ -68,50 +68,51 @@ async def test_api_set(
     assert await api.async_set_security_mode(mode=True) is None
 
 
-async def test_api_rpc_errors(hass, aioclient_mock, caplog):
+async def test_api_rpc_error_timeout(hass, aioclient_mock, caplog):
     """Test API calls."""
     api = api_client(hass)
 
-    # In order to get 100% coverage, we need to test `api_wrapper` to test the code
-    # that isn't already called by `async_get_data` and `async_set_title`. Because the
-    # only logic that lives inside `api_wrapper` that is not being handled by a third
-    # party library (aiohttp) is the exception handling, we also want to simulate
-    # raising the exceptions to ensure that the function handles them as expected.
-    # The caplog fixture allows access to log messages in tests. This is particularly
-    # useful during exception handling testing since often the only action as part of
-    # exception handling is a logging statement
-    caplog.clear()
-    aioclient_mock.post(RPC_ENDPOINT, exc=asyncio.TimeoutError)
-
     with pytest.raises(asyncio.TimeoutError):
+        aioclient_mock.post(RPC_ENDPOINT, exc=asyncio.TimeoutError)
         assert await api.rpc("timeout") is None
         assert (
             len(caplog.record_tuples) == 1
             and "Timeout error fetching information from" in caplog.record_tuples[0][2]
         )
 
-    caplog.clear()
-    aioclient_mock.post(RPC_ENDPOINT, exc=aiohttp.ClientError)
+
+async def test_api_rpc_error_client(hass, aioclient_mock, caplog):
+    """Test API calls."""
+    api = api_client(hass)
 
     with pytest.raises(aiohttp.ClientError):
+        aioclient_mock.post(RPC_ENDPOINT, exc=aiohttp.ClientError)
         assert await api.rpc("client_error") is None
         assert (
             len(caplog.record_tuples) == 1
             and "Error fetching information from" in caplog.record_tuples[0][2]
         )
 
-    caplog.clear()
-    aioclient_mock.post(RPC_ENDPOINT, exc=Exception)
+
+async def test_api_rpc_error_unknown_exception(hass, aioclient_mock, caplog):
+    """Test API calls."""
+    api = api_client(hass)
+
     with pytest.raises(Exception):
+        aioclient_mock.post(RPC_ENDPOINT, exc=Exception)
         assert await api.rpc("exc") is None
         assert (
             len(caplog.record_tuples) == 1
             and "Something really wrong happened!" in caplog.record_tuples[0][2]
         )
 
-    caplog.clear()
-    aioclient_mock.post(RPC_ENDPOINT, exc=TypeError)
+
+async def test_api_rpc_error_type_error(hass, aioclient_mock, caplog):
+    """Test API calls."""
+    api = api_client(hass)
+
     with pytest.raises(TypeError):
+        aioclient_mock.post(RPC_ENDPOINT, exc=TypeError)
         assert await api.rpc("type_error") is None
         assert (
             len(caplog.record_tuples) == 1
