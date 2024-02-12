@@ -38,6 +38,10 @@ async def async_setup_entry(
                 for heater in coordinator.data.get("heaters", [])
             )
         )
+        + list(
+            MhEngBinarySensor(coordinator, entry, eng)
+            for eng in coordinator.data.get("engs", [])
+        )
     )
 
 
@@ -116,7 +120,6 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
         """Return true if the binary_sensor is on."""
 
         severity = self.coordinator.data.get("severity")
-
         if severity is None:
             return None
 
@@ -127,3 +130,41 @@ class MhSeverityBinarySensor(MhEntity, BinarySensorEntity):
         return {
             "description": desc,
         }
+
+
+class MhEngBinarySensor(MhEntity, BinarySensorEntity):
+    """myheat Binary Sensor class."""
+
+    def __init__(self, coordinator, config_entry, eng: dict):
+        super().__init__(coordinator, config_entry)
+        self.eng_name = eng["name"]
+        self.eng_id = eng["id"]
+
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
+        return f"{name} {self.eng_name}"
+
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{super().unique_id}eng{self.eng_id}"
+
+    @property
+    def is_on(self):
+        """Return true if the binary_sensor is on."""
+        return self._eng().get("turnedOn")
+
+    @property
+    def device_info(self) -> dict:
+        d = super().device_info
+        d["name"] += f" Eng {self.eng_name}"
+        return d
+
+    def _eng(self) -> dict:
+        engs = self.coordinator.data.get("engs", [])
+        for e in engs:
+            if e["id"] == self.eng_id:
+                return e
+        return {}
