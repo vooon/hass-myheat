@@ -3,7 +3,7 @@
 import logging
 from typing import Any
 
-from homeassistant.config_entries import ConfigEntry, ConfigFlow
+from homeassistant.config_entries import CONN_CLASS_CLOUD_POLL, ConfigEntry, ConfigFlow
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
@@ -30,7 +30,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
     """Config flow for myheat."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
+    CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
 
     # entry:ConfigEntry|None=None
 
