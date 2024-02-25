@@ -10,7 +10,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_NAME, DEFAULT_NAME, DOMAIN
-from .entity import MhEntity
+from .entity import MhHeaterEntity, MhEntity
 
 _logger = logging.getLogger(__package__)
 
@@ -39,50 +39,13 @@ async def async_setup_entry(
     )
 
 
-class MhHeaterSensor(MhEntity, SensorEntity):
+class MhHeaterSensor(MhHeaterEntity, SensorEntity):
     """myheat Sensor class."""
-
-    _key = ""
-
-    def __init__(self, coordinator, config_entry, heater: dict):
-        super().__init__(coordinator, config_entry)
-        self.heater_name = heater["name"]
-        self.heater_id = heater["id"]
-
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        return f"{name} {self.heater_name} {self._key}"
 
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self._heater().get(self._key)
-
-    @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}htr{self.heater_id}{self._key}"
-
-    @property
-    def _mh_dev_name_suffix(self):
-        return f" {self.heater_name}"
-
-    @property
-    def _mh_identifiers(self):
-        return (DOMAIN, f"{super().unique_id}htr{self.heater_id}")
-
-    def _heater(self) -> dict:
-        if not self.coordinator.data.get("dataActual", False):
-            _logger.warninig("data not actual! %s", self.coordinator.data)
-            return {}
-
-        heaters = self.coordinator.data.get("heaters", [])
-        for h in heaters:
-            if h["id"] == self.heater_id:
-                return h
-        return {}
+        return self.get_heater().get(self._key)
 
 
 class MhHeaterFlowTempSensor(MhHeaterSensor):

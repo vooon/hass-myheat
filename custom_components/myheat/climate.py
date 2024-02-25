@@ -21,8 +21,8 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_NAME, DEFAULT_NAME, DOMAIN
-from .entity import MhEntity
+from .const import DOMAIN
+from .entity import MhEnvEntity
 
 _logger = logging.getLogger(__package__)
 
@@ -56,13 +56,11 @@ async def async_setup_entry(
     )
 
 
-class MhEnvClimate(MhEntity, ClimateEntity):
+class MhEnvClimate(MhEnvEntity, ClimateEntity):
     """myheat Climate class."""
 
     def __init__(self, coordinator, config_entry, env: dict):
-        super().__init__(coordinator, config_entry)
-        self.env_name = env["name"]
-        self.env_id = env["id"]
+        super().__init__(coordinator, config_entry, env)
 
         self._attr_supported_features = (
             ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
@@ -100,17 +98,6 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
 
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
-        return f"{name} {self.env_name}"
-
-    @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return f"{super().unique_id}env{self.env_id}"
-
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new target hvac mode."""
 
@@ -132,7 +119,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
 
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
-        goal = kwargs.get("temperature", 0)
+        goal = kwargs.get("temperature", 0.0)
         await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
         await self.coordinator.async_request_refresh()
 
@@ -140,7 +127,7 @@ class MhEnvClimate(MhEntity, ClimateEntity):
     def _handle_coordinator_update(self):
         """Get the latest state from the thermostat."""
 
-        e = self._env()
+        e = self.get_env()
 
         self._attr_current_temperature = e.get("value")
         self._attr_target_temperature = e.get("target")
@@ -156,23 +143,3 @@ class MhEnvClimate(MhEntity, ClimateEntity):
         )
 
         self.async_write_ha_state()
-
-    @property
-    def _mh_dev_name_suffix(self):
-        return f" {self.env_name}"
-
-    @property
-    def _mh_identifiers(self):
-        return (DOMAIN, f"{super().unique_id}env{self.env_id}")
-
-    def _env(self) -> dict:
-        if not self.coordinator.data.get("dataActual", False):
-            _logger.warninig("data not actual! %s", self.coordinator.data)
-            return {}
-
-        envs = self.coordinator.data.get("envs", [])
-        for e in envs:
-            if e["id"] == self.env_id:
-                return e
-
-        return {}

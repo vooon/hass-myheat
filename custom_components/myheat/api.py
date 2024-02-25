@@ -95,7 +95,7 @@ RPC_SCHEMA = vol.Schema(
                     "dataActual": bool,
                     "severity": int,
                     "severityDesc": str,
-                    "weatherTemp": float,
+                    "weatherTemp": vol.Coerce(float),
                     "city": str,
                 },
                 extra=vol.ALLOW_EXTRA,
