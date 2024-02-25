@@ -23,6 +23,7 @@ async def async_setup_entry(
         (
             MhSeverityBinarySensor(coordinator, entry),
             MhDataActualBinarySensor(coordinator, entry),
+            MhAlarmsBinarySensor(coordinator, entry),
         ),
         chain.from_iterable(
             [
@@ -64,6 +65,32 @@ class MhDataActualBinarySensor(MhEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool | None:
         return self.coordinator.data.get("dataActual")
+
+
+class MhAlarmsBinarySensor(MhEntity, BinarySensorEntity):
+    """myheat Alarms Binary Sensor class."""
+
+    _attr_device_class = "tamper"
+
+    @property
+    def name(self) -> str:
+        return f"{self._mh_name} alarms"
+
+    @property
+    def unique_id(self):
+        return f"{super().unique_id}alarms"
+
+    @property
+    def is_on(self) -> bool | None:
+        alarms = self.coordinator.data.get("alarms", [])
+        return len(alarms) > 0
+
+    @property
+    def extra_state_attributes(self):
+        alarms = self.coordinator.data.get("alarms", [])
+        return {
+            "alarms": alarms,
+        }
 
 
 class MhSeverityBinarySensorBase(BinarySensorEntity):
