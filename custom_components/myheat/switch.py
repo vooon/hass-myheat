@@ -1,44 +1,42 @@
 """Switch platform for MyHeat."""
 
 from homeassistant.components.switch import SwitchEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DEFAULT_NAME
 from .const import DOMAIN
-from .const import ICON
-from .const import SWITCH
 from .entity import MhEntity
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_devices: AddEntitiesCallback,
+):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_devices([MhBinarySwitch(coordinator, entry)])
+    async_add_devices([MhSecuritySwitch(coordinator, entry)])
 
 
-class MhBinarySwitch(MhEntity, SwitchEntity):
+class MhSecuritySwitch(MhEntity, SwitchEntity):
     """myheat switch class."""
 
+    _attr_icon = "mdi:security"
+
+    @property
+    def name(self) -> str:
+        return f"{self._mh_name} security alarm"
+
+    @property
+    def unique_id(self) -> str:
+        return f"{super().unique_id}security"
+
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn on the switch."""
-        await self.coordinator.api.async_set_title("bar")
-        await self.coordinator.async_request_refresh()
+        await self.coordinator.api.async_set_security_mode(mode=True)
+        # NOTE: we cannot query the state, so we have to make some assumptions
+        self._attr_is_on = True
 
     async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn off the switch."""
-        await self.coordinator.api.async_set_title("foo")
-        await self.coordinator.async_request_refresh()
-
-    @property
-    def name(self):
-        """Return the name of the switch."""
-        return f"{DEFAULT_NAME}_{SWITCH}"
-
-    @property
-    def icon(self):
-        """Return the icon of this switch."""
-        return ICON
-
-    @property
-    def is_on(self):
-        """Return true if the switch is on."""
-        return self.coordinator.data.get("title", "") == "foo"
+        await self.coordinator.api.async_set_security_mode(mode=False)
+        self._attr_is_on = False
