@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_NAME, DEFAULT_NAME, DOMAIN
+from .const import DOMAIN
 from .entity import MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
 
 _logger = logging.getLogger(__package__)
@@ -22,37 +22,33 @@ async def async_setup_entry(
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
-    _logger.info(f"Setting up heater entries: {coordinator.data}")
-
-    async_add_entities(
-        [
+    entities = chain(
+        (
             MhSeverityBinarySensor(coordinator, entry),
             MhDataActualBinarySensor(coordinator, entry),
-        ]
-        + list(
-            chain.from_iterable(
-                [
-                    MhHeaterDisabledBinarySensor(coordinator, entry, heater),
-                    MhHeaterBurnerWaterBinarySensor(coordinator, entry, heater),
-                    MhHeaterBurnerHeatingBinarySensor(coordinator, entry, heater),
-                ]
-                for heater in coordinator.data.get("heaters", [])
-            )
-        )
-        + list(
+        ),
+        chain.from_iterable(
+            [
+                MhHeaterDisabledBinarySensor(coordinator, entry, heater),
+                MhHeaterBurnerWaterBinarySensor(coordinator, entry, heater),
+                MhHeaterBurnerHeatingBinarySensor(coordinator, entry, heater),
+            ]
+            for heater in coordinator.data.get("heaters", [])
+        ),
+        (
             MhEnvSeverityBinarySensor(coordinator, entry, env)
             for env in coordinator.data.get("envs", [])
-        )
-        + list(
-            chain.from_iterable(
-                [
-                    MhEngTurnedOnBinarySensor(coordinator, entry, eng),
-                    MhEngSeverityBinarySensor(coordinator, entry, eng),
-                ]
-                for eng in coordinator.data.get("engs", [])
-            )
-        )
+        ),
+        chain.from_iterable(
+            [
+                MhEngTurnedOnBinarySensor(coordinator, entry, eng),
+                MhEngSeverityBinarySensor(coordinator, entry, eng),
+            ]
+            for eng in coordinator.data.get("engs", [])
+        ),
     )
+
+    async_add_entities(entities)
 
 
 class MhDataActualBinarySensor(MhEntity, BinarySensorEntity):
