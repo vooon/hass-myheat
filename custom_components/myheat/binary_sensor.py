@@ -1,7 +1,6 @@
 """Binary sensor platform for MyHeat."""
 
 from itertools import chain
-import logging
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
@@ -10,8 +9,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .entity import MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
-
-_logger = logging.getLogger(__package__)
 
 
 async def async_setup_entry(

@@ -1,7 +1,6 @@
 """Sensor platform for MyHeat."""
 
 from itertools import chain
-import logging
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
@@ -9,10 +8,8 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_NAME, DEFAULT_NAME, DOMAIN
+from .const import DOMAIN
 from .entity import MhHeaterEntity, MhEntity
-
-_logger = logging.getLogger(__package__)
 
 
 async def async_setup_entry(
@@ -23,9 +20,8 @@ async def async_setup_entry(
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
-    _logger.info(f"Setting up heater entries: {coordinator.data}")
-
-    async_add_entities(
+    entities = chain(
+        (MhWeatherTempSensor(coordinator, entry),),
         chain.from_iterable(
             [
                 MhHeaterFlowTempSensor(coordinator, entry, heater),
@@ -35,13 +31,39 @@ async def async_setup_entry(
                 MhHeaterModulationSensor(coordinator, entry, heater),
             ]
             for heater in coordinator.data.get("heaters", [])
-        )
+        ),
     )
+
+    async_add_entities(entities)
+
+
+class MhWeatherTempSensor(MhEntity, SensorEntity):
+    """myheat weatherTemp Sensor class."""
+
+    _attr_device_class = "temperature"
+    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
+
+    @property
+    def name(self) -> str:
+        return f"{self._mh_name} weatherTemp"
+
+    @property
+    def unique_id(self):
+        return f"{super().unique_id}weatherTemp"
+
+    @property
+    def state(self):
+        return self.coordinator.data.get("weatherTemp")
+
+    @property
+    def extra_state_attributes(self):
+        city = self.coordinator.data.get("city")
+        return {
+            "city": city,
+        }
 
 
 class MhHeaterSensor(MhHeaterEntity, SensorEntity):
-    """myheat Sensor class."""
-
     @property
     def state(self):
         """Return the state of the sensor."""

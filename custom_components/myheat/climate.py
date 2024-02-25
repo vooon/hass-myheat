@@ -1,7 +1,5 @@
 """Climate platform for MyHeat."""
 
-import logging
-
 from homeassistant.components.climate import (
     PRESET_AWAY,
     PRESET_ECO,
@@ -24,7 +22,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .entity import MhEnvEntity
 
-_logger = logging.getLogger(__package__)
 
 PRESET_TO_ID = {
     # PRESET_ACTIVITY: 0,
@@ -45,8 +42,6 @@ async def async_setup_entry(
 ) -> None:
     """Setup climate platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-
-    _logger.info(f"Setting up env entries: {coordinator.data}")
 
     async_add_entities(
         [
