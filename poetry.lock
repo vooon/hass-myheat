@@ -1392,13 +1392,13 @@ habluetooth = ">=0.11.0"
 
 [[package]]
 name = "homeassistant"
-version = "2024.6.0b3"
+version = "2024.6.0b5"
 description = "Open-source home automation platform running on Python 3."
 optional = false
 python-versions = ">=3.12.0"
 files = [
-    {file = "homeassistant-2024.6.0b3-py3-none-any.whl", hash = "sha256:7d1ec73ca59997e6ddc36763d6693459e098610428c0fe6cc8dbc0d30ce679c4"},
-    {file = "homeassistant-2024.6.0b3.tar.gz", hash = "sha256:2737cc2a92ed17daf15ac24d1cf06c8d01515b7d70c2d1d8157d84a4b9c3b882"},
+    {file = "homeassistant-2024.6.0b5-py3-none-any.whl", hash = "sha256:e28ff19487815531fe70118b544deaa10a0732bcff2370afd82f7d941b0c5a42"},
+    {file = "homeassistant-2024.6.0b5.tar.gz", hash = "sha256:6318a0ebba10655dd34cdcaff20beedbdd938eed6ea178ce620f4102b0000678"},
 ]
 
 [package.dependencies]
@@ -1885,47 +1885,6 @@ files = [
     {file = "mypy-1.10.0-cp39-cp39-win_amd64.whl", hash = "sha256:28d0e038361b45f099cc086d9dd99c15ff14d0188f44ac883010e172ce86c38a"},
     {file = "mypy-1.10.0-py3-none-any.whl", hash = "sha256:f8c083976eb530019175aabadb60921e73b4f45736760826aa1689dda8208aee"},
     {file = "mypy-1.10.0.tar.gz", hash = "sha256:3d087fcbec056c4ee34974da493a826ce316947485cef3901f511848e687c131"},
-]
-
-[package.dependencies]
-mypy-extensions = ">=1.0.0"
-typing-extensions = ">=4.1.0"
-
-[package.extras]
-dmypy = ["psutil (>=4.0)"]
-install-types = ["pip"]
-mypyc = ["setuptools (>=50)"]
-reports = ["lxml"]
-
-[[package]]
-name = "mypy-dev"
-version = "1.11.0a3"
-description = "Optional static typing for Python"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "mypy_dev-1.11.0a3-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:32a2ee262519cafe7061861148daad69d20c70b81e3890f60c792174048d843f"},
-    {file = "mypy_dev-1.11.0a3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:80ef9bf289ca549eed48c19a3c0c8a6187af039b5cc5ea13e0dcf66c79371b55"},
-    {file = "mypy_dev-1.11.0a3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e0a21161744deb0a825c689420d98923887289254f95214cc2d68a031490bb55"},
-    {file = "mypy_dev-1.11.0a3-cp310-cp310-win_amd64.whl", hash = "sha256:7a9de525002d922155a6d3ed9dba006dedb453f6958e40bd639b8f10ed5a5880"},
-    {file = "mypy_dev-1.11.0a3-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:6a2d84f7c27de5d7ad2f52d0d18781a1753fae3858a336cbf75f16ef4a54eefc"},
-    {file = "mypy_dev-1.11.0a3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d4a8b7bf495356479f2ca4e77a9a221f072e606fcd9543c3a9a892b44faeb960"},
-    {file = "mypy_dev-1.11.0a3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:90b99c324e7df92233631e730d8c2c23c0f110ff475a5797a7c01624878e5ccf"},
-    {file = "mypy_dev-1.11.0a3-cp311-cp311-win_amd64.whl", hash = "sha256:83112ef2b67e616e1871dffb891266bc642e1dc18b1dabb8fc8b4ffaf9bac3d4"},
-    {file = "mypy_dev-1.11.0a3-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:bade2166a5c10e0f048a7295d83cad1e8070030fe96f03bd5873f6ce7bff3fbb"},
-    {file = "mypy_dev-1.11.0a3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:b137031355e750a2f7b785e097fbb4c8e720d002d209e3a922062482ce2df8b4"},
-    {file = "mypy_dev-1.11.0a3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d11e1286f9b64ab1e2ce8c1b0389b366d72ab18323a490131f8ff45314a3bef0"},
-    {file = "mypy_dev-1.11.0a3-cp312-cp312-win_amd64.whl", hash = "sha256:7f876eed1d8d100973ed5380150b673fd3632520fe72c44af014780dfe4a38e5"},
-    {file = "mypy_dev-1.11.0a3-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:79d1e64a4853a04bd9c2042b6b402e5992087b6ce15f0a54127319c1269c3728"},
-    {file = "mypy_dev-1.11.0a3-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:48b2cf0e8362b8b8a8e332628a0ca9b770b9e778610675c4dc45e9bcbe043700"},
-    {file = "mypy_dev-1.11.0a3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:45af2abc2f753df666e393142f28c4de64431563782429ca12754164a8e871c9"},
-    {file = "mypy_dev-1.11.0a3-cp38-cp38-win_amd64.whl", hash = "sha256:e3f817640998e8e260004804aea64308172db4cc97e5847050f83da8f2ce8feb"},
-    {file = "mypy_dev-1.11.0a3-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:f62c54352e22cd252fb3648310a02ff56a1a5efc09e3cb728ee3fdb403990b73"},
-    {file = "mypy_dev-1.11.0a3-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:fb654dbcc09977089e50ff5234103db7358e744e427304756ec69a6d7ffda64b"},
-    {file = "mypy_dev-1.11.0a3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ad35767a45f272df0295d4c438145ab25b5bf6e12c4290bfad36b90f6f09e9d5"},
-    {file = "mypy_dev-1.11.0a3-cp39-cp39-win_amd64.whl", hash = "sha256:dd69f44fe39adb184e30d8732374f2d1e687d3ebf4e3475fa89d4758844f24b7"},
-    {file = "mypy_dev-1.11.0a3-py3-none-any.whl", hash = "sha256:b564baa0661b1898de801089bfedd2ab4a21afcbb972755b254cc3264bfa6e7e"},
-    {file = "mypy_dev-1.11.0a3.tar.gz", hash = "sha256:e1e860ea4dc85e81ae61147ff8b1695521a675f922f57d09f1ed74a50f2448b9"},
 ]
 
 [package.dependencies]
@@ -2699,21 +2658,20 @@ pytest = ">=4.0.0"
 
 [[package]]
 name = "pytest-homeassistant-custom-component"
-version = "0.13.127"
+version = "0.13.129"
 description = "Experimental package to automatically extract test plugins for Home Assistant custom components"
 optional = false
 python-versions = ">=3.12"
 files = [
-    {file = "pytest_homeassistant_custom_component-0.13.127-py3-none-any.whl", hash = "sha256:334dc19ee0c2d2de5715d07ed191faa853a7595e0d5c9f87a839e6a21c8a597b"},
-    {file = "pytest_homeassistant_custom_component-0.13.127.tar.gz", hash = "sha256:3ddb4c0fe0f02acfa272eb5c2941429f8883590f8ca82b0c767890e5e0022d71"},
+    {file = "pytest_homeassistant_custom_component-0.13.129-py3-none-any.whl", hash = "sha256:14b75e5506d018d3e00847a9b5894ca0cef5423080a8778364fcc891a6fad240"},
+    {file = "pytest_homeassistant_custom_component-0.13.129.tar.gz", hash = "sha256:d5c233a4582a360614600c685773f6b57a829f8ab6d79fa4dabdafd714af21e9"},
 ]
 
 [package.dependencies]
 coverage = "7.5.0"
 freezegun = "1.5.0"
-homeassistant = "2024.6.0b3"
+homeassistant = "2024.6.0b5"
 mock-open = "1.4.0"
-mypy-dev = "1.11.0a3"
 numpy = "1.26.0"
 paho-mqtt = "1.6.1"
 pipdeptree = "2.19.0"
