@@ -1353,13 +1353,13 @@ bluetooth-data-tools = ">=1.16.0"
 
 [[package]]
 name = "hass-nabucasa"
-version = "0.81.0"
+version = "0.81.1"
 description = "Home Assistant cloud integration by Nabu Casa, Inc."
 optional = false
 python-versions = ">=3.11"
 files = [
-    {file = "hass_nabucasa-0.81.0-py3-none-any.whl", hash = "sha256:8ab1f47c8fd61f1443e60de792e6a152edc7ee4d4ac2d05a3f3c697082d95ae6"},
-    {file = "hass_nabucasa-0.81.0.tar.gz", hash = "sha256:acf89d5187365bef402212459c5614f24a6385b90e65fccce0e92892e8e9f964"},
+    {file = "hass_nabucasa-0.81.1-py3-none-any.whl", hash = "sha256:604618c25ec53ac2b5e06c08242e0299c24e87975185f4af119b7659ac3a01a4"},
+    {file = "hass_nabucasa-0.81.1.tar.gz", hash = "sha256:5be7430e6eda80f27e58d67f66a81d2bfebdcf3dfdf8615a0dc816daeaa6585d"},
 ]
 
 [package.dependencies]
@@ -1374,7 +1374,7 @@ PyJWT = ">=2.8.0"
 snitun = "0.39.1"
 
 [package.extras]
-test = ["codespell (==2.2.6)", "mypy (==1.10.0)", "pre-commit (==3.7.1)", "pre-commit-hooks (==4.6.0)", "pylint (==3.2.0)", "pytest (==8.2.0)", "pytest-aiohttp (==1.0.5)", "pytest-timeout (==2.3.1)", "ruff (==0.4.4)", "syrupy (==4.6.1)", "tomli (==2.0.1)", "types-atomicwrites (==1.4.5.1)", "types-pyOpenSSL (==24.1.0.20240425)", "xmltodict (==0.13.0)"]
+test = ["codespell (==2.3.0)", "mypy (==1.10.0)", "pre-commit (==3.7.1)", "pre-commit-hooks (==4.6.0)", "pylint (==3.2.2)", "pytest (==8.2.1)", "pytest-aiohttp (==1.0.5)", "pytest-timeout (==2.3.1)", "ruff (==0.4.7)", "syrupy (==4.6.1)", "tomli (==2.0.1)", "types-atomicwrites (==1.4.5.1)", "types-pyOpenSSL (==24.1.0.20240425)", "xmltodict (==0.13.0)"]
 
 [[package]]
 name = "home-assistant-bluetooth"
@@ -1392,13 +1392,13 @@ habluetooth = ">=0.11.0"
 
 [[package]]
 name = "homeassistant"
-version = "2024.6.0b6"
+version = "2024.6.0b8"
 description = "Open-source home automation platform running on Python 3."
 optional = false
 python-versions = ">=3.12.0"
 files = [
-    {file = "homeassistant-2024.6.0b6-py3-none-any.whl", hash = "sha256:7c471139d617d35f30ec6c912a72cabf8417b22e382ad4d0bf321474ef39f4cc"},
-    {file = "homeassistant-2024.6.0b6.tar.gz", hash = "sha256:3d9ac591aa4329fa4f3161a09e29e936b0c18e829af2fa7ccb3bae41ba8125bd"},
+    {file = "homeassistant-2024.6.0b8-py3-none-any.whl", hash = "sha256:2cf5ae51a654093d6d1f84371dc42f0a6fa632ec2c794cefb7dbe949589572e9"},
+    {file = "homeassistant-2024.6.0b8.tar.gz", hash = "sha256:be92a9beac14e3a91907644f8b7b5ea131c3ec771adfa37e99d0af3b2c768aac"},
 ]
 
 [package.dependencies]
@@ -1418,7 +1418,7 @@ certifi = ">=2021.5.30"
 ciso8601 = "2.3.1"
 cryptography = "42.0.5"
 fnv-hash-fast = "0.5.0"
-hass-nabucasa = "0.81.0"
+hass-nabucasa = "0.81.1"
 home-assistant-bluetooth = "1.12.0"
 httpx = "0.27.0"
 ifaddr = "0.2.0"
@@ -2658,19 +2658,19 @@ pytest = ">=4.0.0"
 
 [[package]]
 name = "pytest-homeassistant-custom-component"
-version = "0.13.130"
+version = "0.13.131"
 description = "Experimental package to automatically extract test plugins for Home Assistant custom components"
 optional = false
 python-versions = ">=3.12"
 files = [
-    {file = "pytest_homeassistant_custom_component-0.13.130-py3-none-any.whl", hash = "sha256:b35fff7da95b33dbb0f6d50098a2c9ef1bfe3163fcea51440513d46a6affa987"},
-    {file = "pytest_homeassistant_custom_component-0.13.130.tar.gz", hash = "sha256:804604035be884a7057db0667e975b8801566939e8714a5cd1232223dea823bc"},
+    {file = "pytest_homeassistant_custom_component-0.13.131-py3-none-any.whl", hash = "sha256:dc1efe49512e87af9a6848199cecda56041561a087283e8847b7cfdcc3a1da00"},
+    {file = "pytest_homeassistant_custom_component-0.13.131.tar.gz", hash = "sha256:98546e7a677f02e364a0cec2d78be96cb1e5df31a37507b440fc052a5478a448"},
 ]
 
 [package.dependencies]
 coverage = "7.5.0"
 freezegun = "1.5.0"
-homeassistant = "2024.6.0b6"
+homeassistant = "2024.6.0b8"
 mock-open = "1.4.0"
 numpy = "1.26.0"
 paho-mqtt = "1.6.1"
