@@ -1386,13 +1386,13 @@ habluetooth = ">=3.0"
 
 [[package]]
 name = "homeassistant"
-version = "2024.9.0b4"
+version = "2024.9.1"
 description = "Open-source home automation platform running on Python 3."
 optional = false
 python-versions = ">=3.12.0"
 files = [
-    {file = "homeassistant-2024.9.0b4-py3-none-any.whl", hash = "sha256:98cfc9ab15fffdee808782cd7895a55b393f5c4c9b338581a69e9e804bd8f67d"},
-    {file = "homeassistant-2024.9.0b4.tar.gz", hash = "sha256:168e0f727f041b703c3662f76b661303185737e3cf233b4f92da784a526c6d82"},
+    {file = "homeassistant-2024.9.1-py3-none-any.whl", hash = "sha256:228c10e04d9a4337608fee4b9b65d5fce62441b3191fb057fc0ed18b8c201855"},
+    {file = "homeassistant-2024.9.1.tar.gz", hash = "sha256:d3eb572a791ca63212a9aa6f161ee73ca7cfc49ad2002bb1ba57a3938a423d44"},
 ]
 
 [package.dependencies]
@@ -2716,19 +2716,19 @@ pytest = ">=4.0.0"
 
 [[package]]
 name = "pytest-homeassistant-custom-component"
-version = "0.13.160"
+version = "0.13.162"
 description = "Experimental package to automatically extract test plugins for Home Assistant custom components"
 optional = false
 python-versions = ">=3.12"
 files = [
-    {file = "pytest_homeassistant_custom_component-0.13.160-py3-none-any.whl", hash = "sha256:c42a9838757d4df9a67bf119d65548008dea1dcafa65e2ba638edfaab8821f1a"},
-    {file = "pytest_homeassistant_custom_component-0.13.160.tar.gz", hash = "sha256:0cd039bbd377fbdf7cd5e8ac7b90c94f4c2fadba7220cf3ba471c53bd1ff5c79"},
+    {file = "pytest_homeassistant_custom_component-0.13.162-py3-none-any.whl", hash = "sha256:3ba8e3032fb15a6c51d4618f6a43caf959d7ef757c93ec5ac5d6a44fb2107ad0"},
+    {file = "pytest_homeassistant_custom_component-0.13.162.tar.gz", hash = "sha256:da642a16dc63ee61946689bc166ba9a65234bb5876421b9fd321b4a1b9517059"},
 ]
 
 [package.dependencies]
 coverage = "7.6.0"
 freezegun = "1.5.1"
-homeassistant = "2024.9.0b4"
+homeassistant = "2024.9.1"
 mock-open = "1.4.0"
 numpy = "1.26.0"
 paho-mqtt = "1.6.1"
