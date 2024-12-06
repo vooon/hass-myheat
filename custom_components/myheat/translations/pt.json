@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MyHeat Account",
+        "description": "Please obtain API key from https://my.myheat.net on user preferences page",
+        "data": {
+          "username": "User",
+          "api_key": "API Key"
+        }
+      },
+      "device": {
+        "title": "MyHeat Controller",
+        "description": "Please select the connected device",
+        "data": {
+          "name": "Name",
+          "device_id": "Device"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Connection error",
+      "invalid_auth": "Auth error",
+      "unknown": "Unknown error"
+    },
+    "abort": {
+      "already_configured": "Already configured"
+    }
+  }
+}
