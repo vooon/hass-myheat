@@ -2,34 +2,29 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configuração de Ligação do Elios4You",
-        "description": "Se precisar de ajuda com a configuração, visite: https://github.com/alexdelprete/ha-4noks-elios4you",
+        "title": "Conta MyHeat",
+        "description": "Obtenha a chave API em https://my.myheat.net na página de preferências do utilizador",
         "data": {
-          "name": "Nome personalizado do dispositivo (usado como prefixo dos sensores)",
-          "host": "IP ou nome do host",
-          "port": "Porta TCP",
-          "scan_interval": "Período de consulta (mín: 30s máx: 600s)"
+          "username": "Utilizador",
+          "api_key": "Chave API"
+        }
+      },
+      "device": {
+        "title": "Controlador MyHeat",
+        "description": "Por favor, selecione o dispositivo conectado",
+        "data": {
+          "name": "Nome",
+          "device_id": "Dispositivo"
         }
       }
     },
     "error": {
-      "already_configured": "O dispositivo já está configurado"
+      "cannot_connect": "Erro de ligação",
+      "invalid_auth": "Erro de autenticação",
+      "unknown": "Erro desconhecido"
     },
     "abort": {
-      "already_configured": "O dispositivo já está configurado"
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Opções de Ligação do Elios4You",
-        "description": "Definir opções de ligação",
-        "data": {
-          "host": "IP ou nome do host",
-          "port": "Porta TCP",
-          "scan_interval": "Período de consulta (mín: 30s máx: 600s)"
-        }
-      }
+      "already_configured": "Já configurado"
     }
   }
 }
