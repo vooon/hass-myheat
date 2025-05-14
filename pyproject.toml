@@ -1,36 +1,45 @@
-[tool.poetry]
+[project]
 name = "hass-myheat"
 version = "0.4.0"
 description = "MyHeat integration plugin for HomeAssistant"
-authors = ["Vladimir Ermakov <vooon341@gmail.com>"]
 readme = "README.md"
 license = "MIT"
+requires-python = ">= 3.12"
 
-[tool.poetry.dependencies]
-#python = "^3.12"
-python = ">=3.12,<3.13"
-#aiohttp = "^3.9"
-#home-assistant-bluetooth = "^1"
-#homeassistant = "^2024"
-#voluptuous = ">=0.12.1"
+dependencies = [
+    # "aiohttp >=3,<4",
+    # "homeassistant >=2025",
+    # "voluptuous >=0.12.1",
+]
 
-[tool.poetry.group.dev.dependencies]
-#flake8 = "*"
-reorder-python-imports = "*"
-#pytest = "^8"
-#pytest-homeassistant-custom-component = "0.13.100"
-pytest-homeassistant-custom-component = ">=0.13.100"
-#bandit = "*"
-black = {version = "*", allow-prereleases = true}
-mypy = "*"
-pre-commit = "*"
-#pydocstyle = ">=6.0.0"
-#prospector = {extras = ["with_vulture"], version = "*"}
-pytest-asyncio = "*"
+[project.optional-dependencies]
+
+[dependency-groups]
+dev = [
+    "flake8",
+    "reorder-python-imports",
+    "pytest >=8,<9",
+    "pytest-homeassistant-custom-component >=0.13.100",
+    "bandit",
+    "black",
+    "ruff",
+    "mypy",
+    "pre-commit",
+    "pydocstyle >=6.0.0",
+    "prospector[with_vulture]",
+    "pytest-asyncio",
+]
+
+[[project.authors]]
+name = "Vladimir Ermakov"
+email = "vooon341@gmail.com"
+
+[tool.hatch.build.targets.wheel.force-include]
+"./" = "custom_components/myheat"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.isort]
 multi_line_output = 3
