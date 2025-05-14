@@ -1,6 +1,6 @@
 [project]
 name = "hass-myheat"
-version = "0.4.1"
+version = "0.4.0"
 description = "MyHeat integration plugin for HomeAssistant"
 readme = "README.md"
 license = "MIT"
@@ -28,6 +28,7 @@ dev = [
     "pydocstyle >=6.0.0",
     "prospector[with_vulture]",
     "pytest-asyncio",
+    "bump2version",
 ]
 
 [[project.authors]]
