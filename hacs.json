@@ -1,6 +1,6 @@
 {
   "name": "MyHeat.net",
   "hacs": "1.34.0",
-  "homeassistant": "2024.2.1",
+  "homeassistant": "2025.5.1",
   "country": ["RU", "BY", "UA", "KZ"]
 }
