@@ -1,10 +1,10 @@
 [project]
 name = "hass-myheat"
-version = "0.4.0"
+version = "0.4.1"
 description = "MyHeat integration plugin for HomeAssistant"
 readme = "README.md"
 license = "MIT"
-requires-python = ">= 3.12"
+requires-python = ">= 3.13.2"
 
 dependencies = [
     # "aiohttp >=3,<4",
@@ -19,7 +19,7 @@ dev = [
     "flake8",
     "reorder-python-imports",
     "pytest >=8,<9",
-    "pytest-homeassistant-custom-component >=0.13.100",
+    "pytest-homeassistant-custom-component >=0.13.244",
     "bandit",
     "black",
     "ruff",
@@ -70,7 +70,7 @@ show_missing = true
 fail_under = 50
 
 [tool.mypy]
-python_version = '3.12'
+python_version = '3.13'
 ignore_errors = false
 follow_imports = "silent"
 ignore_missing_imports = true
