@@ -19,7 +19,7 @@ jobs:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - uses: astral-sh/setup-uv@v6
       - name: Install Dependencies
-        run: uv sync --locked --all-groups
+        run: uv sync --frozen --all-groups
         shell: bash
       - name: Test with Pytest
         run: uv run pytest --cov-report=xml
