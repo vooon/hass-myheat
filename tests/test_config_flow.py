@@ -4,14 +4,14 @@ from unittest.mock import patch
 
 from homeassistant import config_entries, data_entry_flow
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import MockConfigEntry  # noqa: F401
 
 from custom_components.myheat.const import (
-    BINARY_SENSOR,
+    BINARY_SENSOR,  # noqa: F401
     DOMAIN,
-    PLATFORMS,
-    SENSOR,
-    SWITCH,
+    PLATFORMS,  # noqa: F401
+    SENSOR,  # noqa: F401
+    SWITCH,  # noqa: F401
 )
 
 from .const import MOCK_CONFIG, MOCK_USER_CONFIG, MOCK_DEVICE_CONFIG
