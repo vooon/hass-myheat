@@ -1,21 +1,20 @@
 """Switch platform for MyHeat."""
 
 from homeassistant.components.switch import SwitchEntity
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import DOMAIN
+from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .entity import MhEntity
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_devices: AddEntitiesCallback,
+    entry: MhConfigEntry,
+    async_add_devices: AddConfigEntryEntitiesCallback,
 ):
     """Setup sensor platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MhDataUpdateCoordinator = entry.runtime_data
     async_add_devices([MhSecuritySwitch(coordinator, entry)])
 
 

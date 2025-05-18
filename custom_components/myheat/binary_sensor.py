@@ -6,8 +6,8 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .entity import MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
+from .entity import MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
 
 
 async def async_setup_entry(

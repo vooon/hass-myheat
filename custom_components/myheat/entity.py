@@ -2,11 +2,8 @@
 
 import logging
 
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-)
-
 from homeassistant.headers.device_registry import DeviceInfo
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     ATTRIBUTION,
@@ -17,8 +14,7 @@ from .const import (
     MANUFACTURER,
     VERSION,
 )
-
-from .coordinator import MhDataUpdateCoordinator, MhConfigEntry
+from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 
 _logger = logging.getLogger(__package__)
 

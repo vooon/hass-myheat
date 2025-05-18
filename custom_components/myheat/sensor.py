@@ -5,10 +5,10 @@ from itertools import chain
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
-
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
-from .entity import MhEntity, MhHeaterEntity
+
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
+from .entity import MhEntity, MhHeaterEntity
 
 
 async def async_setup_entry(

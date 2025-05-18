@@ -18,8 +18,8 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .entity import MhEnvEntity
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
+from .entity import MhEnvEntity
 
 PRESET_TO_ID = {
     # PRESET_ACTIVITY: 0,

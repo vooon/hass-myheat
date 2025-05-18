@@ -25,8 +25,8 @@ async def _get_coordinator(call: ServiceCall) -> MhDataUpdateCoordinator:
     for entry_id in device_entry.config_entries:
         if (entry := hass.config_entries.async_get_entry(entry_id)) is None:
             continue
-        if entry.domain == DOMAIN and entry.entry_id in hass.data[DOMAIN]:
-            return hass.data[DOMAIN][entry.entry_id]
+        if entry.domain == DOMAIN:
+            return entry.runtime_data
 
     raise ValueError(f"No controller for device id: {device_id}")
 
