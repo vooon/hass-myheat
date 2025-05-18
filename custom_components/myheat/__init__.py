@@ -5,12 +5,9 @@ For more details about this integration, please refer to
 https://github.com/vooon/hass-myheat
 """
 
-import asyncio
 import logging
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
@@ -23,8 +20,8 @@ from .const import (
     PLATFORMS,
     STARTUP_MESSAGE,
 )
-from .const import CONF_NAME  # noqa
-from .coordinator import MhDataUpdateCoordinator
+from .const import CONF_NAME  # noqa: F401
+from .coordinator import MhDataUpdateCoordinator, MhConfigEntry
 from .services import async_setup_services
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
@@ -36,9 +33,9 @@ async def async_setup(hass: HomeAssistant, config: ConfigType):
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_setup_entry(hass: HomeAssistant, entry: MhConfigEntry):
     """Set up this integration using UI."""
-    if hass.data.get(DOMAIN) is None:
+    if DOMAIN not in hass.data:
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
 
@@ -55,42 +52,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     )
 
     coordinator = MhDataUpdateCoordinator(hass, client=client, entry=entry)
-    await coordinator.async_refresh()
+    await coordinator.async_config_entry_first_refresh()
+    # hass.data[DOMAIN][entry.entry_id] = coordinator  # XXX deprecated
+    entry.runtime_data = coordinator
 
-    if not coordinator.last_update_success:
-        raise ConfigEntryNotReady
-
-    hass.data[DOMAIN][entry.entry_id] = coordinator
-
-    for platform in PLATFORMS:
-        coordinator.platforms.append(platform)
-        hass.async_add_job(
-            hass.config_entries.async_forward_entry_setups(entry, platform)
-        )
-
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.add_update_listener(async_reload_entry)
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: MhConfigEntry) -> bool:
     """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
-        )
-    )
-    if unloaded:
-        hass.data[DOMAIN].pop(entry.entry_id)
-
-    return unloaded
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(hass: HomeAssistant, entry: MhConfigEntry) -> None:
     """Reload config entry."""
     await async_unload_entry(hass, entry)
     await async_setup_entry(hass, entry)

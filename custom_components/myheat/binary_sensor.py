@@ -3,21 +3,20 @@
 from itertools import chain
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import DOMAIN
 from .entity import MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
+from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    entry: MhConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Setup sensor platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MhDataUpdateCoordinator = entry.runtime_data
 
     entities = chain(
         (
@@ -59,7 +58,7 @@ class MhDataActualBinarySensor(MhEntity, BinarySensorEntity):
         return f"{self._mh_name} dataActual"
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         return f"{super().unique_id}dataActual"
 
     @property
@@ -77,7 +76,7 @@ class MhAlarmsBinarySensor(MhEntity, BinarySensorEntity):
         return f"{self._mh_name} alarms"
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         return f"{super().unique_id}alarms"
 
     @property
@@ -109,7 +108,7 @@ class MhSeverityBinarySensorBase(BinarySensorEntity):
         return severity != 1
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> dict:
         severity, desc = self._severity()
         return {
             "value": severity,
@@ -131,7 +130,7 @@ class MhSeverityBinarySensor(MhEntity, MhSeverityBinarySensorBase):
         return f"{self._mh_name} severity"
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         return f"{super().unique_id}severity"
 
 
@@ -160,7 +159,7 @@ class MhEngSeverityBinarySensor(MhEngEntity, MhSeverityBinarySensorBase):
 
 class MhHeaterBinarySensor(MhHeaterEntity, BinarySensorEntity):
     @property
-    def is_on(self):
+    def is_on(self) -> bool | None:
         return self.get_heater().get(self._key)
 
 
@@ -184,5 +183,5 @@ class MhHeaterBurnerHeatingBinarySensor(MhHeaterBinarySensor):
 
 class MhEngTurnedOnBinarySensor(MhEngEntity, BinarySensorEntity):
     @property
-    def is_on(self):
+    def is_on(self) -> bool | None:
         return self.get_eng().get("turnedOn")

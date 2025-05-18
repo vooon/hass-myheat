@@ -3,22 +3,21 @@
 from itertools import chain
 
 from homeassistant.components.sensor import SensorEntity
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from .entity import MhEntity, MhHeaterEntity
+from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    entry: MhConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Setup sensor platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MhDataUpdateCoordinator = entry.runtime_data
 
     entities = chain(
         (MhWeatherTempSensor(coordinator, entry),),
@@ -48,15 +47,15 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
         return f"{self._mh_name} weatherTemp"
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         return f"{super().unique_id}weatherTemp"
 
     @property
-    def state(self):
+    def state(self) -> float | None:
         return self.coordinator.data.get("weatherTemp")
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> dict:
         city = self.coordinator.data.get("city")
         return {
             "city": city,
@@ -65,7 +64,7 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
 
 class MhHeaterSensor(MhHeaterEntity, SensorEntity):
     @property
-    def state(self):
+    def state(self) -> float | None:
         """Return the state of the sensor."""
         return self.get_heater().get(self._key)
 

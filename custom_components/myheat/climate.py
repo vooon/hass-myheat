@@ -14,13 +14,12 @@ from homeassistant.components.climate import (
 from homeassistant.components.climate import PRESET_ACTIVITY  # noqa: F401
 from homeassistant.components.climate import PRESET_BOOST  # noqa: F401
 from homeassistant.components.climate import PRESET_COMFORT  # noqa: F401
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import DOMAIN
 from .entity import MhEnvEntity
+from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 
 PRESET_TO_ID = {
     # PRESET_ACTIVITY: 0,
@@ -36,11 +35,11 @@ PRESET_TO_ID = {
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    entry: MhConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Setup climate platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: MhDataUpdateCoordinator = entry.runtime_data
 
     async_add_entities(
         [
@@ -53,7 +52,12 @@ async def async_setup_entry(
 class MhEnvClimate(MhEnvEntity, ClimateEntity):
     """myheat Climate class."""
 
-    def __init__(self, coordinator, config_entry, env: dict):
+    def __init__(
+        self,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
+        env: dict,
+    ):
         super().__init__(coordinator, config_entry, env)
 
         self._attr_supported_features = (

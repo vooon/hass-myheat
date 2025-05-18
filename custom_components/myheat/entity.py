@@ -2,11 +2,11 @@
 
 import logging
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
-    DataUpdateCoordinator,
 )
+
+from homeassistant.headers.device_registry import DeviceInfo
 
 from .const import (
     ATTRIBUTION,
@@ -18,14 +18,16 @@ from .const import (
     VERSION,
 )
 
+from .coordinator import MhDataUpdateCoordinator, MhConfigEntry
+
 _logger = logging.getLogger(__package__)
 
 
-class MhEntity(CoordinatorEntity):
+class MhEntity(CoordinatorEntity[MhDataUpdateCoordinator]):
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator,
-        config_entry: ConfigEntry,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
     ):
         super().__init__(coordinator)
         self.config_entry = config_entry
@@ -35,17 +37,17 @@ class MhEntity(CoordinatorEntity):
         return self.config_entry.entry_id
 
     @property
-    def device_info(self) -> dict:
+    def device_info(self) -> DeviceInfo:
         name = self.config_entry.data.get(CONF_NAME, DEFAULT_NAME)
         name += self._mh_dev_name_suffix
-        info = {
-            "identifiers": {self._mh_identifiers},
-            "name": name,
-            "model": VERSION,
-            "manufacturer": MANUFACTURER,
-        }
+        info = DeviceInfo(
+            identifiers={self._mh_identifiers},
+            name=name,
+            model=VERSION,
+            manufacturer=MANUFACTURER,
+        )
         if self._mh_identifiers != self._mh_via_device:
-            info["via_device"] = self._mh_via_device
+            info.via_device = self._mh_via_device
         return info
 
     @property
@@ -53,11 +55,11 @@ class MhEntity(CoordinatorEntity):
         return ""
 
     @property
-    def _mh_identifiers(self) -> tuple:
+    def _mh_identifiers(self) -> tuple[str, str]:
         return (DOMAIN, self.config_entry.entry_id)
 
     @property
-    def _mh_via_device(self) -> tuple:
+    def _mh_via_device(self) -> tuple[str, str]:
         return (DOMAIN, self.config_entry.entry_id)
 
     @property
@@ -82,8 +84,8 @@ class MhHeaterEntity(MhEntity):
 
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator,
-        config_entry: ConfigEntry,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
         heater: dict,
     ):
         super().__init__(coordinator, config_entry)
@@ -105,7 +107,7 @@ class MhHeaterEntity(MhEntity):
         return f" {self.heater_name}"
 
     @property
-    def _mh_identifiers(self) -> tuple:
+    def _mh_identifiers(self) -> tuple[str, str]:
         return (DOMAIN, f"{super().unique_id}htr{self.heater_id}")
 
     def get_heater(self) -> dict:
@@ -130,8 +132,8 @@ class MhEnvEntity(MhEntity):
 
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator,
-        config_entry: ConfigEntry,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
         env: dict,
     ):
         super().__init__(coordinator, config_entry)
@@ -151,7 +153,7 @@ class MhEnvEntity(MhEntity):
         return f" {self.env_name}"
 
     @property
-    def _mh_identifiers(self) -> tuple:
+    def _mh_identifiers(self) -> tuple[str, str]:
         return (DOMAIN, f"{super().unique_id}env{self.env_id}")
 
     def get_env(self) -> dict:
@@ -176,8 +178,8 @@ class MhEngEntity(MhEntity):
 
     def __init__(
         self,
-        coordinator: DataUpdateCoordinator,
-        config_entry: ConfigEntry,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
         eng: dict,
     ):
         super().__init__(coordinator, config_entry)
@@ -185,11 +187,11 @@ class MhEngEntity(MhEntity):
         self.eng_id = eng["id"]
 
     @property
-    def name(self):
+    def name(self) -> str:
         return f"{self._mh_name} {self.eng_name}{' ' + self._key if self._key else ''}"
 
     @property
-    def unique_id(self):
+    def unique_id(self) -> str:
         return f"{super().unique_id}eng{self.eng_id}{self._key if self._key else ''}"
 
     @property
@@ -197,7 +199,7 @@ class MhEngEntity(MhEntity):
         return f" {self.eng_name}"
 
     @property
-    def _mh_identifiers(self) -> tuple:
+    def _mh_identifiers(self) -> tuple[str, str]:
         return (DOMAIN, f"{super().unique_id}eng{self.eng_id}")
 
     def get_eng(self) -> dict:
