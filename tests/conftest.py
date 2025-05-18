@@ -1,6 +1,6 @@
 """Global fixtures for MyHeat integration."""
 
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
@@ -43,6 +43,16 @@ def bypass_get_devices():
         return_value=MOCK_GET_DEVICES["data"],
     ):
         yield
+
+
+@pytest.fixture
+def mock_setup_entry():
+    """Mock async_setup_entry."""
+    with patch(
+        "custom_components.myheat.async_setup_entry",
+        return_value=AsyncMock(True),
+    ) as mock_setup:
+        yield mock_setup
 
 
 @pytest.fixture(name="error_on_get_data")
