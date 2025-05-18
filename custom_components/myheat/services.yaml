@@ -1,75 +1,83 @@
 # Expose all calls MyHeat API has
 ---
 
-# List all devices
 get_devices:
   name: Get Devices
+  description: Get all connected devices
   target: &tgt
-    entity:
+    device:
       integration: myheat
 
-# Get data for one device
 get_device_info:
   name: Get Device Info
+  description: Get device state
   target: *tgt
   fields:
-    device_id: &devid
-      name: Device ID
+    alt_device_id: &devid
+      name: Device ID (API)
+      description: Set custom device ID. Default to the device passed to a target.
       selector:
         number:
 
-# Set environment goal (temperature)
 set_env_goal:
+  name: Set environment goal (temperature)
+  description: Set environment goal, or goal for mode.
   target: *tgt
   fields:
     obj_id: &objid
       name: Object ID
+      description: Object ID, environment or engineering component.
+      required: true
       selector:
         number:
     goal:
       name: Goal [temperature]
+      description: Environment temperature goal
+      required: true
       selector:
         number:
-    device_id: *devid
-    change_mode:
+    alt_device_id: *devid
+    change_mode: &chmode
       name: Change Mode
+      description: |
+        If set, then current enabled mode would be adjusted.
+        If unset, then mode would be reset.
       default: false
       selector:
         boolean:
 
-# Set environment to use goal curve
 set_env_curve:
+  name: Set environment to use goal curve
+  description: Set goal curve for environment
   target: *tgt
   fields:
     obj_id: *objid
     curve:
+      required: true
       selector:
         number:
-    device_id: *devid
-    change_mode:
-      default: false
-      selector:
-        boolean:
+    alt_device_id: *devid
+    change_mode: *chmode
 
-# Set engineering component goal (e.g. valve position)
 set_eng_goal:
+  name: Set engineering component goal
+  description: Controls engineering component, like valves position, etc...
   target: *tgt
   fields:
     obj_id: *objid
     goal:
+      required: true
       selector:
         number:
-    device_id: *devid
-    change_mode:
-      default: false
-      selector:
-        boolean:
+    alt_device_id: *devid
+    change_mode: *chmode
 
-# Set heating mode, by mode_id or schedule_id
 set_heating_mode:
+  name: Set heating mode
+  description: One of mode_id or schedule_id should be provided.
   target: *tgt
   fields:
-    device_id: *devid
+    alt_device_id: *devid
     mode_id:
       selector:
         number:
@@ -77,11 +85,18 @@ set_heating_mode:
       selector:
         number:
 
-# Arm/disarm security (mode)
 set_security_mode:
+  name: Set security mode
+  description: Arm/disarm security (mode)
   target: *tgt
   fields:
     mode:
+      required: true
       selector:
         boolean:
-    device_id: *devid
+    alt_device_id: *devid
+
+refresh:
+  name: Force refresh of the data coordinator
+  description: Trigger coordinator data refresh
+  target: *tgt
