@@ -6,9 +6,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.myheat import (
     MhDataUpdateCoordinator,
-    async_reload_entry,
     async_setup_entry,
-    async_unload_entry,
 )
 from custom_components.myheat.const import DOMAIN
 
@@ -22,11 +20,10 @@ async def test_async_setup_entry_default(hass, bypass_get_device_info):
     entry.add_to_hass(hass)
 
     assert await hass.config_entries.async_setup(entry.entry_id) is True
+    assert entry.runtime_data is not None and isinstance(entry.runtime_data, MhDataUpdateCoordinator)
 
-    assert DOMAIN in hass.data and entry.entry_id in hass.data[DOMAIN]
 
-
-async def _test_setup_entry_exception(hass, error_on_get_data):
+async def test_setup_entry_exception(hass, error_on_get_data):
     """Test ConfigEntryNotReady when API raises an exception during entry setup."""
     config_entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
 
