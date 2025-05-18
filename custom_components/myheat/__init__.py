@@ -9,9 +9,10 @@ import asyncio
 import logging
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import Config, HomeAssistant
+from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.typing import ConfigType
 
 from .api import MhApiClient
 from .const import (
@@ -24,12 +25,14 @@ from .const import (
 )
 from .const import CONF_NAME  # noqa
 from .coordinator import MhDataUpdateCoordinator
+from .services import async_setup_services
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
-async def async_setup(hass: HomeAssistant, config: Config):
+async def async_setup(hass: HomeAssistant, config: ConfigType):
     """Set up this integration using YAML is not supported."""
+    await async_setup_services(hass)
     return True
 
 

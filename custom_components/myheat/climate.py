@@ -11,9 +11,9 @@ from homeassistant.components.climate import (
     HVACAction,
     HVACMode,
 )
-from homeassistant.components.climate import PRESET_ACTIVITY  # noqa
-from homeassistant.components.climate import PRESET_BOOST  # noqa
-from homeassistant.components.climate import PRESET_COMFORT  # noqa
+from homeassistant.components.climate import PRESET_ACTIVITY  # noqa: F401
+from homeassistant.components.climate import PRESET_BOOST  # noqa: F401
+from homeassistant.components.climate import PRESET_COMFORT  # noqa: F401
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
