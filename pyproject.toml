@@ -1,6 +1,6 @@
 [project]
 name = "hass-myheat"
-version = "0.4.1"
+version = "0.5.0"
 description = "MyHeat integration plugin for HomeAssistant"
 readme = "README.md"
 license = "MIT"
