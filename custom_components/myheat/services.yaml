@@ -1,0 +1,79 @@
+# Expose all calls MyHeat API has
+---
+
+# TODO: target
+
+# List all devices
+get_devices:
+  fields: {}
+
+# Get data for one device
+get_device_info:
+  fields:
+    device_id: &devid
+      selector:
+        integer:
+
+# Set environment goal (temperature)
+set_env_goal:
+  fields:
+    obj_id: &objid
+      selector:
+        integer:
+    goal:
+      selector:
+        number:
+    device_id: *devid
+    change_mode:
+      default: false
+      selector:
+        boolean:
+
+# Set environment to use goal curve
+set_env_curve:
+  fields:
+    obj_id: &objid
+      selector:
+        integer:
+    curve:
+      selector:
+        integer:
+    device_id: *devid
+    change_mode:
+      default: false
+      selector:
+        boolean:
+
+# Set engineering component goal (e.g. valve position)
+set_eng_goal:
+  fields:
+    obj_id: &objid
+      selector:
+        integer:
+    goal:
+      selector:
+        number:
+    device_id: *devid
+    change_mode:
+      default: false
+      selector:
+        boolean:
+
+# Set heating mode, by mode_id or schedule_id
+set_heating_mode:
+  fields:
+    device_id: *devid
+    mode_id:
+      selector:
+        integer:
+    schedule_id:
+      selector:
+        integer:
+
+# Arm/disarm security (mode)
+set_security_mode:
+  fields:
+    mode:
+      selector:
+        boolean:
+    device_id: *devid
