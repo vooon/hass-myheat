@@ -1,6 +1,5 @@
 # Expose all calls MyHeat API has
 ---
-
 get_devices:
   name: Get Devices
   description: Get all connected devices
@@ -53,6 +52,8 @@ set_env_curve:
   fields:
     obj_id: *objid
     curve:
+      name: Curve ID
+      description: ID of the temperature Curve to apply.
       required: true
       selector:
         number:
@@ -66,6 +67,8 @@ set_eng_goal:
   fields:
     obj_id: *objid
     goal:
+      name: Goal
+      description: Component goal, e.g. 3-state valve position or something else.
       required: true
       selector:
         number:
@@ -79,9 +82,13 @@ set_heating_mode:
   fields:
     alt_device_id: *devid
     mode_id:
+      name: Mode ID
+      description: Select some heating mode
       selector:
         number:
     schedule_id:
+      name: Schedule ID
+      description: Select some schedule
       selector:
         number:
 
@@ -91,6 +98,8 @@ set_security_mode:
   target: *tgt
   fields:
     mode:
+      name: Mode
+      description: Set security alarm mode.
       required: true
       selector:
         boolean:
