@@ -22,7 +22,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .entity import MhEnvEntity
 
-
 PRESET_TO_ID = {
     # PRESET_ACTIVITY: 0,
     PRESET_AWAY: 3,  # Режим: Отпуск

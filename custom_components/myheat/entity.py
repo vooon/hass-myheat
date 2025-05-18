@@ -92,7 +92,9 @@ class MhHeaterEntity(MhEntity):
 
     @property
     def name(self) -> str:
-        return f"{self._mh_name} {self.heater_name}{' '+self._key if self._key else ''}"
+        return (
+            f"{self._mh_name} {self.heater_name}{' ' + self._key if self._key else ''}"
+        )
 
     @property
     def unique_id(self) -> str:
@@ -138,7 +140,7 @@ class MhEnvEntity(MhEntity):
 
     @property
     def name(self) -> str:
-        return f"{self._mh_name} {self.env_name}{' '+self._key if self._key else ''}"
+        return f"{self._mh_name} {self.env_name}{' ' + self._key if self._key else ''}"
 
     @property
     def unique_id(self) -> str:
@@ -184,7 +186,7 @@ class MhEngEntity(MhEntity):
 
     @property
     def name(self):
-        return f"{self._mh_name} {self.eng_name}{' '+self._key if self._key else ''}"
+        return f"{self._mh_name} {self.eng_name}{' ' + self._key if self._key else ''}"
 
     @property
     def unique_id(self):

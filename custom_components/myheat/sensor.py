@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
-from .entity import MhHeaterEntity, MhEntity
+from .entity import MhEntity, MhHeaterEntity
 
 
 async def async_setup_entry(

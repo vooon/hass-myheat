@@ -6,15 +6,13 @@ from homeassistant import config_entries, data_entry_flow
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry  # noqa: F401
 
-from custom_components.myheat.const import (
-    BINARY_SENSOR,  # noqa: F401
-    DOMAIN,
-    PLATFORMS,  # noqa: F401
-    SENSOR,  # noqa: F401
-    SWITCH,  # noqa: F401
-)
+from custom_components.myheat.const import BINARY_SENSOR  # noqa: F401
+from custom_components.myheat.const import DOMAIN
+from custom_components.myheat.const import PLATFORMS  # noqa: F401
+from custom_components.myheat.const import SENSOR  # noqa: F401
+from custom_components.myheat.const import SWITCH  # noqa: F401
 
-from .const import MOCK_CONFIG, MOCK_USER_CONFIG, MOCK_DEVICE_CONFIG
+from .const import MOCK_CONFIG, MOCK_DEVICE_CONFIG, MOCK_USER_CONFIG
 
 
 # This fixture bypasses the actual setup of the integration
@@ -23,8 +21,9 @@ from .const import MOCK_CONFIG, MOCK_USER_CONFIG, MOCK_DEVICE_CONFIG
 @pytest.fixture(autouse=True)
 def bypass_setup_fixture():
     """Prevent setup."""
-    with patch("custom_components.myheat.async_setup", return_value=True), patch(
-        "custom_components.myheat.async_setup_entry", return_value=True
+    with (
+        patch("custom_components.myheat.async_setup", return_value=True),
+        patch("custom_components.myheat.async_setup_entry", return_value=True),
     ):
         yield
 
