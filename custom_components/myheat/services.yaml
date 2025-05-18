@@ -1,4 +1,5 @@
 # Expose all calls MyHeat API has
+---
 
 # List all devices
 get_devices:
@@ -34,9 +35,7 @@ set_env_goal:
 set_env_curve:
   target: *tgt
   fields:
-    obj_id: &objid
-      selector:
-        number:
+    obj_id: *objid
     curve:
       selector:
         number:
@@ -50,9 +49,7 @@ set_env_curve:
 set_eng_goal:
   target: *tgt
   fields:
-    obj_id: &objid
-      selector:
-        number:
+    obj_id: *objid
     goal:
       selector:
         number:
