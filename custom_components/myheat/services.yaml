@@ -1,7 +1,4 @@
 # Expose all calls MyHeat API has
----
-
-# TODO: target
 
 # List all devices
 get_devices:
