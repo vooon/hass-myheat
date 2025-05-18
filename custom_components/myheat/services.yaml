@@ -3,15 +3,18 @@
 
 # List all devices
 get_devices:
+  name: Get Devices
   target: &tgt
     entity:
       integration: myheat
 
 # Get data for one device
 get_device_info:
+  name: Get Device Info
   target: *tgt
   fields:
     device_id: &devid
+      name: Device ID
       selector:
         number:
 
@@ -20,13 +23,16 @@ set_env_goal:
   target: *tgt
   fields:
     obj_id: &objid
+      name: Object ID
       selector:
         number:
     goal:
+      name: Goal [temperature]
       selector:
         number:
     device_id: *devid
     change_mode:
+      name: Change Mode
       default: false
       selector:
         boolean:
