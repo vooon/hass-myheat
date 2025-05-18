@@ -25,6 +25,7 @@ async def test_async_setup_entry_default(hass, bypass_get_device_info):
 
     assert DOMAIN in hass.data and entry.entry_id in hass.data[DOMAIN]
 
+
 async def _test_setup_entry_exception(hass, error_on_get_data):
     """Test ConfigEntryNotReady when API raises an exception during entry setup."""
     config_entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
