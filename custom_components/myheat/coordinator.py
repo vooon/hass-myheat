@@ -30,8 +30,9 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator):
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=SCAN_INTERVAL,
             config_entry=entry,
+            update_interval=SCAN_INTERVAL,
+            always_update=True,
         )
 
     async def _async_update_data(self):

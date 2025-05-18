@@ -3,10 +3,11 @@
 import logging
 from typing import Any
 
-from homeassistant.config_entries import CONN_CLASS_CLOUD_POLL, ConfigEntry, ConfigFlow
-from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResult
-from homeassistant.exceptions import HomeAssistantError
+from homeassistant.config_entries import (
+    CONN_CLASS_CLOUD_POLL,
+    ConfigFlow,
+    ConfigFlowResult,
+)
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
@@ -14,7 +15,7 @@ import voluptuous as vol
 from .api import MhApiClient
 from .const import CONF_API_KEY, CONF_DEVICE_ID, CONF_NAME, CONF_USERNAME, DOMAIN
 
-_logger = logging.getLogger(__package__)
+_LOGGER = logging.getLogger(__package__)
 
 DATA_SCHEMA = vol.Schema(
     {
@@ -38,7 +39,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle a flow initialized by the user."""
 
         if user_input is None:
@@ -60,7 +61,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
         self,
         user_input: dict[str, Any] | None = None,
         errors: dict[str, str] = {},
-    ) -> FlowResult:  # pylint: disable=unused-argument
+    ) -> ConfigFlowResult:  # pylint: disable=unused-argument
         """Show the configuration form to edit auth data."""
         return self.async_show_form(
             step_id="user",
@@ -75,7 +76,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
 
     async def async_step_device(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Show the configuration form to choose the device."""
 
         if not user_input:
@@ -115,5 +116,6 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
             result = await client.async_get_devices()
             return result["devices"]
         except Exception:  # pylint: disable=broad-except
+            _LOGGER.exception("failed to get devices during config flow")
             pass
         return []
