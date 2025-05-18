@@ -108,7 +108,7 @@ async def async_set_security_mode(call: ServiceCall) -> ServiceResponse:
 
 async def async_refresh(call: ServiceCall) -> ServiceResponse:
     coordinator = await _get_coordinator(call)
-    return await coordinator.async_refresh()
+    await coordinator.async_refresh()
     return coordinator.data
 
 
