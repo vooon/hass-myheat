@@ -20,7 +20,9 @@ async def test_async_setup_entry_default(hass, bypass_get_device_info):
     entry.add_to_hass(hass)
 
     assert await hass.config_entries.async_setup(entry.entry_id) is True
-    assert entry.runtime_data is not None and isinstance(entry.runtime_data, MhDataUpdateCoordinator)
+    assert entry.runtime_data is not None and isinstance(
+        entry.runtime_data, MhDataUpdateCoordinator
+    )
 
 
 async def test_setup_entry_exception(hass, error_on_get_data):
