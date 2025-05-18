@@ -26,5 +26,11 @@
     "abort": {
       "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
     }
+  },
+  "services": {
+    "get_devices": {
+      "name": "Get Devices",
+      "description": "Get list of connected devices"
+    }
   }
 }

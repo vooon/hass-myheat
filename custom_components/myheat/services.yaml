@@ -5,10 +5,14 @@
 
 # List all devices
 get_devices:
+  target: &tgt
+    entity:
+      integration: myheat
   fields: {}
 
 # Get data for one device
 get_device_info:
+  target: *tgt
   fields:
     device_id: &devid
       selector:
@@ -16,6 +20,7 @@ get_device_info:
 
 # Set environment goal (temperature)
 set_env_goal:
+  target: *tgt
   fields:
     obj_id: &objid
       selector:
@@ -31,6 +36,7 @@ set_env_goal:
 
 # Set environment to use goal curve
 set_env_curve:
+  target: *tgt
   fields:
     obj_id: &objid
       selector:
@@ -46,6 +52,7 @@ set_env_curve:
 
 # Set engineering component goal (e.g. valve position)
 set_eng_goal:
+  target: *tgt
   fields:
     obj_id: &objid
       selector:
@@ -61,6 +68,7 @@ set_eng_goal:
 
 # Set heating mode, by mode_id or schedule_id
 set_heating_mode:
+  target: *tgt
   fields:
     device_id: *devid
     mode_id:
@@ -72,6 +80,7 @@ set_heating_mode:
 
 # Arm/disarm security (mode)
 set_security_mode:
+  target: *tgt
   fields:
     mode:
       selector:
