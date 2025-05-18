@@ -8,7 +8,6 @@ get_devices:
   target: &tgt
     entity:
       integration: myheat
-  fields: {}
 
 # Get data for one device
 get_device_info:
@@ -16,7 +15,7 @@ get_device_info:
   fields:
     device_id: &devid
       selector:
-        integer:
+        number:
 
 # Set environment goal (temperature)
 set_env_goal:
@@ -24,7 +23,7 @@ set_env_goal:
   fields:
     obj_id: &objid
       selector:
-        integer:
+        number:
     goal:
       selector:
         number:
@@ -40,10 +39,10 @@ set_env_curve:
   fields:
     obj_id: &objid
       selector:
-        integer:
+        number:
     curve:
       selector:
-        integer:
+        number:
     device_id: *devid
     change_mode:
       default: false
@@ -56,7 +55,7 @@ set_eng_goal:
   fields:
     obj_id: &objid
       selector:
-        integer:
+        number:
     goal:
       selector:
         number:
@@ -73,10 +72,10 @@ set_heating_mode:
     device_id: *devid
     mode_id:
       selector:
-        integer:
+        number:
     schedule_id:
       selector:
-        integer:
+        number:
 
 # Arm/disarm security (mode)
 set_security_mode:
