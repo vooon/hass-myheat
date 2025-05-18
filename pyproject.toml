@@ -68,8 +68,7 @@ branch = false
 
 [tool.coverage.report]
 show_missing = true
-# fail_under = 50
-fail_under = 20
+fail_under = 50
 
 [tool.mypy]
 python_version = '3.13'
@@ -83,7 +82,7 @@ exclude='custom_components\/(?!myheat).*'
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
+target-version = ['py313']
 exclude = '''
 
 (
