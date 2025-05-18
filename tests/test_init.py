@@ -4,10 +4,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.myheat import (
-    MhDataUpdateCoordinator,
-    async_setup_entry,
-)
+from custom_components.myheat import MhDataUpdateCoordinator, async_setup_entry
 from custom_components.myheat.const import DOMAIN
 
 from .const import MOCK_CONFIG
