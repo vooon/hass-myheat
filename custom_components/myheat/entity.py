@@ -2,7 +2,7 @@
 
 import logging
 
-from homeassistant.headers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
@@ -43,7 +43,7 @@ class MhEntity(CoordinatorEntity[MhDataUpdateCoordinator]):
             manufacturer=MANUFACTURER,
         )
         if self._mh_identifiers != self._mh_via_device:
-            info.via_device = self._mh_via_device
+            info["via_device"] = self._mh_via_device
         return info
 
     @property

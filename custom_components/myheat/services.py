@@ -109,6 +109,7 @@ async def async_set_security_mode(call: ServiceCall) -> ServiceResponse:
 async def async_refresh(call: ServiceCall) -> ServiceResponse:
     coordinator = await _get_coordinator(call)
     return await coordinator.async_refresh()
+    return coordinator.data
 
 
 async def async_setup_services(hass: HomeAssistant):
@@ -129,4 +130,9 @@ async def async_setup_services(hass: HomeAssistant):
     hass.services.async_register(DOMAIN, "set_eng_goal", async_set_eng_goal)
     hass.services.async_register(DOMAIN, "set_heating_mode", async_set_heating_mode)
     hass.services.async_register(DOMAIN, "set_security_mode", async_set_security_mode)
-    hass.services.async_register(DOMAIN, "refresh", async_refresh)
+    hass.services.async_register(
+        DOMAIN,
+        "refresh",
+        async_refresh,
+        supports_response=SupportsResponse.OPTIONAL,
+    )
