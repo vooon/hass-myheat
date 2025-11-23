@@ -14,6 +14,11 @@ TIMEOUT = 10
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
+ENV_TYPE_ROOM_TEMPERATURE = "room_temperature"
+ENV_TYPE_CIRCUIT_TEMPERATURE = "circuit_temperature"
+ENV_TYPE_BOILER_TEMPERATURE = "boiler_temperature"
+ENV_TYPE_DHW_TEMPERATURE = "dhw_temperature"
+
 HEADERS = {
     "Content-Type": "application/json; charset=UTF-8",
     "User-Agent": f"homeassistant-myheat/{VERSION}",
