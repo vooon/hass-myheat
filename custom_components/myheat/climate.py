@@ -54,6 +54,25 @@ async def async_setup_entry(
 class MhEnvClimate(MhEnvEntity, ClimateEntity):
     """myheat Climate class."""
 
+    _attr_supported_features = (
+        ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
+    )
+
+    _attr_fan_mode = None
+    _attr_fan_modes = []
+
+    _attr_hvac_action = None
+    _attr_hvac_mode = HVACMode.OFF
+    _attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
+
+    _attr_is_aux_heat = False
+
+    _attr_target_temperature_high = 40
+    _attr_target_temperature_low = 15
+    _attr_target_temperature_step = 0.5
+
+    _attr_temperature_unit = UnitOfTemperature.CELSIUS
+
     def __init__(
         self,
         coordinator: MhDataUpdateCoordinator,
@@ -62,25 +81,12 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
     ):
         super().__init__(coordinator, config_entry, env)
 
-        self._attr_supported_features = (
-            ClimateEntityFeature.TARGET_TEMPERATURE | ClimateEntityFeature.PRESET_MODE
-        )
-
         self._attr_current_humidity = None
         self._attr_current_temperature = None
 
-        self._attr_fan_mode = None
-        self._attr_fan_modes = []
-
-        self._attr_hvac_action = None
-        self._attr_hvac_mode = HVACMode.OFF
-        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
-
-        self._attr_is_aux_heat = False
-
         # self._attr_max_humidity = DEFAULT_MAX_HUMIDITY
-        # self._attr_max_temp: float
         # self._attr_min_humidity: int = DEFAULT_MIN_HUMIDITY
+        # self._attr_max_temp: float
         # self._attr_min_temp: float
 
         # self._attr_precision: float
@@ -90,13 +96,8 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
         # self._attr_swing_mode: str | None
         # self._attr_swing_modes: list[str] | None
 
-        # self._attr_target_humidity = None
-        # self._attr_target_temperature_high = None
-        # self._attr_target_temperature_low = None
-        self._attr_target_temperature_step = 0.1
         self._attr_target_temperature = None
-
-        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
+        # self._attr_target_humidity = None
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new target hvac mode."""

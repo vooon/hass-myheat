@@ -96,6 +96,7 @@ class MhAlarmsBinarySensor(MhEntity, BinarySensorEntity):
 
 class MhSeverityBinarySensorBase(BinarySensorEntity):
     _attr_device_class = "problem"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def _severity(self) -> (int | None, str | None):
         return None, None

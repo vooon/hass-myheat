@@ -38,6 +38,26 @@ async def async_setup_entry(
 class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
     """myheat WaterHeater class."""
 
+    _attr_target_temperature_high = 7.0
+    _attr_target_temperature_low = 85.0
+    _attr_target_temperature_step = 0.5
+    _attr_max_temp = 7.0
+    _attr_min_temp = 85.0
+    # _attr_precision: float
+
+    _attr_supported_features = (
+        WaterHeaterEntityFeature.TARGET_TEMPERATURE
+        | WaterHeaterEntityFeature.OPERATION_MODE
+        | WaterHeaterEntityFeature.ON_OFF
+    )
+
+    _attr_operation_list = [
+        OPERATION_MODE_OFF,
+        OPERATION_MODE_ON,
+    ]
+
+    _attr_temperature_unit = UnitOfTemperature.CELSIUS
+
     def __init__(
         self,
         coordinator: MhDataUpdateCoordinator,
@@ -46,24 +66,8 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
     ):
         super().__init__(coordinator, config_entry, env)
 
-        self._attr_supported_features = (
-            WaterHeaterEntityFeature.TARGET_TEMPERATURE
-            | WaterHeaterEntityFeature.ON_OFF
-        )
-
         self._attr_current_temperature = None
-
-        # self._attr_max_temp: float
-        # self._attr_min_temp: float
-
-        # self._attr_precision: float
-
-        # self._attr_target_temperature_high = None
-        # self._attr_target_temperature_low = None
-        self._attr_target_temperature_step = 1.0
         self._attr_target_temperature = None
-
-        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the water heater on."""
@@ -83,6 +87,16 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
         await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
         await self.coordinator.async_request_refresh()
 
+    async def async_set_operation_mode(self, operation_mode: str) -> None:
+        """Set new target operation mode."""
+        if operation_mode == OPERATION_MODE_OFF:
+            goal = None
+        elif operation_mode == OPERATION_MODE_ON:
+            goal = self._attr_target_temperature
+
+        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
+        await self.coordinator.async_request_refresh()
+
     @property
     def extra_state_attributes(self) -> dict:
         e = self.get_env()
@@ -95,11 +109,12 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
         """Get the latest state from the thermostat."""
 
         e = self.get_env()
+        target = e.get("target")
 
         self._attr_current_temperature = e.get("value")
-        self._attr_target_temperature = e.get("target")
+        self._attr_target_temperature = target or 0.0
         self._attr_current_operation = (
-            OPERATION_MODE_ON if e.get("target") is not None else OPERATION_MODE_OFF
+            OPERATION_MODE_ON if target is not None else OPERATION_MODE_OFF
         )
 
         self.async_write_ha_state()
