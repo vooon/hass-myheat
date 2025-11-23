@@ -39,6 +39,7 @@ async def async_setup_entry(
 class MhWeatherTempSensor(MhEntity, SensorEntity):
     """myheat weatherTemp Sensor class."""
 
+    _attr_icon = "mdi:weather-cloudy"
     _attr_device_class = "temperature"
     _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
 
