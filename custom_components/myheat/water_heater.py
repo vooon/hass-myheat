@@ -5,6 +5,8 @@ from typing import Any
 from homeassistant.components.water_heater import (
     WaterHeaterEntity,
     WaterHeaterEntityFeature,
+    STATE_ON,
+    STATE_OFF,
 )
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
@@ -14,8 +16,8 @@ from .api import ENV_TYPE_ROOM_TEMPERATURE
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .entity import MhEnvEntity
 
-OPERATION_MODE_ON = "on"
-OPERATION_MODE_OFF = "off"
+OPERATION_MODE_ON = STATE_ON
+OPERATION_MODE_OFF = STATE_OFF
 
 
 async def async_setup_entry(
