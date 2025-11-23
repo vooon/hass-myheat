@@ -3,6 +3,7 @@
 from itertools import chain
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
@@ -52,6 +53,7 @@ class MhDataActualBinarySensor(MhEntity, BinarySensorEntity):
     """myheat Data Actual (connected) Binary Sensor class."""
 
     _attr_device_class = "connectivity"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     @property
     def name(self) -> str:
