@@ -38,11 +38,11 @@ async def async_setup_entry(
 class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
     """myheat WaterHeater class."""
 
-    _attr_target_temperature_high = 7.0
-    _attr_target_temperature_low = 85.0
+    _attr_target_temperature_high = 85.0
+    _attr_target_temperature_low = 7.0
     _attr_target_temperature_step = 0.5
-    _attr_max_temp = 7.0
-    _attr_min_temp = 85.0
+    _attr_max_temp = 85.0
+    _attr_min_temp = 7.0
     # _attr_precision: float
 
     _attr_supported_features = (
