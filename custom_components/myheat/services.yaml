@@ -5,7 +5,8 @@ get_devices:
   description: Get all connected devices
   target: &tgt
     device:
-      integration: myheat
+      entity:
+        - integration: myheat
 
 get_device_info:
   name: Get Device Info
