@@ -27,10 +27,11 @@ SENSOR = "sensor"
 SWITCH = "switch"
 
 PLATFORMS = [
+    Platform.BINARY_SENSOR,
     Platform.CLIMATE,
     Platform.SENSOR,
-    Platform.BINARY_SENSOR,
     Platform.SWITCH,
+    Platform.WATER_HEATER,
 ]
 
 # Defaults
