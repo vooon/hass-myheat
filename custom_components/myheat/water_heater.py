@@ -1,5 +1,7 @@
 """Water Heater platform for MyHeat."""
 
+from typing import Any
+
 from homeassistant.components.water_heater import (
     WaterHeaterEntity,
     WaterHeaterEntityFeature,
@@ -75,7 +77,7 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
         await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
         await self.coordinator.async_request_refresh()
 
-    async def async_set_temperature(self, **kwargs) -> None:
+    async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
         goal = kwargs.get("temperature", 0.0)
         await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
