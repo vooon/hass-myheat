@@ -18,6 +18,7 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
+from .api import ENV_TYPE_ROOM_TEMPERATURE
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .entity import MhEnvEntity
 
@@ -45,6 +46,7 @@ async def async_setup_entry(
         [
             MhEnvClimate(coordinator, entry, env)
             for env in coordinator.data.get("envs", [])
+            if env.get("type") in [ENV_TYPE_ROOM_TEMPERATURE]
         ]
     )
 
@@ -91,7 +93,7 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
         # self._attr_target_humidity = None
         # self._attr_target_temperature_high = None
         # self._attr_target_temperature_low = None
-        self._attr_target_temperature_step = 1.0
+        self._attr_target_temperature_step = 0.1
         self._attr_target_temperature = None
 
         self._attr_temperature_unit = UnitOfTemperature.CELSIUS
