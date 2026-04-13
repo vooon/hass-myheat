@@ -25,7 +25,7 @@ dev = [
     "ruff",
     "mypy",
     "pre-commit",
-    "pydocstyle >=6.0.0",
+    "pydocstyle >=6.3.0",
     "prospector[with_vulture]",
     "pytest-asyncio",
     "bump2version",
