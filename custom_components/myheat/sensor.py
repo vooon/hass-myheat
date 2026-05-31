@@ -2,8 +2,8 @@
 
 from itertools import chain
 
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.const import UnitOfTemperature
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.const import PERCENTAGE, UnitOfPressure, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
@@ -40,8 +40,8 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
     """myheat weatherTemp Sensor class."""
 
     _attr_icon = "mdi:weather-cloudy"
-    _attr_device_class = "temperature"
-    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
     @property
     def name(self) -> str:
@@ -52,8 +52,9 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
         return f"{super().unique_id}weatherTemp"
 
     @property
-    def state(self) -> float | None:
-        return self.coordinator.data.get("weatherTemp")
+    def native_value(self) -> float | None:
+        value = self.coordinator.data.get("weatherTemp")
+        return float(value) if value is not None else None
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -65,7 +66,7 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
 
 class MhHeaterSensor(MhHeaterEntity, SensorEntity):
     @property
-    def state(self) -> float | None:
+    def native_value(self) -> float | None:
         """Return the state of the sensor."""
         return self.get_heater().get(self._key)
 
@@ -73,32 +74,33 @@ class MhHeaterSensor(MhHeaterEntity, SensorEntity):
 class MhHeaterFlowTempSensor(MhHeaterSensor):
     _key = "flowTemp"
     _attr_icon = "mdi:coolant-temperature"
-    _attr_device_class = "temperature"
-    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
 
 class MhHeaterReturnTempSensor(MhHeaterSensor):
     _key = "returnTemp"
     _attr_icon = "mdi:coolant-temperature"
-    _attr_device_class = "temperature"
-    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
 
 class MhHeaterTargetTempSensor(MhHeaterSensor):
     _key = "targetTemp"
     _attr_icon = "mdi:coolant-temperature"
-    _attr_device_class = "temperature"
-    _attr_unit_of_measurement = UnitOfTemperature.CELSIUS
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
 
 class MhHeaterPressureSensor(MhHeaterSensor):
     _key = "pressure"
     _attr_icon = "mdi:gauge"
-    _attr_device_class = "pressure"
+    _attr_device_class = SensorDeviceClass.PRESSURE
+    _attr_native_unit_of_measurement = UnitOfPressure.BAR
 
 
 class MhHeaterModulationSensor(MhHeaterSensor):
     _key = "modulation"
     _attr_icon = "mdi:gas-burner"
     _attr_device_class = None
-    _attr_unit_of_measurement = "%"
+    _attr_native_unit_of_measurement = PERCENTAGE

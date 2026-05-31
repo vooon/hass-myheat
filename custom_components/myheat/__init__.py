@@ -9,6 +9,7 @@ import logging
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
@@ -16,12 +17,15 @@ from .api import MhApiClient
 from .const import (
     CONF_API_KEY,
     CONF_DEVICE_ID,
+    CONF_NAME,
     CONF_USERNAME,
+    DEFAULT_NAME,
     DOMAIN,
+    MANUFACTURER,
     PLATFORMS,
     STARTUP_MESSAGE,
+    VERSION,
 )
-from .const import CONF_NAME  # noqa: F401
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .services import async_setup_services
 
@@ -57,6 +61,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: MhConfigEntry):
     coordinator = MhDataUpdateCoordinator(hass, client=client, entry=entry)
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
+
+    device_registry = dr.async_get(hass)
+    device_registry.async_get_or_create(
+        config_entry_id=entry.entry_id,
+        identifiers={(DOMAIN, entry.entry_id)},
+        manufacturer=MANUFACTURER,
+        model=VERSION,
+        name=entry.data.get(CONF_NAME, DEFAULT_NAME),
+    )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.add_update_listener(async_reload_entry)

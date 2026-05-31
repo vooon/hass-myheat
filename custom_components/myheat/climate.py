@@ -99,6 +99,8 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
         self._attr_target_temperature = None
         # self._attr_target_humidity = None
 
+        self._update_state_attrs()
+
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new target hvac mode."""
 
@@ -124,10 +126,8 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
         await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
         await self.coordinator.async_request_refresh()
 
-    @callback
-    def _handle_coordinator_update(self):
-        """Get the latest state from the thermostat."""
-
+    def _update_state_attrs(self) -> None:
+        """Update entity state attributes from coordinator data."""
         e = self.get_env()
 
         self._attr_current_temperature = e.get("value")
@@ -143,4 +143,8 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
             HVACMode.HEAT if self._attr_target_temperature is not None else HVACMode.OFF
         )
 
+    @callback
+    def _handle_coordinator_update(self):
+        """Get the latest state from the thermostat."""
+        self._update_state_attrs()
         self.async_write_ha_state()
