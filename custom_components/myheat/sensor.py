@@ -3,7 +3,12 @@
 from itertools import chain
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
-from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfPressure, UnitOfTemperature
+from homeassistant.const import (
+    EntityCategory,
+    PERCENTAGE,
+    UnitOfPressure,
+    UnitOfTemperature,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
@@ -24,7 +29,7 @@ async def async_setup_entry(
         (
             sensor
             for sensor in (
-                MhLocalGsmSignalSensor(coordinator, entry),
+                MhLocalGsmRssiSensor(coordinator, entry),
                 MhLocalGsmBalanceSensor(coordinator, entry),
             )
             if sensor.available
@@ -86,23 +91,25 @@ class MhLocalSensor(MhEntity, SensorEntity):
         return float(value) if value is not None else None
 
 
-class MhLocalGsmSignalSensor(MhLocalSensor):
+class MhLocalGsmRssiSensor(MhLocalSensor):
     _local_key = "gsmRssi"
     _attr_icon = "mdi:signal-cellular-2"
     _attr_native_unit_of_measurement = PERCENTAGE
 
     @property
     def name(self) -> str:
-        return f"{self._mh_name} GSM signal"
+        return f"{self._mh_name} GSM RSSI"
 
     @property
     def unique_id(self) -> str:
-        return f"{super().unique_id}gsmSignal"
+        return f"{super().unique_id}gsmRssi"
 
 
 class MhLocalGsmBalanceSensor(MhLocalSensor):
     _local_key = "gsmBalance"
     _attr_icon = "mdi:sim"
+    _attr_device_class = SensorDeviceClass.MONETARY
+    _attr_native_unit_of_measurement = "RUB"
 
     @property
     def name(self) -> str:

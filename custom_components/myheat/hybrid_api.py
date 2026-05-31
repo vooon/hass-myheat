@@ -25,7 +25,7 @@ _LOGGER = logging.getLogger(__package__)
 def _is_sentinel(value: Any) -> bool:
     try:
         return float(value) <= -16777215
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return False
 
 
@@ -35,7 +35,7 @@ def _clean_number(value: Any) -> float | None:
 
     try:
         return float(value)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return None
 
 
@@ -62,7 +62,7 @@ def _state(obj: dict[str, Any], key: str) -> Any:
 def _is_nonzero(value: Any) -> bool:
     try:
         return int(float(value)) != 0
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return False
 
 
@@ -229,8 +229,7 @@ def normalize_local_device_info(
         "hModes": obj_state.get("hModes", []),
         "scheds": obj_state.get("scheds", []),
         "objectState": {
-            key: obj_state.get(key, [])
-            for key in ("envs", "heaters", "engs", "alarms")
+            key: obj_state.get(key, []) for key in ("envs", "heaters", "engs", "alarms")
         },
         "deviceState": _safe_device_state(device_state),
     }
@@ -352,7 +351,9 @@ class MhHybridApiClient:
         if cloud_data is None and local_data is None:
             if cloud_error is not None:
                 raise cloud_error
-            raise LocalResponseError("Both cloud and local MY HEAT APIs are unavailable")
+            raise LocalResponseError(
+                "Both cloud and local MY HEAT APIs are unavailable"
+            )
 
         return merge_local_device_info(cloud_data, local_data)
 
@@ -388,7 +389,7 @@ class MhHybridApiClient:
             obj_state = await self.local.async_get_obj_state()
             try:
                 device_state = await self.local.async_get_state()
-            except (LocalApiError, asyncio.TimeoutError):
+            except LocalApiError, asyncio.TimeoutError:
                 device_state = {}
 
             self._local_cache = normalize_local_device_info(obj_state, device_state)
@@ -502,9 +503,7 @@ class MhHybridApiClient:
         if (
             self.local is not None
             and (
-                mode_id is None
-                or mode_id == -1
-                or self.local.has_heating_mode(mode_id)
+                mode_id is None or mode_id == -1 or self.local.has_heating_mode(mode_id)
             )
             and (
                 schedule_id is None
