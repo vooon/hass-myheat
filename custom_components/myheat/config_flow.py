@@ -7,13 +7,31 @@ from homeassistant.config_entries import (
     CONN_CLASS_CLOUD_POLL,
     ConfigFlow,
     ConfigFlowResult,
+    OptionsFlow,
 )
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
 from .api import MhApiClient
-from .const import CONF_API_KEY, CONF_DEVICE_ID, CONF_NAME, CONF_USERNAME, DOMAIN
+from .const import (
+    CONF_API_KEY,
+    CONF_DEVICE_ID,
+    CONF_LOCAL_HOST,
+    CONF_LOCAL_MODE_ENABLED,
+    CONF_LOCAL_PASSWORD,
+    CONF_LOCAL_POLL_INTERVAL,
+    CONF_LOCAL_PROTOCOL,
+    CONF_LOCAL_REQUEST_TIMEOUT,
+    CONF_LOCAL_USERNAME,
+    CONF_NAME,
+    CONF_USERNAME,
+    DEFAULT_LOCAL_POLL_INTERVAL,
+    DEFAULT_LOCAL_PROTOCOL,
+    DEFAULT_LOCAL_REQUEST_TIMEOUT,
+    DOMAIN,
+    LOCAL_PROTOCOLS,
+)
 
 _LOGGER = logging.getLogger(__package__)
 
@@ -32,6 +50,12 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
     CONNECTION_CLASS = CONN_CLASS_CLOUD_POLL
+
+    @staticmethod
+    def async_get_options_flow(config_entry):
+        """Create the options flow."""
+
+        return MhOptionsFlowHandler(config_entry)
 
     @property
     def data_schema(self) -> vol.Schema:
@@ -122,3 +146,93 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
             _LOGGER.exception("failed to get devices during config flow")
             pass
         return []
+
+
+class MhOptionsFlowHandler(OptionsFlow):
+    """Handle MyHeat options."""
+
+    def __init__(self, config_entry) -> None:
+        self.config_entry = config_entry
+
+    async def async_step_init(
+        self,
+        user_input: dict[str, Any] | None = None,
+    ) -> ConfigFlowResult:
+        """Start the options flow."""
+
+        return await self.async_step_local_init(user_input)
+
+    async def async_step_local_init(
+        self,
+        user_input: dict[str, Any] | None = None,
+    ) -> ConfigFlowResult:
+        """Manage local API options."""
+
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if user_input.get(CONF_LOCAL_MODE_ENABLED):
+                required = (
+                    CONF_LOCAL_HOST,
+                    CONF_LOCAL_USERNAME,
+                    CONF_LOCAL_PASSWORD,
+                )
+                if any(not user_input.get(key) for key in required):
+                    errors["base"] = "local_config_incomplete"
+                else:
+                    return self.async_create_entry(title="", data=user_input)
+            else:
+                return self.async_create_entry(title="", data=user_input)
+
+        options = {
+            CONF_LOCAL_MODE_ENABLED: False,
+            CONF_LOCAL_PROTOCOL: DEFAULT_LOCAL_PROTOCOL,
+            CONF_LOCAL_REQUEST_TIMEOUT: DEFAULT_LOCAL_REQUEST_TIMEOUT,
+            CONF_LOCAL_POLL_INTERVAL: DEFAULT_LOCAL_POLL_INTERVAL,
+            **self.config_entry.options,
+        }
+
+        return self.async_show_form(
+            step_id="local_init",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_LOCAL_MODE_ENABLED,
+                        default=options.get(CONF_LOCAL_MODE_ENABLED, False),
+                    ): bool,
+                    vol.Optional(
+                        CONF_LOCAL_HOST,
+                        default=options.get(CONF_LOCAL_HOST, ""),
+                    ): str,
+                    vol.Required(
+                        CONF_LOCAL_PROTOCOL,
+                        default=options.get(
+                            CONF_LOCAL_PROTOCOL,
+                            DEFAULT_LOCAL_PROTOCOL,
+                        ),
+                    ): vol.In(LOCAL_PROTOCOLS),
+                    vol.Optional(
+                        CONF_LOCAL_USERNAME,
+                        default=options.get(CONF_LOCAL_USERNAME, ""),
+                    ): str,
+                    vol.Optional(
+                        CONF_LOCAL_PASSWORD,
+                        default=options.get(CONF_LOCAL_PASSWORD, ""),
+                    ): str,
+                    vol.Required(
+                        CONF_LOCAL_REQUEST_TIMEOUT,
+                        default=options.get(
+                            CONF_LOCAL_REQUEST_TIMEOUT,
+                            DEFAULT_LOCAL_REQUEST_TIMEOUT,
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1, max=60)),
+                    vol.Required(
+                        CONF_LOCAL_POLL_INTERVAL,
+                        default=options.get(
+                            CONF_LOCAL_POLL_INTERVAL,
+                            DEFAULT_LOCAL_POLL_INTERVAL,
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=5, max=300)),
+                }
+            ),
+            errors=errors,
+        )

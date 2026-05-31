@@ -16,15 +16,49 @@
           "name": "[%key:common::config_flow::data::name%]",
           "device_id": "[%key:common::config_flow::data::device_id%]"
         }
+      },
+      "local_init": {
+        "title": "Local API",
+        "description": "Optional LAN API access. The device LAN address should be trusted because local access can control heating.",
+        "data": {
+          "local_mode_enabled": "Enable local API",
+          "local_host": "Host",
+          "local_protocol": "Protocol",
+          "local_username": "[%key:common::config_flow::data::username%]",
+          "local_password": "[%key:common::config_flow::data::password%]",
+          "local_request_timeout": "Request timeout",
+          "local_poll_interval": "Local poll interval"
+        }
       }
     },
     "error": {
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
       "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "local_config_incomplete": "Local API host, username, and password are required when local API is enabled.",
       "unknown": "[%key:common::config_flow::error::unknown%]"
     },
     "abort": {
       "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  },
+  "options": {
+    "step": {
+      "local_init": {
+        "title": "Local API",
+        "description": "Optional LAN API access. The device LAN address should be trusted because local access can control heating.",
+        "data": {
+          "local_mode_enabled": "Enable local API",
+          "local_host": "Host",
+          "local_protocol": "Protocol",
+          "local_username": "[%key:common::config_flow::data::username%]",
+          "local_password": "[%key:common::config_flow::data::password%]",
+          "local_request_timeout": "Request timeout",
+          "local_poll_interval": "Local poll interval"
+        }
+      }
+    },
+    "error": {
+      "local_config_incomplete": "Local API host, username, and password are required when local API is enabled."
     }
   },
   "services": {

@@ -75,6 +75,19 @@ set_eng_goal:
     alt_device_id: *devid
     change_mode: *chmode
 
+set_heater_enabled:
+  name: Set heater enabled
+  description: Enable or disable a heater through the local API.
+  target: *tgt
+  fields:
+    obj_id: *objid
+    enabled:
+      name: Enabled
+      description: Enable the heater when true, disable it when false.
+      required: true
+      selector:
+        boolean:
+
 set_heating_mode:
   name: Set heating mode
   description: One of mode_id or schedule_id should be provided.

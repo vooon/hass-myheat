@@ -96,6 +96,16 @@ async def async_set_heating_mode(call: ServiceCall) -> ServiceResponse:
     )
 
 
+async def async_set_heater_enabled(call: ServiceCall) -> ServiceResponse:
+    coordinator = await _get_coordinator(call)
+    obj_id = call.data["obj_id"]
+    enabled = call.data["enabled"]
+    return await coordinator.api.async_set_heater_enabled(
+        obj_id=obj_id,
+        enabled=enabled,
+    )
+
+
 async def async_set_security_mode(call: ServiceCall) -> ServiceResponse:
     coordinator = await _get_coordinator(call)
     device_id = call.data.get("alt_device_id")
@@ -128,6 +138,7 @@ async def async_setup_services(hass: HomeAssistant):
     hass.services.async_register(DOMAIN, "set_env_goal", async_set_env_goal)
     hass.services.async_register(DOMAIN, "set_env_curve", async_set_env_curve)
     hass.services.async_register(DOMAIN, "set_eng_goal", async_set_eng_goal)
+    hass.services.async_register(DOMAIN, "set_heater_enabled", async_set_heater_enabled)
     hass.services.async_register(DOMAIN, "set_heating_mode", async_set_heating_mode)
     hass.services.async_register(DOMAIN, "set_security_mode", async_set_security_mode)
     hass.services.async_register(

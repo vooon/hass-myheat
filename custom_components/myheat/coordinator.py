@@ -1,16 +1,16 @@
 from datetime import timedelta
 import logging
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .api import MhApiClient
-from .const import DOMAIN  # noqa: F401
+from .const import DEFAULT_CLOUD_POLL_INTERVAL, DOMAIN  # noqa: F401
 
 _LOGGER = logging.getLogger(__package__)
 
-SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = timedelta(seconds=DEFAULT_CLOUD_POLL_INTERVAL)
 
 type MhConfigEntry = ConfigEntry[MhDataUpdateCoordinator]
 
@@ -22,7 +22,8 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator[dict]):
         self,
         hass: HomeAssistant,
         entry: MhConfigEntry,
-        client: MhApiClient,
+        client: Any,
+        scan_interval: timedelta = SCAN_INTERVAL,
     ) -> None:
         """Initialize."""
         self.api = client
@@ -32,7 +33,7 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator[dict]):
             _LOGGER,
             config_entry=entry,
             name=entry.title,
-            update_interval=SCAN_INTERVAL,
+            update_interval=scan_interval,
             always_update=True,
         )
 
