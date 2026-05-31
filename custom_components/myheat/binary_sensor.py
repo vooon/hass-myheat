@@ -84,7 +84,10 @@ class MhAlarmsBinarySensor(MhEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool | None:
         alarms = self.coordinator.data.get("alarms", [])
-        return len(alarms) > 0
+        if isinstance(alarms, list):
+            return any(alarm.get("alarm", False) for alarm in alarms)
+
+        return bool(alarms)
 
     @property
     def extra_state_attributes(self):

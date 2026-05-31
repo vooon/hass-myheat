@@ -18,7 +18,7 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .api import ENV_TYPE_ROOM_TEMPERATURE
+from .api import CLIMATE_ENV_TYPES
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .entity import MhEnvEntity
 
@@ -46,7 +46,7 @@ async def async_setup_entry(
         [
             MhEnvClimate(coordinator, entry, env)
             for env in coordinator.data.get("envs", [])
-            if env.get("type") in [ENV_TYPE_ROOM_TEMPERATURE]
+            if env.get("type") in CLIMATE_ENV_TYPES
         ]
     )
 

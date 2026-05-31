@@ -15,9 +15,14 @@ TIMEOUT = 10
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 ENV_TYPE_ROOM_TEMPERATURE = "room_temperature"
+ENV_TYPE_FLOOR_TEMPERATURE = "floor_temperature"
 ENV_TYPE_CIRCUIT_TEMPERATURE = "circuit_temperature"
 ENV_TYPE_BOILER_TEMPERATURE = "boiler_temperature"
 ENV_TYPE_DHW_TEMPERATURE = "dhw_temperature"
+CLIMATE_ENV_TYPES = {
+    ENV_TYPE_ROOM_TEMPERATURE,
+    ENV_TYPE_FLOOR_TEMPERATURE,
+}
 
 HEADERS = {
     "Content-Type": "application/json; charset=UTF-8",
@@ -58,7 +63,7 @@ RPC_SCHEMA = vol.Schema(
                                 "name": str,
                                 "disabled": bool,
                                 "flowTemp": float,
-                                "returnTemp": float,
+                                "returnTemp": vol.Any(None, float),
                                 "pressure": vol.Any(None, float),
                                 "targetTemp": float,
                                 "burnerHeating": bool,
@@ -96,7 +101,19 @@ RPC_SCHEMA = vol.Schema(
                             extra=vol.ALLOW_EXTRA,
                         ),
                     ],
-                    "alarms": list,
+                    "alarms": [
+                        vol.Schema(
+                            {
+                                "id": int,
+                                "type": str,
+                                "name": str,
+                                "alarm": bool,
+                                "severity": int,
+                                "severityDesc": str,
+                            },
+                            extra=vol.ALLOW_EXTRA,
+                        ),
+                    ],
                     "dataActual": bool,
                     "severity": int,
                     "severityDesc": str,

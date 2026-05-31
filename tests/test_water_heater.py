@@ -18,7 +18,7 @@ from .helpers import setup_mock_entry, state_by_name
 
 
 async def test_water_heater_entities(hass, bypass_get_device_info):
-    """Test water heater entities are created from non-room envs."""
+    """Test water heater entities are created from boiler and circuit envs."""
     await setup_mock_entry(hass)
 
     assert len(hass.states.async_entity_ids(WATER_HEATER_DOMAIN)) == 2
