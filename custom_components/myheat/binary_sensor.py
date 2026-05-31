@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
-from .entity import MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
+from .entity import MhAlarmEntity, MhEngEntity, MhEntity, MhEnvEntity, MhHeaterEntity
 
 
 async def async_setup_entry(
@@ -43,6 +43,11 @@ async def async_setup_entry(
                 MhEngSeverityBinarySensor(coordinator, entry, eng),
             ]
             for eng in coordinator.data.get("engs", [])
+        ),
+        (
+            MhAlarmBinarySensor(coordinator, entry, alarm)
+            for alarm in coordinator.data.get("alarms", [])
+            if isinstance(alarm, dict)
         ),
     )
 
@@ -191,3 +196,20 @@ class MhEngTurnedOnBinarySensor(MhEngEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool | None:
         return self.get_eng().get("turnedOn")
+
+
+class MhAlarmBinarySensor(MhAlarmEntity, BinarySensorEntity):
+    _attr_device_class = "problem"
+
+    @property
+    def is_on(self) -> bool | None:
+        return self.get_alarm().get("alarm")
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        alarm = self.get_alarm()
+        return {
+            "type": alarm.get("type"),
+            "severity": alarm.get("severity"),
+            "description": alarm.get("severityDesc"),
+        }

@@ -209,3 +209,55 @@ class MhEngEntity(MhEntity):
                 return e
 
         return {}
+
+
+class MhAlarmEntity(MhEntity):
+    """Alarm element"""
+
+    _key: str | None = None
+    alarm_name: str = ""
+    alarm_id: int = 0
+
+    def __init__(
+        self,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
+        alarm: dict,
+    ):
+        super().__init__(coordinator, config_entry)
+        self.alarm_name = alarm["name"]
+        self.alarm_id = alarm["id"]
+
+    @property
+    def name(self) -> str:
+        return (
+            f"{self._mh_name} {self.alarm_name}{' ' + self._key if self._key else ''}"
+        )
+
+    @property
+    def unique_id(self) -> str:
+        return f"{super().unique_id}alarm{self.alarm_id}{self._key if self._key else ''}"
+
+    @property
+    def _mh_dev_name_suffix(self) -> str:
+        return f" {self.alarm_name}"
+
+    @property
+    def _mh_identifiers(self) -> tuple[str, str]:
+        return (DOMAIN, f"{super().unique_id}alarm{self.alarm_id}")
+
+    def get_alarm(self) -> dict:
+        """Return alarm state data"""
+        if not self.coordinator.data.get("dataActual", False):
+            _logger.warninig("data not actual! %s", self.coordinator.data)
+            return {}
+
+        alarms = self.coordinator.data.get("alarms", [])
+        if not isinstance(alarms, list):
+            return {}
+
+        for alarm in alarms:
+            if alarm["id"] == self.alarm_id:
+                return alarm
+
+        return {}

@@ -10,7 +10,7 @@ async def test_binary_sensor_entities(hass, bypass_get_device_info):
     """Test binary sensor entities are created from coordinator data."""
     await setup_mock_entry(hass)
 
-    assert len(hass.states.async_entity_ids(BINARY_SENSOR_DOMAIN)) == 32
+    assert len(hass.states.async_entity_ids(BINARY_SENSOR_DOMAIN)) == 34
 
     data_actual = state_by_name(hass, BINARY_SENSOR_DOMAIN, "test_device dataActual")
     assert data_actual.state == STATE_ON
@@ -35,6 +35,21 @@ async def test_binary_sensor_entities(hass, bypass_get_device_info):
             "severityDesc": "Нормальное состояние.",
         },
     ]
+
+    water_leakage = state_by_name(
+        hass, BINARY_SENSOR_DOMAIN, "test_device Протечка воды"
+    )
+    assert water_leakage.state == STATE_OFF
+    assert water_leakage.attributes["type"] == "water_leakage"
+    assert water_leakage.attributes["severity"] == 1
+    assert water_leakage.attributes["description"] == "Нормальное состояние."
+
+    boiler_room_leakage = state_by_name(
+        hass, BINARY_SENSOR_DOMAIN, "test_device Протечка воды Котельная"
+    )
+    assert boiler_room_leakage.state == STATE_OFF
+    assert boiler_room_leakage.attributes["type"] == "water_leakage"
+    assert boiler_room_leakage.attributes["severity"] == 1
 
     severity = state_by_name(hass, BINARY_SENSOR_DOMAIN, "test_device Severity")
     assert severity.state == STATE_OFF
