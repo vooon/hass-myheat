@@ -67,7 +67,7 @@ show_missing = true
 fail_under = 50
 
 [tool.mypy]
-python_version = '3.13'
+python_version = '3.14'
 ignore_errors = false
 follow_imports = "silent"
 ignore_missing_imports = true
@@ -78,7 +78,7 @@ exclude='custom_components\/(?!myheat).*'
 
 [tool.black]
 line-length = 88
-target-version = ['py313']
+target-version = ['py314']
 exclude = '''
 
 (
