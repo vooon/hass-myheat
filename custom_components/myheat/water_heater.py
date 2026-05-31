@@ -71,6 +71,8 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
         self._attr_current_temperature = None
         self._attr_target_temperature = None
 
+        self._update_state_attrs()
+
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the water heater on."""
         goal = self._attr_target_temperature
@@ -106,10 +108,8 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
             "is_burning": e.get("demand", False),
         }
 
-    @callback
-    def _handle_coordinator_update(self):
-        """Get the latest state from the thermostat."""
-
+    def _update_state_attrs(self) -> None:
+        """Update entity state attributes from coordinator data."""
         e = self.get_env()
         target = e.get("target")
 
@@ -119,4 +119,8 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
             OPERATION_MODE_ON if target is not None else OPERATION_MODE_OFF
         )
 
+    @callback
+    def _handle_coordinator_update(self):
+        """Get the latest state from the thermostat."""
+        self._update_state_attrs()
         self.async_write_ha_state()
