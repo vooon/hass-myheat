@@ -20,16 +20,22 @@ from .helpers import setup_mock_entry, state_by_name
 
 
 async def test_climate_entities(hass, bypass_get_device_info):
-    """Test climate entities are created from room temperature envs."""
+    """Test climate entities are created from room and floor temperature envs."""
     await setup_mock_entry(hass)
 
-    assert len(hass.states.async_entity_ids(CLIMATE_DOMAIN)) == 4
+    assert len(hass.states.async_entity_ids(CLIMATE_DOMAIN)) == 5
 
     cafe = state_by_name(hass, CLIMATE_DOMAIN, "test_device Кафе")
     assert cafe.state == HVACMode.HEAT
     assert cafe.attributes["current_temperature"] == 24.8
     assert cafe.attributes["temperature"] == 23
     assert cafe.attributes[ATTR_HVAC_ACTION] == HVACAction.IDLE
+
+    floor = state_by_name(hass, CLIMATE_DOMAIN, "test_device Теплый пол")
+    assert floor.state == HVACMode.HEAT
+    assert floor.attributes["current_temperature"] == 26.5
+    assert floor.attributes["temperature"] == 27
+    assert floor.attributes[ATTR_HVAC_ACTION] == HVACAction.HEATING
 
     accounting = state_by_name(hass, CLIMATE_DOMAIN, "test_device Бухгалтерия")
     assert accounting.state == HVACMode.OFF
