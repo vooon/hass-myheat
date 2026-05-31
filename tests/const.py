@@ -245,3 +245,119 @@ MOCK_GET_DEVICE_INFO = {
 }
 
 MOCK_NO_ERR = {"err": 0, "refreshPage": False}
+
+MOCK_LOCAL_OBJ_STATE = {
+    "deviceFlags": 24961,
+    "deviceSeverity": 1,
+    "simSignal": 71,
+    "simBalance": 137.7,
+    "envs": [
+        {
+            "n": "Room1",
+            "i": 67,
+            "t": 101,
+            "f": 0,
+            "sev": 1,
+            "st": {
+                "p1": 22.5,
+                "p4": 1,
+            },
+            "s": {
+                "p3008": "23.5",
+                "p3022": "1",
+                "p3026": "1",
+                "p3049": "1",
+                "p3012": "10",
+                "p3011": "35",
+            },
+        },
+        {
+            "n": "Outdoor sensor",
+            "i": 68,
+            "t": 101,
+            "f": 0,
+            "sev": 1,
+            "st": {
+                "p1": -16777216,
+            },
+            "s": {
+                "p3026": "0",
+            },
+        },
+    ],
+    "heaters": [
+        {
+            "n": "Boiler",
+            "i": 45,
+            "t": 303,
+            "f": 2336,
+            "sev": 1,
+            "st": {
+                "p100": 51,
+                "p101": 41,
+                "p109": 1.8,
+            },
+            "s": {
+                "p3013": "0",
+            },
+        }
+    ],
+    "engs": [
+        {
+            "n": "Pump",
+            "i": 123,
+            "t": 302,
+            "f": 0,
+            "sev": 1,
+            "st": {
+                "p4": 0,
+            },
+            "s": {
+                "p3008": "-16777216",
+            },
+        }
+    ],
+    "alarms": [
+        {
+            "n": "Leak",
+            "i": 301,
+            "t": 901,
+            "f": 0,
+            "sev": 1,
+            "st": {
+                "p1": 0,
+            },
+            "s": {},
+        }
+    ],
+    "curves": [
+        {
+            "i": 1,
+            "n": "Curve 1",
+            "d": [-30, 49, -28, 48],
+        }
+    ],
+    "hModes": [
+        {
+            "i": 1,
+            "n": "Home",
+        }
+    ],
+    "scheds": [
+        {
+            "i": 10,
+            "n": "Week",
+        }
+    ],
+}
+
+MOCK_LOCAL_GET_STATE = {
+    "status": 1,
+    "inet": "1",
+    "serial": "serial",
+    "regkey": "sensitive",
+    "wifiSsid": "wifi",
+    "gsmCarrier": "carrier",
+    "gsmRssi": "71",
+    "gsmBalance": "137.70",
+}

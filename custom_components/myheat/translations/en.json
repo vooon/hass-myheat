@@ -16,15 +16,49 @@
           "name": "Name",
           "device_id": "Device"
         }
+      },
+      "local_init": {
+        "title": "Local API",
+        "description": "Optional LAN API access. The device LAN address should be trusted because local access can control heating.",
+        "data": {
+          "local_mode_enabled": "Enable local API",
+          "local_host": "Host",
+          "local_protocol": "Protocol",
+          "local_username": "User",
+          "local_password": "Password",
+          "local_request_timeout": "Request timeout",
+          "local_poll_interval": "Local poll interval"
+        }
       }
     },
     "error": {
       "cannot_connect": "Connection error",
       "invalid_auth": "Auth error",
+      "local_config_incomplete": "Local API host, username, and password are required when local API is enabled.",
       "unknown": "Unknown error"
     },
     "abort": {
       "already_configured": "Already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "local_init": {
+        "title": "Local API",
+        "description": "Optional LAN API access. The device LAN address should be trusted because local access can control heating.",
+        "data": {
+          "local_mode_enabled": "Enable local API",
+          "local_host": "Host",
+          "local_protocol": "Protocol",
+          "local_username": "User",
+          "local_password": "Password",
+          "local_request_timeout": "Request timeout",
+          "local_poll_interval": "Local poll interval"
+        }
+      }
+    },
+    "error": {
+      "local_config_incomplete": "Local API host, username, and password are required when local API is enabled."
     }
   }
 }

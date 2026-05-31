@@ -3,7 +3,7 @@
 from itertools import chain
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
-from homeassistant.const import PERCENTAGE, UnitOfPressure, UnitOfTemperature
+from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfPressure, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
@@ -21,6 +21,14 @@ async def async_setup_entry(
 
     entities = chain(
         (MhWeatherTempSensor(coordinator, entry),),
+        (
+            sensor
+            for sensor in (
+                MhLocalGsmSignalSensor(coordinator, entry),
+                MhLocalGsmBalanceSensor(coordinator, entry),
+            )
+            if sensor.available
+        ),
         chain.from_iterable(
             [
                 MhHeaterFlowTempSensor(coordinator, entry, heater),
@@ -62,6 +70,47 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
         return {
             "city": city,
         }
+
+
+class MhLocalSensor(MhEntity, SensorEntity):
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _local_key: str
+
+    @property
+    def available(self) -> bool:
+        return self.native_value is not None
+
+    @property
+    def native_value(self) -> float | None:
+        value = self.coordinator.data.get("local", {}).get(self._local_key)
+        return float(value) if value is not None else None
+
+
+class MhLocalGsmSignalSensor(MhLocalSensor):
+    _local_key = "gsmRssi"
+    _attr_icon = "mdi:signal-cellular-2"
+    _attr_native_unit_of_measurement = PERCENTAGE
+
+    @property
+    def name(self) -> str:
+        return f"{self._mh_name} GSM signal"
+
+    @property
+    def unique_id(self) -> str:
+        return f"{super().unique_id}gsmSignal"
+
+
+class MhLocalGsmBalanceSensor(MhLocalSensor):
+    _local_key = "gsmBalance"
+    _attr_icon = "mdi:sim"
+
+    @property
+    def name(self) -> str:
+        return f"{self._mh_name} GSM balance"
+
+    @property
+    def unique_id(self) -> str:
+        return f"{super().unique_id}gsmBalance"
 
 
 class MhHeaterSensor(MhHeaterEntity, SensorEntity):

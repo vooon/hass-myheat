@@ -16,15 +16,49 @@
           "name": "Имя",
           "device_id": "Устройство"
         }
+      },
+      "local_init": {
+        "title": "Локальный API",
+        "description": "Опциональный доступ к API по локальной сети. Локальная сеть устройства должна быть доверенной, так как доступ к ней позволяет управлять отоплением.",
+        "data": {
+          "local_mode_enabled": "Включить локальный API",
+          "local_host": "Хост",
+          "local_protocol": "Протокол",
+          "local_username": "Логин",
+          "local_password": "Пароль",
+          "local_request_timeout": "Таймаут запроса",
+          "local_poll_interval": "Интервал опроса локального API"
+        }
       }
     },
     "error": {
       "cannot_connect": "Ошибка подключения",
       "invalid_auth": "Ошибка аутентификации",
+      "local_config_incomplete": "При включенном локальном API нужно указать хост, логин и пароль.",
       "unknown": "Неизвестная ошибка"
     },
     "abort": {
       "already_configured": "Устройство уже настроено"
+    }
+  },
+  "options": {
+    "step": {
+      "local_init": {
+        "title": "Локальный API",
+        "description": "Опциональный доступ к API по локальной сети. Локальная сеть устройства должна быть доверенной, так как доступ к ней позволяет управлять отоплением.",
+        "data": {
+          "local_mode_enabled": "Включить локальный API",
+          "local_host": "Хост",
+          "local_protocol": "Протокол",
+          "local_username": "Логин",
+          "local_password": "Пароль",
+          "local_request_timeout": "Таймаут запроса",
+          "local_poll_interval": "Интервал опроса локального API"
+        }
+      }
+    },
+    "error": {
+      "local_config_incomplete": "При включенном локальном API нужно указать хост, логин и пароль."
     }
   }
 }

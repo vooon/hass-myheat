@@ -16,15 +16,49 @@
           "name": "Nome",
           "device_id": "Dispositivo"
         }
+      },
+      "local_init": {
+        "title": "API local",
+        "description": "Acesso opcional a API pela LAN. A rede local do dispositivo deve ser confiavel porque o acesso local pode controlar o aquecimento.",
+        "data": {
+          "local_mode_enabled": "Ativar API local",
+          "local_host": "Host",
+          "local_protocol": "Protocolo",
+          "local_username": "Utilizador",
+          "local_password": "Palavra-passe",
+          "local_request_timeout": "Tempo limite do pedido",
+          "local_poll_interval": "Intervalo de consulta local"
+        }
       }
     },
     "error": {
       "cannot_connect": "Erro de ligação",
       "invalid_auth": "Erro de autenticação",
+      "local_config_incomplete": "Host, utilizador e palavra-passe sao obrigatorios quando a API local esta ativa.",
       "unknown": "Erro desconhecido"
     },
     "abort": {
       "already_configured": "Já configurado"
+    }
+  },
+  "options": {
+    "step": {
+      "local_init": {
+        "title": "API local",
+        "description": "Acesso opcional a API pela LAN. A rede local do dispositivo deve ser confiavel porque o acesso local pode controlar o aquecimento.",
+        "data": {
+          "local_mode_enabled": "Ativar API local",
+          "local_host": "Host",
+          "local_protocol": "Protocolo",
+          "local_username": "Utilizador",
+          "local_password": "Palavra-passe",
+          "local_request_timeout": "Tempo limite do pedido",
+          "local_poll_interval": "Intervalo de consulta local"
+        }
+      }
+    },
+    "error": {
+      "local_config_incomplete": "Host, utilizador e palavra-passe sao obrigatorios quando a API local esta ativa."
     }
   }
 }
