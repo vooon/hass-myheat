@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Аккаунт MyHeat",
-        "description": "Получите ключ API на странице настроек пользователя https://my.myheat.net",
+        "description": "Получите ключ API на странице настроек пользователя {api_key_url}",
         "data": {
           "username": "Логин",
           "api_key": "Ключ API"

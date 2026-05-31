@@ -43,6 +43,9 @@ async def test_successful_config_flow(hass):
     # Check that the config flow shows the user form as the first step
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "user"
+    assert result["description_placeholders"] == {
+        "api_key_url": "https://my.myheat.net",
+    }
 
     # If a user were to enter `test_username` for username and `test_password`
     # for password, it would result in this function call
@@ -81,6 +84,9 @@ async def test_failed_config_flow(hass):
 
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "user"
+    assert result["description_placeholders"] == {
+        "api_key_url": "https://my.myheat.net",
+    }
 
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],

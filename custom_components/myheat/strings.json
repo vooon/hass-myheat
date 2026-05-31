@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "MyHeat Account",
-        "description": "Please obtain API key from https://my.myheat.net on user preferences page",
+        "description": "Please obtain API key from {api_key_url} on user preferences page",
         "data": {
           "username": "[%key:common::config_flow::data::username%]",
           "api_key": "[%key:common::config_flow::data::api_key%]"

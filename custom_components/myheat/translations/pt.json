@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Conta MyHeat",
-        "description": "Obtenha a chave API em https://my.myheat.net na página de preferências do utilizador",
+        "description": "Obtenha a chave API em {api_key_url} na página de preferências do utilizador",
         "data": {
           "username": "Utilizador",
           "api_key": "Chave API"
