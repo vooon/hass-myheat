@@ -72,6 +72,9 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
                 }
             ),
             errors=errors,
+            description_placeholders={
+                "api_key_url": "https://my.myheat.net",
+            },
         )
 
     async def async_step_device(
