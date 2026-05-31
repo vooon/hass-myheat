@@ -236,7 +236,9 @@ class MhAlarmEntity(MhEntity):
 
     @property
     def unique_id(self) -> str:
-        return f"{super().unique_id}alarm{self.alarm_id}{self._key if self._key else ''}"
+        return (
+            f"{super().unique_id}alarm{self.alarm_id}{self._key if self._key else ''}"
+        )
 
     @property
     def _mh_dev_name_suffix(self) -> str:
