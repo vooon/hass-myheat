@@ -1,10 +1,10 @@
 """Test MyHeat setup process."""
 
-from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.config_entries import ConfigEntryState
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.myheat import MhDataUpdateCoordinator, async_setup_entry
+from custom_components.myheat import MhDataUpdateCoordinator
 from custom_components.myheat.const import DOMAIN
 
 from .const import MOCK_CONFIG
@@ -24,5 +24,5 @@ async def test_setup_entry_exception(hass, error_on_get_data):
     """Test ConfigEntryNotReady when API raises an exception during entry setup."""
     entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
     entry.add_to_hass(hass)
-    with pytest.raises(ConfigEntryNotReady):
-        await hass.config_entries.async_setup(entry.entry_id)
+    assert await hass.config_entries.async_setup(entry.entry_id) is False
+    assert entry.state is ConfigEntryState.SETUP_RETRY
