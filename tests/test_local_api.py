@@ -161,7 +161,9 @@ async def test_local_env_target_payload_and_verification():
     )
     client = local_client(session)
     client._session_id = "session-id"  # pylint: disable=protected-access
-    client._obj_state = deepcopy(MOCK_LOCAL_OBJ_STATE)  # pylint: disable=protected-access
+    client._obj_state = deepcopy(
+        MOCK_LOCAL_OBJ_STATE
+    )  # pylint: disable=protected-access
 
     await client.async_set_env_goal(obj_id=67, goal=25.1)
 
@@ -184,7 +186,9 @@ async def test_local_env_curve_payload_and_verification():
     )
     client = local_client(session)
     client._session_id = "session-id"  # pylint: disable=protected-access
-    client._obj_state = deepcopy(MOCK_LOCAL_OBJ_STATE)  # pylint: disable=protected-access
+    client._obj_state = deepcopy(
+        MOCK_LOCAL_OBJ_STATE
+    )  # pylint: disable=protected-access
 
     await client.async_set_env_curve(obj_id=67, curve=1)
 
@@ -207,7 +211,9 @@ async def test_local_eng_goal_payload_and_verification():
     )
     client = local_client(session)
     client._session_id = "session-id"  # pylint: disable=protected-access
-    client._obj_state = deepcopy(MOCK_LOCAL_OBJ_STATE)  # pylint: disable=protected-access
+    client._obj_state = deepcopy(
+        MOCK_LOCAL_OBJ_STATE
+    )  # pylint: disable=protected-access
 
     await client.async_set_eng_goal(obj_id=123, goal=1)
 
@@ -227,7 +233,9 @@ async def test_local_heating_mode_payload_refreshes_state():
     )
     client = local_client(session)
     client._session_id = "session-id"  # pylint: disable=protected-access
-    client._obj_state = deepcopy(MOCK_LOCAL_OBJ_STATE)  # pylint: disable=protected-access
+    client._obj_state = deepcopy(
+        MOCK_LOCAL_OBJ_STATE
+    )  # pylint: disable=protected-access
 
     await client.async_set_heating_mode(mode_id=1)
 
@@ -247,7 +255,9 @@ async def test_local_write_verification_mismatch_raises():
     )
     client = local_client(session)
     client._session_id = "session-id"  # pylint: disable=protected-access
-    client._obj_state = deepcopy(MOCK_LOCAL_OBJ_STATE)  # pylint: disable=protected-access
+    client._obj_state = deepcopy(
+        MOCK_LOCAL_OBJ_STATE
+    )  # pylint: disable=protected-access
 
     with pytest.raises(LocalVerificationError):
         await client.async_set_heater_enabled(obj_id=45, enabled=False)

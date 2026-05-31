@@ -140,7 +140,7 @@ def _validate_response(
 def _is_sentinel(value: Any) -> bool:
     try:
         return float(value) <= -16777215
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return False
 
 
@@ -150,7 +150,7 @@ def _clean_number(value: Any) -> float | None:
 
     try:
         return float(value)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return None
 
 
@@ -177,7 +177,7 @@ def _state(obj: dict[str, Any], key: str) -> Any:
 def _is_nonzero(value: Any) -> bool:
     try:
         return int(float(value)) != 0
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return False
 
 
@@ -241,7 +241,7 @@ class LocalApiClient:
                 )
                 status = response.status
                 data = await response.json(content_type=None)
-        except (asyncio.TimeoutError, asyncio.CancelledError):
+        except asyncio.TimeoutError, asyncio.CancelledError:
             _LOGGER.exception("Timeout calling local API endpoint %s", endpoint)
             raise
         except (aiohttp.ClientError, socket.gaierror) as ex:
@@ -254,7 +254,9 @@ class LocalApiClient:
         if status < 200 or status >= 300:
             raise LocalResponseError(f"Local API endpoint {endpoint} returned {status}")
         if not isinstance(data, dict):
-            raise LocalResponseError(f"Local API endpoint {endpoint} returned non-object")
+            raise LocalResponseError(
+                f"Local API endpoint {endpoint} returned non-object"
+            )
 
         return data, response.headers
 
@@ -326,7 +328,9 @@ class LocalApiClient:
     def _has_object(self, collection: str, obj_id: int) -> bool:
         if self._obj_state is None:
             return False
-        return any(obj.get("i") == obj_id for obj in self._obj_state.get(collection, []))
+        return any(
+            obj.get("i") == obj_id for obj in self._obj_state.get(collection, [])
+        )
 
     def has_curve(self, curve: int) -> bool:
         if self._obj_state is None:
@@ -341,7 +345,9 @@ class LocalApiClient:
     def has_schedule(self, schedule: int) -> bool:
         if self._obj_state is None:
             return False
-        return any(item.get("i") == schedule for item in self._obj_state.get("scheds", []))
+        return any(
+            item.get("i") == schedule for item in self._obj_state.get("scheds", [])
+        )
 
     def supports_security(self) -> bool:
         return self._obj_state is not None and "securityArmed" in self._obj_state
@@ -509,9 +515,8 @@ class LocalApiClient:
             has_schedule = "sched" in state
             if not has_mode and not has_schedule:
                 return True
-            return (
-                (not has_mode or _clean_int(state.get("hMode")) == mode)
-                and (not has_schedule or _clean_int(state.get("sched")) == schedule)
+            return (not has_mode or _clean_int(state.get("hMode")) == mode) and (
+                not has_schedule or _clean_int(state.get("sched")) == schedule
             )
 
         await self._write_and_verify(
