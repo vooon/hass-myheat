@@ -109,7 +109,7 @@ class MhHeaterEntity(MhEntity):
     def get_heater(self) -> dict:
         """Return heater state data"""
         if not self.coordinator.data.get("dataActual", False):
-            _logger.warninig("data not actual! %s", self.coordinator.data)
+            _logger.warning("data not actual! %s", self.coordinator.data)
             return {}
 
         for h in self.coordinator.data.get("heaters", []):
@@ -155,7 +155,7 @@ class MhEnvEntity(MhEntity):
     def get_env(self) -> dict:
         """Return env state data"""
         if not self.coordinator.data.get("dataActual", False):
-            _logger.warninig("data not actual! %s", self.coordinator.data)
+            _logger.warning("data not actual! %s", self.coordinator.data)
             return {}
 
         for e in self.coordinator.data.get("envs", []):
@@ -201,7 +201,7 @@ class MhEngEntity(MhEntity):
     def get_eng(self) -> dict:
         """Return eng state data"""
         if not self.coordinator.data.get("dataActual", False):
-            _logger.warninig("data not actual! %s", self.coordinator.data)
+            _logger.warning("data not actual! %s", self.coordinator.data)
             return {}
 
         for e in self.coordinator.data.get("engs", []):
@@ -251,7 +251,7 @@ class MhAlarmEntity(MhEntity):
     def get_alarm(self) -> dict:
         """Return alarm state data"""
         if not self.coordinator.data.get("dataActual", False):
-            _logger.warninig("data not actual! %s", self.coordinator.data)
+            _logger.warning("data not actual! %s", self.coordinator.data)
             return {}
 
         alarms = self.coordinator.data.get("alarms", [])
