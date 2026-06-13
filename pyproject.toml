@@ -19,7 +19,7 @@ dev = [
     "flake8",
     "reorder-python-imports",
     "pytest >=9.0.3,<10",
-    "pytest-homeassistant-custom-component>=0.13.337",
+    "pytest-homeassistant-custom-component>=0.13.339",
     "bandit",
     "black",
     "ruff",
