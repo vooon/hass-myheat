@@ -55,7 +55,7 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
     def async_get_options_flow(config_entry):
         """Create the options flow."""
 
-        return MhOptionsFlowHandler(config_entry)
+        return MhOptionsFlowHandler()
 
     @property
     def data_schema(self) -> vol.Schema:
@@ -150,9 +150,6 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
 
 class MhOptionsFlowHandler(OptionsFlow):
     """Handle MyHeat options."""
-
-    def __init__(self, config_entry) -> None:
-        self.config_entry = config_entry
 
     async def async_step_init(
         self,
