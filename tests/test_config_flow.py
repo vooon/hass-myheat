@@ -5,9 +5,16 @@ from unittest.mock import patch
 from homeassistant import config_entries
 from homeassistant.data_entry_flow import FlowResultType
 import pytest
-from pytest_homeassistant_custom_component.common import MockConfigEntry  # noqa: F401
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.myheat.const import BINARY_SENSOR  # noqa: F401
+from custom_components.myheat.const import CONF_LOCAL_HOST
+from custom_components.myheat.const import CONF_LOCAL_MODE_ENABLED
+from custom_components.myheat.const import CONF_LOCAL_PASSWORD
+from custom_components.myheat.const import CONF_LOCAL_POLL_INTERVAL
+from custom_components.myheat.const import CONF_LOCAL_PROTOCOL
+from custom_components.myheat.const import CONF_LOCAL_REQUEST_TIMEOUT
+from custom_components.myheat.const import CONF_LOCAL_USERNAME
 from custom_components.myheat.const import DOMAIN
 from custom_components.myheat.const import PLATFORMS  # noqa: F401
 from custom_components.myheat.const import SENSOR  # noqa: F401
@@ -95,3 +102,32 @@ async def test_failed_config_flow(hass):
 
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {"base": "invalid_auth"}
+
+
+async def test_options_flow(hass):
+    """Test options flow."""
+    entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
+    entry.add_to_hass(hass)
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "local_init"
+
+    options = {
+        CONF_LOCAL_MODE_ENABLED: True,
+        CONF_LOCAL_HOST: "192.0.2.10",
+        CONF_LOCAL_PROTOCOL: "http",
+        CONF_LOCAL_USERNAME: "local_user",
+        CONF_LOCAL_PASSWORD: "local_password",
+        CONF_LOCAL_REQUEST_TIMEOUT: 15,
+        CONF_LOCAL_POLL_INTERVAL: 10,
+    }
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input=options,
+    )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["data"] == options
+    assert dict(entry.options) == options
