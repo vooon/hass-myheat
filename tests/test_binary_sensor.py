@@ -10,7 +10,7 @@ async def test_binary_sensor_entities(hass, bypass_get_device_info):
     """Test binary sensor entities are created from coordinator data."""
     await setup_mock_entry(hass)
 
-    assert len(hass.states.async_entity_ids(BINARY_SENSOR_DOMAIN)) == 34
+    assert len(hass.states.async_entity_ids(BINARY_SENSOR_DOMAIN)) == 35
 
     data_actual = state_by_name(hass, BINARY_SENSOR_DOMAIN, "test_device dataActual")
     assert data_actual.state == STATE_ON

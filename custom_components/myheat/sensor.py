@@ -4,16 +4,17 @@ from itertools import chain
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.const import (
-    EntityCategory,
     PERCENTAGE,
+    EntityCategory,
     UnitOfPressure,
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
+from .api import SENSOR_ENV_TYPES
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
-from .entity import MhEntity, MhHeaterEntity
+from .entity import MhEntity, MhEnvEntity, MhHeaterEntity
 
 
 async def async_setup_entry(
@@ -43,6 +44,11 @@ async def async_setup_entry(
                 MhHeaterModulationSensor(coordinator, entry, heater),
             ]
             for heater in coordinator.data.get("heaters", [])
+        ),
+        (
+            MhEnvHumiditySensor(coordinator, entry, env)
+            for env in coordinator.data.get("envs", [])
+            if env.get("type") in SENSOR_ENV_TYPES
         ),
     )
 
@@ -75,6 +81,17 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
         return {
             "city": city,
         }
+
+
+class MhEnvHumiditySensor(MhEnvEntity, SensorEntity):
+    """Humidity environment sensor."""
+
+    _attr_device_class = SensorDeviceClass.HUMIDITY
+    _attr_native_unit_of_measurement = PERCENTAGE
+
+    @property
+    def native_value(self) -> float | None:
+        return self.get_env().get("value")
 
 
 class MhLocalSensor(MhEntity, SensorEntity):

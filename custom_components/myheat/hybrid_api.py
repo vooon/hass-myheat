@@ -80,8 +80,8 @@ def _env_type(obj: dict[str, Any], controlled: bool) -> str:
         return str(explicit)
 
     obj_type = obj.get("t")
-    if obj_type == 109:
-        return "humidity"
+    if obj_type == 109:  # XXX TODO: re-check
+        return "room_humidity"
     if obj_type == 113:
         return "pressure"
     if controlled:
