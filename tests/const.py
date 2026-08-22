@@ -126,6 +126,16 @@ MOCK_GET_DEVICE_INFO = {
                 "severityDesc": "Нормальное состояние.",
             },
             {
+                "id": 26,
+                "type": "room_humidity",
+                "name": "Влажность",
+                "value": 45.5,
+                "target": None,
+                "demand": False,
+                "severity": 1,
+                "severityDesc": "Нормальное состояние.",
+            },
+            {
                 "id": 20,
                 "type": "room_temperature",
                 "name": "Бухгалтерия",

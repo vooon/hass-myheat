@@ -111,6 +111,20 @@ async def test_normalize_local_device_info_maps_objects_and_sanitizes_regkey():
     unavailable = data["envs"][1]
     assert unavailable["value"] is None
 
+    humidity_state = deepcopy(MOCK_LOCAL_OBJ_STATE)
+    humidity_state["envs"] = [
+        {
+            "n": "Humidity",
+            "i": 69,
+            "t": 109,
+            "st": {"p1": 47.2},
+            "s": {},
+        }
+    ]
+    humidity = normalize_local_device_info(humidity_state)["envs"][0]
+    assert humidity["type"] == "room_humidity"
+    assert humidity["value"] == 47.2
+
     heater = data["heaters"][0]
     assert heater["disabled"] is False
     assert heater["flowTemp"] == 51

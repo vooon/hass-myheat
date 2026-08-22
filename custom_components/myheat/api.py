@@ -19,10 +19,12 @@ ENV_TYPE_FLOOR_TEMPERATURE = "floor_temperature"
 ENV_TYPE_CIRCUIT_TEMPERATURE = "circuit_temperature"
 ENV_TYPE_BOILER_TEMPERATURE = "boiler_temperature"
 ENV_TYPE_DHW_TEMPERATURE = "dhw_temperature"
+ENV_TYPE_HUMIDITY = "room_humidity"
 CLIMATE_ENV_TYPES = {
     ENV_TYPE_ROOM_TEMPERATURE,
     ENV_TYPE_FLOOR_TEMPERATURE,
 }
+SENSOR_ENV_TYPES = {ENV_TYPE_HUMIDITY}
 
 HEADERS = {
     "Content-Type": "application/json; charset=UTF-8",
