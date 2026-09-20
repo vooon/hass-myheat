@@ -129,7 +129,7 @@ config flow, setup, and entity platforms.
 uv run pytest
 ```
 
-The integration metadata currently targets Home Assistant `2026.5.0` or newer
+The integration metadata currently targets Home Assistant `2026.8.0` or newer
 for HACS installs.
 
 ## Contributions
