@@ -121,13 +121,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: MhConfigEntry):
     entry.runtime_data = coordinator
 
     device_registry = dr.async_get(hass)
-    device_registry.async_get_or_create(
+    controller = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
         identifiers={(DOMAIN, entry.entry_id)},
         manufacturer=MANUFACTURER,
         model=VERSION,
         name=entry.data.get(CONF_NAME, DEFAULT_NAME),
     )
+    coordinator.mh_device_id = controller.id
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.add_update_listener(async_reload_entry)

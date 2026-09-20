@@ -27,6 +27,7 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator[dict]):
     ) -> None:
         """Initialize."""
         self.api = client
+        self.mh_device_id: str | None = None
 
         super().__init__(
             hass,

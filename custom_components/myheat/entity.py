@@ -42,8 +42,11 @@ class MhEntity(CoordinatorEntity[MhDataUpdateCoordinator]):
             model=VERSION,
             manufacturer=MANUFACTURER,
         )
-        if self._mh_identifiers != self._mh_via_device:
-            info["via_device"] = self._mh_via_device
+        if (
+            self._mh_identifiers != self._mh_via_device
+            and self.coordinator.mh_device_id is not None
+        ):
+            info["via_device_id"] = self.coordinator.mh_device_id
         return info
 
     @property
