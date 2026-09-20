@@ -12,7 +12,12 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .api import SENSOR_ENV_TYPES
+from .api import (
+    CLIMATE_ENV_TYPES,
+    ENV_TYPE_HUMIDITY,
+    TEMPERATURE_ENV_TYPES,
+    WATER_HEATER_ENV_TYPES,
+)
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .entity import MhEntity, MhEnvEntity, MhHeaterEntity
 
@@ -46,9 +51,9 @@ async def async_setup_entry(
             for heater in coordinator.data.get("heaters", [])
         ),
         (
-            MhEnvHumiditySensor(coordinator, entry, env)
+            MhEnvSensor(coordinator, entry, env)
             for env in coordinator.data.get("envs", [])
-            if env.get("type") in SENSOR_ENV_TYPES
+            if env.get("type") not in CLIMATE_ENV_TYPES | WATER_HEATER_ENV_TYPES
         ),
     )
 
@@ -83,11 +88,29 @@ class MhWeatherTempSensor(MhEntity, SensorEntity):
         }
 
 
-class MhEnvHumiditySensor(MhEnvEntity, SensorEntity):
-    """Humidity environment sensor."""
+class MhEnvSensor(MhEnvEntity, SensorEntity):
+    """Sensor for environment values that cannot be controlled.
 
-    _attr_device_class = SensorDeviceClass.HUMIDITY
-    _attr_native_unit_of_measurement = PERCENTAGE
+    Env types that are neither climate nor water heater entities (humidity,
+    outdoor temperature, and any unknown numeric zone value) are exposed as
+    plain sensors instead of falling back to a water heater.
+    """
+
+    def __init__(
+        self,
+        coordinator: MhDataUpdateCoordinator,
+        config_entry: MhConfigEntry,
+        env: dict,
+    ):
+        super().__init__(coordinator, config_entry, env)
+
+        env_type = env.get("type")
+        if env_type == ENV_TYPE_HUMIDITY:
+            self._attr_device_class = SensorDeviceClass.HUMIDITY
+            self._attr_native_unit_of_measurement = PERCENTAGE
+        elif env_type in TEMPERATURE_ENV_TYPES:
+            self._attr_device_class = SensorDeviceClass.TEMPERATURE
+            self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
 
     @property
     def native_value(self) -> float | None:

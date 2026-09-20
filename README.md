@@ -20,13 +20,13 @@ API.
 
 ## Features
 
-| Platform        | What is exposed                                                                                                                                                                                     |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `binary_sensor` | Controller data freshness, overall severity, alarm summary, individual alarms, per-environment and per-engineering severity, heater disabled/burner states, and engineering component on/off state. |
-| `climate`       | Room and floor temperature environments with current temperature, target temperature, heat/off mode, heating action, and preset modes.                                                              |
-| `sensor`        | Outdoor/weather temperature, heater flow/return/target temperatures, pressure, modulation, and optional local GSM RSSI/balance diagnostics.                                                         |
-| `switch`        | Security alarm switch and local heater enable switches when local control is available.                                                                                                             |
-| `water_heater`  | Non-room temperature environments such as boiler, DHW, and heating circuit temperatures with target temperature and on/off control.                                                                 |
+| Platform        | What is exposed                                                                                                                                                                                                                              |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `binary_sensor` | Controller data freshness, overall severity, alarm summary, individual alarms, per-environment and per-engineering severity, heater disabled/burner states, and engineering component on/off state.                                          |
+| `climate`       | Room and floor temperature environments with current temperature, target temperature, heat/off mode, heating action, and preset modes.                                                                                                       |
+| `sensor`        | Weather temperature, heater flow/return/target temperatures, pressure, modulation, optional local GSM RSSI/balance diagnostics, and any non-controllable environment value (humidity, outdoor temperature, and unknown numeric zone values). |
+| `switch`        | Security alarm switch and local heater enable switches when local control is available.                                                                                                                                                      |
+| `water_heater`  | Boiler, DHW, and heating circuit temperature environments with target temperature and on/off control. Other environment types are exposed as sensors instead.                                                                                |
 
 Entity availability depends on the objects returned by your MyHeat controller.
 
