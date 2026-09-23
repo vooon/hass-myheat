@@ -15,6 +15,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from .api import (
     CLIMATE_ENV_TYPES,
     ENV_TYPE_HUMIDITY,
+    PRESSURE_ENV_TYPES,
     TEMPERATURE_ENV_TYPES,
     WATER_HEATER_ENV_TYPES,
 )
@@ -111,6 +112,9 @@ class MhEnvSensor(MhEnvEntity, SensorEntity):
         elif env_type in TEMPERATURE_ENV_TYPES:
             self._attr_device_class = SensorDeviceClass.TEMPERATURE
             self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+        elif env_type in PRESSURE_ENV_TYPES:
+            self._attr_device_class = SensorDeviceClass.PRESSURE
+            self._attr_native_unit_of_measurement = UnitOfPressure.BAR
 
     @property
     def native_value(self) -> float | None:
