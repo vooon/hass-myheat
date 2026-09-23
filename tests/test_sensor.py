@@ -63,6 +63,26 @@ async def test_other_env_types_become_sensors(hass):
                 "severityDesc": "Нормальное состояние.",
             },
             {
+                "id": 93,
+                "type": "common_temperature",
+                "name": "1ТА Выс-температура",
+                "value": 54.1875,
+                "target": None,
+                "demand": False,
+                "severity": 1,
+                "severityDesc": "Нормальное состояние.",
+            },
+            {
+                "id": 94,
+                "type": "circuit_pressure",
+                "name": "Давление в контуре",
+                "value": 1.267,
+                "target": None,
+                "demand": False,
+                "severity": 1,
+                "severityDesc": "Нормальное состояние.",
+            },
+            {
                 "id": 92,
                 "type": "some_unknown_value",
                 "name": "Что-то",
@@ -87,6 +107,16 @@ async def test_other_env_types_become_sensors(hass):
     assert outdoor.state == "19"
     assert outdoor.attributes["device_class"] == SensorDeviceClass.TEMPERATURE
     assert outdoor.attributes["unit_of_measurement"] == UnitOfTemperature.CELSIUS
+
+    common = state_by_name(hass, SENSOR_DOMAIN, "test_device 1ТА Выс-температура")
+    assert common.state == "54.1875"
+    assert common.attributes["device_class"] == SensorDeviceClass.TEMPERATURE
+    assert common.attributes["unit_of_measurement"] == UnitOfTemperature.CELSIUS
+
+    pressure = state_by_name(hass, SENSOR_DOMAIN, "test_device Давление в контуре")
+    assert pressure.state == "1.267"
+    assert pressure.attributes["device_class"] == SensorDeviceClass.PRESSURE
+    assert pressure.attributes["unit_of_measurement"] == UnitOfPressure.BAR
 
     unknown = state_by_name(hass, SENSOR_DOMAIN, "test_device Что-то")
     assert unknown.state == "3.5"

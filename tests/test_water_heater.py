@@ -1,5 +1,6 @@
 """Test MyHeat water heater entities."""
 
+from copy import deepcopy
 from unittest.mock import call, patch
 
 from homeassistant.components.water_heater import (
@@ -14,6 +15,7 @@ from homeassistant.components.water_heater import (
 )
 from homeassistant.const import ATTR_ENTITY_ID, ATTR_TEMPERATURE
 
+from .const import MOCK_GET_DEVICE_INFO
 from .helpers import setup_mock_entry, state_by_name
 
 
@@ -32,6 +34,36 @@ async def test_water_heater_entities(hass, bypass_get_device_info):
     circuit = state_by_name(hass, WATER_HEATER_DOMAIN, "test_device Контур отопления")
     assert circuit.state == STATE_OFF
     assert circuit.attributes["current_temperature"] == 56
+    assert circuit.attributes["temperature"] == 0.0
+
+
+async def test_pi_regulation_circuit_is_water_heater(hass):
+    """Test pi_regulation_circuit envs are exposed as water heaters."""
+    data = deepcopy(MOCK_GET_DEVICE_INFO["data"])
+    data["envs"].append(
+        {
+            "id": 362,
+            "type": "pi_regulation_circuit",
+            "name": "Т/П дом",
+            "value": 24,
+            "target": None,
+            "demand": False,
+            "severity": 1,
+            "severityDesc": "Нормальное состояние.",
+        }
+    )
+
+    with patch(
+        "custom_components.myheat.MhApiClient.async_get_device_info",
+        return_value=data,
+    ):
+        await setup_mock_entry(hass)
+
+    assert len(hass.states.async_entity_ids(WATER_HEATER_DOMAIN)) == 3
+
+    circuit = state_by_name(hass, WATER_HEATER_DOMAIN, "test_device Т/П дом")
+    assert circuit.state == STATE_OFF
+    assert circuit.attributes["current_temperature"] == 24
     assert circuit.attributes["temperature"] == 0.0
 
 
