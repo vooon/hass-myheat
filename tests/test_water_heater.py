@@ -67,6 +67,36 @@ async def test_pi_regulation_circuit_is_water_heater(hass):
     assert circuit.attributes["temperature"] == 0.0
 
 
+async def test_common_temperature_is_water_heater(hass):
+    """Test common_temperature envs are exposed as water heaters."""
+    data = deepcopy(MOCK_GET_DEVICE_INFO["data"])
+    data["envs"].append(
+        {
+            "id": 232,
+            "type": "common_temperature",
+            "name": "1ТА Выс-температура",
+            "value": 45.25,
+            "target": None,
+            "demand": False,
+            "severity": 1,
+            "severityDesc": "Нормальное состояние.",
+        }
+    )
+
+    with patch(
+        "custom_components.myheat.MhApiClient.async_get_device_info",
+        return_value=data,
+    ):
+        await setup_mock_entry(hass)
+
+    assert len(hass.states.async_entity_ids(WATER_HEATER_DOMAIN)) == 3
+
+    common = state_by_name(hass, WATER_HEATER_DOMAIN, "test_device 1ТА Выс-температура")
+    assert common.state == STATE_OFF
+    assert common.attributes["current_temperature"] == 45.2
+    assert common.attributes["temperature"] == 0.0
+
+
 async def test_water_heater_services(hass, bypass_get_device_info):
     """Test water heater services call MyHeat API methods."""
     await setup_mock_entry(hass)

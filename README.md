@@ -24,9 +24,10 @@ API.
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `binary_sensor` | Controller data freshness, overall severity, alarm summary, individual alarms, per-environment and per-engineering severity, heater disabled/burner states, and engineering component on/off state.                                          |
 | `climate`       | Room and floor temperature environments with current temperature, target temperature, heat/off mode, heating action, and preset modes.                                                                                                       |
+| `select`        | Engineering components (pumps, actuators, valves) with the MyHeat three-state goal: `auto` (regulation), `on`, or `off`.                                                                                                                     |
 | `sensor`        | Weather temperature, heater flow/return/target temperatures, pressure, modulation, optional local GSM RSSI/balance diagnostics, and any non-controllable environment value (humidity, outdoor temperature, and unknown numeric zone values). |
 | `switch`        | Security alarm switch and local heater enable switches when local control is available.                                                                                                                                                      |
-| `water_heater`  | Boiler, DHW, PI-regulated circuit, and heating circuit temperature environments with target temperature and on/off control. Other environment types are exposed as sensors instead.                                                          |
+| `water_heater`  | Boiler, DHW, PI-regulated circuit, common/accumulator, and heating circuit temperature environments with target temperature and on/off control. Other environment types are exposed as sensors instead.                                      |
 
 Entity availability depends on the objects returned by your MyHeat controller.
 
