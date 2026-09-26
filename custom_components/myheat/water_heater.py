@@ -16,6 +16,7 @@ from .api import WATER_HEATER_ENV_TYPES
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
 from .entity import MhEnvEntity
 
+DEFAULT_TURN_ON_GOAL = 45  # a sane DHW setpoint when no previous goal is known
 OPERATION_MODE_ON = STATE_ON
 OPERATION_MODE_OFF = STATE_OFF
 
@@ -70,36 +71,42 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
 
         self._attr_current_temperature = None
         self._attr_target_temperature = None
+        # Last goal seen while on: turning the heater back on restores it instead of sending 0.
+        self._last_target: float | None = None
 
         self._update_state_attrs()
 
+    async def _async_set_goal(self, goal: float | None) -> None:
+        # changeMode=0 makes MyHeat drop the active regulation mode and fall back to a manual
+        # setpoint; changeMode=1 adjusts the goal inside the current mode. None turns the env off.
+        await self.coordinator.api.async_set_env_goal(
+            obj_id=self.env_id, goal=goal, change_mode=goal is not None
+        )
+        await self.coordinator.async_request_refresh()
+
+    def _goal_for_turn_on(self) -> float:
+        if self._last_target:
+            return self._last_target
+        return DEFAULT_TURN_ON_GOAL
+
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the water heater on."""
-        goal = self._attr_target_temperature
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
-        await self.coordinator.async_request_refresh()
+        await self._async_set_goal(self._goal_for_turn_on())
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the water heater off."""
-        goal = None
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
-        await self.coordinator.async_request_refresh()
+        await self._async_set_goal(None)
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
-        goal = kwargs.get("temperature", 0.0)
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
-        await self.coordinator.async_request_refresh()
+        await self._async_set_goal(kwargs.get("temperature", 0.0))
 
     async def async_set_operation_mode(self, operation_mode: str) -> None:
         """Set new target operation mode."""
         if operation_mode == OPERATION_MODE_OFF:
-            goal = None
+            await self._async_set_goal(None)
         elif operation_mode == OPERATION_MODE_ON:
-            goal = self._attr_target_temperature
-
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
-        await self.coordinator.async_request_refresh()
+            await self._async_set_goal(self._goal_for_turn_on())
 
     @property
     def extra_state_attributes(self) -> dict:
@@ -114,7 +121,10 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
         target = e.get("target")
 
         self._attr_current_temperature = e.get("value")
-        self._attr_target_temperature = target or 0.0
+        # None while off: a 0.0 target would be re-sent as a real goal by turn_on.
+        self._attr_target_temperature = target
+        if target:
+            self._last_target = target
         self._attr_current_operation = (
             OPERATION_MODE_ON if target is not None else OPERATION_MODE_OFF
         )
