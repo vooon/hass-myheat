@@ -111,7 +111,10 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
             if goal is None:
                 goal = 24  # NOTE(vooon): we need some reasonable value to turn on the heater and i like 22-26.
 
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
+        # changeMode=1 keeps the active regulation mode; changeMode=0 resets it.
+        await self.coordinator.api.async_set_env_goal(
+            obj_id=self.env_id, goal=goal, change_mode=goal is not None
+        )
         await self.coordinator.async_request_refresh()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
@@ -123,7 +126,9 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
     async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
         goal = kwargs.get("temperature", 0.0)
-        await self.coordinator.api.async_set_env_goal(obj_id=self.env_id, goal=goal)
+        await self.coordinator.api.async_set_env_goal(
+            obj_id=self.env_id, goal=goal, change_mode=True
+        )
         await self.coordinator.async_request_refresh()
 
     def _update_state_attrs(self) -> None:
