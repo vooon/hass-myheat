@@ -77,8 +77,7 @@ class MhEnvWaterHeater(MhEnvEntity, WaterHeaterEntity):
         self._update_state_attrs()
 
     async def _async_set_goal(self, goal: float | None) -> None:
-        # changeMode=0 makes MyHeat drop the active regulation mode and fall back to a manual
-        # setpoint; changeMode=1 adjusts the goal inside the current mode. None turns the env off.
+        # changeMode=1 keeps the active regulation mode; changeMode=0 resets it.
         await self.coordinator.api.async_set_env_goal(
             obj_id=self.env_id, goal=goal, change_mode=goal is not None
         )

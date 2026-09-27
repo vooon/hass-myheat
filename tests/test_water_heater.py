@@ -34,7 +34,7 @@ async def test_water_heater_entities(hass, bypass_get_device_info):
     circuit = state_by_name(hass, WATER_HEATER_DOMAIN, "test_device Контур отопления")
     assert circuit.state == STATE_OFF
     assert circuit.attributes["current_temperature"] == 56
-    assert circuit.attributes["temperature"] == 0.0
+    assert circuit.attributes["temperature"] is None
 
 
 async def test_pi_regulation_circuit_is_water_heater(hass):
@@ -64,7 +64,7 @@ async def test_pi_regulation_circuit_is_water_heater(hass):
     circuit = state_by_name(hass, WATER_HEATER_DOMAIN, "test_device Т/П дом")
     assert circuit.state == STATE_OFF
     assert circuit.attributes["current_temperature"] == 24
-    assert circuit.attributes["temperature"] == 0.0
+    assert circuit.attributes["temperature"] is None
 
 
 async def test_common_temperature_is_water_heater(hass):
@@ -94,7 +94,7 @@ async def test_common_temperature_is_water_heater(hass):
     common = state_by_name(hass, WATER_HEATER_DOMAIN, "test_device 1ТА Выс-температура")
     assert common.state == STATE_OFF
     assert common.attributes["current_temperature"] == 45.2
-    assert common.attributes["temperature"] == 0.0
+    assert common.attributes["temperature"] is None
 
 
 async def test_water_heater_services(hass, bypass_get_device_info):
@@ -112,7 +112,7 @@ async def test_water_heater_services(hass, bypass_get_device_info):
             },
             blocking=True,
         )
-        assert goal_func.call_args == call(obj_id=21, goal=44.5)
+        assert goal_func.call_args == call(obj_id=21, goal=44.5, change_mode=True)
 
         goal_func.reset_mock()
 
@@ -132,7 +132,7 @@ async def test_water_heater_services(hass, bypass_get_device_info):
             service_data={ATTR_ENTITY_ID: boiler.entity_id},
             blocking=True,
         )
-        assert goal_func.call_args == call(obj_id=21, goal=45)
+        assert goal_func.call_args == call(obj_id=21, goal=45, change_mode=True)
 
         goal_func.reset_mock()
 

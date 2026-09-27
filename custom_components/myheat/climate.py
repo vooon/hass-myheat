@@ -111,8 +111,7 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
             if goal is None:
                 goal = 24  # NOTE(vooon): we need some reasonable value to turn on the heater and i like 22-26.
 
-        # changeMode=0 makes MyHeat drop the active regulation mode (e.g. "by room") and fall back
-        # to a manual flow-temperature setpoint; changeMode=1 adjusts the goal inside the current mode.
+        # changeMode=1 keeps the active regulation mode; changeMode=0 resets it.
         await self.coordinator.api.async_set_env_goal(
             obj_id=self.env_id, goal=goal, change_mode=goal is not None
         )

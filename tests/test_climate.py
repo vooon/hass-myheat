@@ -59,7 +59,7 @@ async def test_climate_services(hass, bypass_get_device_info):
             },
             blocking=True,
         )
-        assert goal_func.call_args == call(obj_id=22, goal=21.5)
+        assert goal_func.call_args == call(obj_id=22, goal=21.5, change_mode=True)
 
         goal_func.reset_mock()
 
@@ -73,6 +73,19 @@ async def test_climate_services(hass, bypass_get_device_info):
             blocking=True,
         )
         assert goal_func.call_args == call(obj_id=22, goal=None)
+
+        goal_func.reset_mock()
+
+        await hass.services.async_call(
+            CLIMATE_DOMAIN,
+            SERVICE_SET_HVAC_MODE,
+            service_data={
+                ATTR_ENTITY_ID: cafe.entity_id,
+                ATTR_HVAC_MODE: HVACMode.HEAT,
+            },
+            blocking=True,
+        )
+        assert goal_func.call_args == call(obj_id=22, goal=23, change_mode=True)
 
     with patch(
         "custom_components.myheat.MhApiClient.async_set_heating_mode"
