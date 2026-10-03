@@ -27,6 +27,8 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator[dict]):
     ) -> None:
         """Initialize."""
         self.api = client
+        # Cloud API does not report the active heating mode, keep the last one set.
+        self.preset_mode: str | None = None
 
         super().__init__(
             hass,
