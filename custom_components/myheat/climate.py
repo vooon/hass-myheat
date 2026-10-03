@@ -1,6 +1,7 @@
 """Climate platform for MyHeat."""
 
 from homeassistant.components.climate import (
+    ATTR_PRESET_MODE,
     PRESET_AWAY,
     PRESET_ECO,
     PRESET_HOME,
@@ -17,6 +18,7 @@ from homeassistant.components.climate import PRESET_COMFORT  # noqa: F401
 from homeassistant.const import UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .api import CLIMATE_ENV_TYPES
 from .coordinator import MhConfigEntry, MhDataUpdateCoordinator
@@ -51,7 +53,7 @@ async def async_setup_entry(
     )
 
 
-class MhEnvClimate(MhEnvEntity, ClimateEntity):
+class MhEnvClimate(MhEnvEntity, ClimateEntity, RestoreEntity):
     """myheat Climate class."""
 
     _attr_supported_features = (
@@ -101,6 +103,18 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
 
         self._update_state_attrs()
 
+    async def async_added_to_hass(self) -> None:
+        """Restore the last preset, as it can't be read back from the API."""
+        await super().async_added_to_hass()
+        if self.coordinator.preset_mode is None and (
+            last_state := await self.async_get_last_state()
+        ):
+            preset_mode = last_state.attributes.get(ATTR_PRESET_MODE)
+            if preset_mode in PRESET_TO_ID:
+                self.coordinator.preset_mode = preset_mode
+                self.coordinator.async_update_listeners()
+        self._update_state_attrs()
+
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set new target hvac mode."""
 
@@ -121,6 +135,8 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
         """Set new preset mode."""
         mode_id = PRESET_TO_ID[preset_mode]
         await self.coordinator.api.async_set_heating_mode(mode_id=mode_id)
+        self.coordinator.preset_mode = preset_mode
+        self.coordinator.async_update_listeners()
         await self.coordinator.async_request_refresh()
 
     async def async_set_temperature(self, **kwargs) -> None:
@@ -137,6 +153,7 @@ class MhEnvClimate(MhEnvEntity, ClimateEntity):
 
         self._attr_current_temperature = e.get("value")
         self._attr_target_temperature = e.get("target")
+        self._attr_preset_mode = self.coordinator.preset_mode or PRESET_NONE
 
         self._attr_hvac_action = (
             (HVACAction.HEATING if e.get("demand", False) else HVACAction.IDLE)
