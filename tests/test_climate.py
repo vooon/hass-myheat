@@ -10,11 +10,15 @@ from homeassistant.components.climate import (
     HVACAction,
     HVACMode,
     PRESET_HOME,
+    PRESET_NONE,
+    PRESET_SLEEP,
     SERVICE_SET_HVAC_MODE,
     SERVICE_SET_PRESET_MODE,
     SERVICE_SET_TEMPERATURE,
 )
 from homeassistant.const import ATTR_ENTITY_ID, ATTR_TEMPERATURE
+from homeassistant.core import State
+from pytest_homeassistant_custom_component.common import mock_restore_cache
 
 from .helpers import setup_mock_entry, state_by_name
 
@@ -100,3 +104,34 @@ async def test_climate_services(hass, bypass_get_device_info):
             blocking=True,
         )
         assert mode_func.call_args == call(mode_id=1)
+
+    # Heating mode is per device, so every climate entity shows it.
+    for name in ("test_device Кафе", "test_device Теплый пол"):
+        state = state_by_name(hass, CLIMATE_DOMAIN, name)
+        assert state.attributes[ATTR_PRESET_MODE] == PRESET_HOME
+
+
+async def test_climate_restore_preset(hass, bypass_get_device_info):
+    """Test the last preset is restored, as the API does not report it."""
+    mock_restore_cache(
+        hass,
+        [
+            State(
+                "climate.test_device_kafe",
+                HVACMode.HEAT,
+                {ATTR_PRESET_MODE: PRESET_SLEEP},
+            )
+        ],
+    )
+    await setup_mock_entry(hass)
+
+    for state in hass.states.async_all(CLIMATE_DOMAIN):
+        assert state.attributes[ATTR_PRESET_MODE] == PRESET_SLEEP
+
+
+async def test_climate_default_preset(hass, bypass_get_device_info):
+    """Test preset is none when nothing was set or restored."""
+    await setup_mock_entry(hass)
+
+    for state in hass.states.async_all(CLIMATE_DOMAIN):
+        assert state.attributes[ATTR_PRESET_MODE] == PRESET_NONE
