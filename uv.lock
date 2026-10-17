@@ -3200,14 +3200,14 @@ wheels = [
 
 [[package]]
 name = "reorder-python-imports"
-version = "3.17.0"
+version = "3.19.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "classify-imports" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/06/0e/7d36e6213d30c2639e031992fc2afbe34a7149f1a0bc1e980c451944a0b8/reorder_python_imports-3.17.0.tar.gz", hash = "sha256:be8269009c1638b09e3dea8381b25689f468a09b4fddd7adc02638386a30252b", size = 11779, upload-time = "2026-07-10T18:44:29.719Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1a/5a/4c37aa9e062adf680f7d93ba7c954b571feaed1984b93f2f6932ded628b3/reorder_python_imports-3.19.0.tar.gz", hash = "sha256:457e65fc0adb50d724b633cae2825e484c119dc381f01353c4fe7693216451c0", size = 11830, upload-time = "2026-10-12T22:55:09.081Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/72/080979d322d3fcc7a5498422cfd34003d208f44e905f372ed772e6aa84fa/reorder_python_imports-3.17.0-py2.py3-none-any.whl", hash = "sha256:ca074de155a18f1d28bd5274fefb2d6fb18b90bdbdce547c23163c18ea2c1795", size = 11989, upload-time = "2026-07-10T18:44:28.808Z" },
+    { url = "https://files.pythonhosted.org/packages/87/8f/aca598d0e6c57645198ec9eca88b610b7d119fd1d9c84174295f414ecfbb/reorder_python_imports-3.19.0-py2.py3-none-any.whl", hash = "sha256:a19fce94b6c04121a466212ce9988863a1eb03a88bbe96f4542d5076572ec725", size = 12066, upload-time = "2026-10-12T22:55:08.051Z" },
 ]
 
 [[package]]
