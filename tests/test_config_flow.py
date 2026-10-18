@@ -8,6 +8,7 @@ import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.myheat.const import BINARY_SENSOR  # noqa: F401
+from custom_components.myheat.const import CONF_CLOUD_REQUEST_TIMEOUT
 from custom_components.myheat.const import CONF_LOCAL_HOST
 from custom_components.myheat.const import CONF_LOCAL_MODE_ENABLED
 from custom_components.myheat.const import CONF_LOCAL_PASSWORD
@@ -15,6 +16,7 @@ from custom_components.myheat.const import CONF_LOCAL_POLL_INTERVAL
 from custom_components.myheat.const import CONF_LOCAL_PROTOCOL
 from custom_components.myheat.const import CONF_LOCAL_REQUEST_TIMEOUT
 from custom_components.myheat.const import CONF_LOCAL_USERNAME
+from custom_components.myheat.const import CONF_UPDATE_FAILURE_TOLERANCE
 from custom_components.myheat.const import DOMAIN
 from custom_components.myheat.const import PLATFORMS  # noqa: F401
 from custom_components.myheat.const import SENSOR  # noqa: F401
@@ -112,9 +114,21 @@ async def test_options_flow(hass):
     result = await hass.config_entries.options.async_init(entry.entry_id)
 
     assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "init"
+
+    cloud_options = {
+        CONF_CLOUD_REQUEST_TIMEOUT: 30,
+        CONF_UPDATE_FAILURE_TOLERANCE: 2,
+    }
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input=cloud_options,
+    )
+
+    assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "local_init"
 
-    options = {
+    local_options = {
         CONF_LOCAL_MODE_ENABLED: True,
         CONF_LOCAL_HOST: "192.0.2.10",
         CONF_LOCAL_PROTOCOL: "http",
@@ -125,8 +139,10 @@ async def test_options_flow(hass):
     }
     result = await hass.config_entries.options.async_configure(
         result["flow_id"],
-        user_input=options,
+        user_input=local_options,
     )
+
+    options = {**cloud_options, **local_options}
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"] == options

@@ -17,6 +17,7 @@ from homeassistant.helpers.typing import ConfigType
 from .api import MhApiClient
 from .const import (
     CONF_API_KEY,
+    CONF_CLOUD_REQUEST_TIMEOUT,
     CONF_DEVICE_ID,
     CONF_LOCAL_HOST,
     CONF_LOCAL_MODE_ENABLED,
@@ -26,12 +27,15 @@ from .const import (
     CONF_LOCAL_REQUEST_TIMEOUT,
     CONF_LOCAL_USERNAME,
     CONF_NAME,
+    CONF_UPDATE_FAILURE_TOLERANCE,
     CONF_USERNAME,
     DEFAULT_CLOUD_POLL_INTERVAL,
+    DEFAULT_CLOUD_REQUEST_TIMEOUT,
     DEFAULT_LOCAL_POLL_INTERVAL,
     DEFAULT_LOCAL_PROTOCOL,
     DEFAULT_LOCAL_REQUEST_TIMEOUT,
     DEFAULT_NAME,
+    DEFAULT_UPDATE_FAILURE_TOLERANCE,
     DOMAIN,
     MANUFACTURER,
     PLATFORMS,
@@ -64,32 +68,36 @@ async def async_setup_entry(hass: HomeAssistant, entry: MhConfigEntry):
     api_key = entry.data.get(CONF_API_KEY)
     device_id = entry.data.get(CONF_DEVICE_ID)
 
+    options = {**entry.data, **entry.options}
+
     session = async_get_clientsession(hass)
     cloud_client = MhApiClient(
         username=username,
         api_key=api_key,
         device_id=device_id,
         session=session,
+        request_timeout=int(
+            options.get(CONF_CLOUD_REQUEST_TIMEOUT, DEFAULT_CLOUD_REQUEST_TIMEOUT)
+        ),
     )
 
-    local_config = {**entry.data, **entry.options}
-    local_enabled = local_config.get(CONF_LOCAL_MODE_ENABLED, False)
+    local_enabled = options.get(CONF_LOCAL_MODE_ENABLED, False)
     local_client = None
     local_poll_interval = int(
-        local_config.get(CONF_LOCAL_POLL_INTERVAL, DEFAULT_LOCAL_POLL_INTERVAL)
+        options.get(CONF_LOCAL_POLL_INTERVAL, DEFAULT_LOCAL_POLL_INTERVAL)
     )
     if local_enabled:
-        local_host = local_config.get(CONF_LOCAL_HOST)
-        local_username = local_config.get(CONF_LOCAL_USERNAME)
-        local_password = local_config.get(CONF_LOCAL_PASSWORD)
+        local_host = options.get(CONF_LOCAL_HOST)
+        local_username = options.get(CONF_LOCAL_USERNAME)
+        local_password = options.get(CONF_LOCAL_PASSWORD)
         if local_host and local_username and local_password:
             local_client = LocalApiClient(
                 host=local_host,
-                protocol=local_config.get(CONF_LOCAL_PROTOCOL, DEFAULT_LOCAL_PROTOCOL),
+                protocol=options.get(CONF_LOCAL_PROTOCOL, DEFAULT_LOCAL_PROTOCOL),
                 username=local_username,
                 password=local_password,
                 request_timeout=int(
-                    local_config.get(
+                    options.get(
                         CONF_LOCAL_REQUEST_TIMEOUT,
                         DEFAULT_LOCAL_REQUEST_TIMEOUT,
                     )
@@ -116,6 +124,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: MhConfigEntry):
         client=client,
         entry=entry,
         scan_interval=timedelta(seconds=scan_seconds),
+        failure_tolerance=int(
+            options.get(CONF_UPDATE_FAILURE_TOLERANCE, DEFAULT_UPDATE_FAILURE_TOLERANCE)
+        ),
     )
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator

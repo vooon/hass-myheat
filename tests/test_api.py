@@ -1,6 +1,7 @@
 """Tests for MyHeat api."""
 
 import asyncio
+from unittest.mock import patch
 
 import aiohttp
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -118,3 +119,22 @@ async def test_api_rpc_error_type_error(hass, aioclient_mock, caplog):
             len(caplog.record_tuples) == 1
             and "Error parsing information from" in caplog.record_tuples[0][2]
         )
+
+
+async def test_api_rpc_uses_request_timeout(hass, aioclient_mock):
+    """The configured request timeout is passed to asyncio.timeout."""
+    api = MhApiClient(
+        username="test_user",
+        api_key="test_api_key",
+        device_id=12,
+        session=async_get_clientsession(hass),
+        request_timeout=42,
+    )
+    aioclient_mock.post(RPC_ENDPOINT, json=MOCK_NO_ERR)
+
+    with patch(
+        "custom_components.myheat.api.asyncio.timeout", wraps=asyncio.timeout
+    ) as timeout:
+        await api.rpc("ping")
+
+    timeout.assert_called_once_with(42)

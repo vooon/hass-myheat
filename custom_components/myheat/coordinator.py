@@ -6,7 +6,11 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DEFAULT_CLOUD_POLL_INTERVAL, DOMAIN  # noqa: F401
+from .const import (  # noqa: F401
+    DEFAULT_CLOUD_POLL_INTERVAL,
+    DEFAULT_UPDATE_FAILURE_TOLERANCE,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__package__)
 
@@ -24,9 +28,12 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator[dict]):
         entry: MhConfigEntry,
         client: Any,
         scan_interval: timedelta = SCAN_INTERVAL,
+        failure_tolerance: int = DEFAULT_UPDATE_FAILURE_TOLERANCE,
     ) -> None:
         """Initialize."""
         self.api = client
+        self._failure_tolerance = failure_tolerance
+        self._consecutive_failures = 0
 
         super().__init__(
             hass,
@@ -40,6 +47,24 @@ class MhDataUpdateCoordinator(DataUpdateCoordinator[dict]):
     async def _async_update_data(self) -> dict:
         """Update data via library."""
         try:
-            return await self.api.async_get_device_info()
+            data = await self.api.async_get_device_info()
         except Exception as exception:
+            self._consecutive_failures += 1
+            # Keep serving the last good data for a few polls so a flaky link
+            # (e.g. LTE) does not flip every entity to unavailable on each miss.
+            if (
+                self.data is not None
+                and self._consecutive_failures <= self._failure_tolerance
+            ):
+                _LOGGER.warning(
+                    "%s: update failed (%d/%d tolerated), keeping previous data: %r",
+                    self.name,
+                    self._consecutive_failures,
+                    self._failure_tolerance,
+                    exception,
+                )
+                return self.data
             raise UpdateFailed() from exception
+
+        self._consecutive_failures = 0
+        return data
