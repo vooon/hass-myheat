@@ -16,6 +16,7 @@ import voluptuous as vol
 from .api import MhApiClient
 from .const import (
     CONF_API_KEY,
+    CONF_CLOUD_REQUEST_TIMEOUT,
     CONF_DEVICE_ID,
     CONF_LOCAL_HOST,
     CONF_LOCAL_MODE_ENABLED,
@@ -25,10 +26,13 @@ from .const import (
     CONF_LOCAL_REQUEST_TIMEOUT,
     CONF_LOCAL_USERNAME,
     CONF_NAME,
+    CONF_UPDATE_FAILURE_TOLERANCE,
     CONF_USERNAME,
+    DEFAULT_CLOUD_REQUEST_TIMEOUT,
     DEFAULT_LOCAL_POLL_INTERVAL,
     DEFAULT_LOCAL_PROTOCOL,
     DEFAULT_LOCAL_REQUEST_TIMEOUT,
+    DEFAULT_UPDATE_FAILURE_TOLERANCE,
     DOMAIN,
     LOCAL_PROTOCOLS,
 )
@@ -151,13 +155,43 @@ class MhFlowHandler(ConfigFlow, domain=DOMAIN):
 class MhOptionsFlowHandler(OptionsFlow):
     """Handle MyHeat options."""
 
+    def __init__(self) -> None:
+        """Initialize the options flow."""
+        self._options: dict[str, Any] = {}
+
     async def async_step_init(
         self,
         user_input: dict[str, Any] | None = None,
     ) -> ConfigFlowResult:
-        """Start the options flow."""
+        """Manage cloud polling options."""
 
-        return await self.async_step_local_init(user_input)
+        if user_input is not None:
+            self._options.update(user_input)
+            return await self.async_step_local_init()
+
+        options = self.config_entry.options
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_CLOUD_REQUEST_TIMEOUT,
+                        default=options.get(
+                            CONF_CLOUD_REQUEST_TIMEOUT,
+                            DEFAULT_CLOUD_REQUEST_TIMEOUT,
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=5, max=60)),
+                    vol.Required(
+                        CONF_UPDATE_FAILURE_TOLERANCE,
+                        default=options.get(
+                            CONF_UPDATE_FAILURE_TOLERANCE,
+                            DEFAULT_UPDATE_FAILURE_TOLERANCE,
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=0, max=10)),
+                }
+            ),
+        )
 
     async def async_step_local_init(
         self,
@@ -176,9 +210,13 @@ class MhOptionsFlowHandler(OptionsFlow):
                 if any(not user_input.get(key) for key in required):
                     errors["base"] = "local_config_incomplete"
                 else:
-                    return self.async_create_entry(title="", data=user_input)
+                    return self.async_create_entry(
+                        title="", data={**self._options, **user_input}
+                    )
             else:
-                return self.async_create_entry(title="", data=user_input)
+                return self.async_create_entry(
+                    title="", data={**self._options, **user_input}
+                )
 
         options = {
             CONF_LOCAL_MODE_ENABLED: False,

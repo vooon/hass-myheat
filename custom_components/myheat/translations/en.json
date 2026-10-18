@@ -43,6 +43,17 @@
   },
   "options": {
     "step": {
+      "init": {
+        "title": "Cloud API",
+        "description": "Polling of the my.myheat.net cloud API.",
+        "data": {
+          "cloud_request_timeout": "Request timeout",
+          "update_failure_tolerance": "Tolerated failed updates"
+        },
+        "data_description": {
+          "update_failure_tolerance": "How many consecutive failed updates keep the previous data before entities become unavailable. 0 disables this."
+        }
+      },
       "local_init": {
         "title": "Local API",
         "description": "Optional LAN API access. The device LAN address should be trusted because local access can control heating.",

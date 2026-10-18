@@ -43,6 +43,17 @@
   },
   "options": {
     "step": {
+      "init": {
+        "title": "API na nuvem",
+        "description": "Consulta da API na nuvem my.myheat.net.",
+        "data": {
+          "cloud_request_timeout": "Tempo limite do pedido",
+          "update_failure_tolerance": "Falhas de atualizacao toleradas"
+        },
+        "data_description": {
+          "update_failure_tolerance": "Quantas atualizacoes falhadas consecutivas mantem os dados anteriores antes de as entidades ficarem indisponiveis. 0 desativa."
+        }
+      },
       "local_init": {
         "title": "API local",
         "description": "Acesso opcional a API pela LAN. A rede local do dispositivo deve ser confiavel porque o acesso local pode controlar o aquecimento.",

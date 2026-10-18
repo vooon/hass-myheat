@@ -75,6 +75,20 @@ During setup, enter:
 
 Only one config entry can be created for the same MyHeat controller.
 
+## Cloud API Options
+
+The integration's **Options** flow starts with cloud polling settings:
+
+| Option                   | Default      | Notes                                                                                                   |
+| ------------------------ | ------------ | ------------------------------------------------------------------------------------------------------- |
+| Request timeout          | `20` seconds | Timeout of a single my.myheat.net request. Valid range: 5-60 seconds.                                   |
+| Tolerated failed updates | `0`          | Consecutive failed updates that keep the previous data before entities become unavailable. Range: 0-10. |
+
+On unreliable uplinks (e.g. LTE) a request occasionally hangs for many seconds.
+Raising the timeout and allowing one or two failed updates keeps entities from
+flapping to unavailable on every such hiccup; a longer outage still marks them
+unavailable once the tolerance is exceeded.
+
 ## Optional Local API
 
 The integration can use the controller's local web API as a fallback/enrichment
